@@ -1423,6 +1423,64 @@
             color: var(--primary);
         }
 
+        /* 顾问供应商展开区块 */
+        .pg-exp .pg-arrow {
+            flex-shrink: 0;
+            align-self: center;
+            display: inline-flex;
+            color: var(--text-light);
+            transition: transform 0.25s;
+        }
+        .pg-exp.open .pg-arrow { transform: rotate(90deg); }
+        .sup-panel {
+            display: none;
+            margin-top: 8px;
+        }
+        .pg-exp.open .sup-panel { display: block; }
+        .sup-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .sup-card:last-child { margin-bottom: 0; }
+        .sup-main { flex: 1; min-width: 0; }
+        .sup-head { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+        .sup-ic { display: inline-flex; flex-shrink: 0; color: var(--primary); }
+        .sup-name { font-size: 14px; font-weight: 600; color: var(--text); }
+        .sup-intro { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+        .sup-row { display: flex; gap: 8px; margin-top: 8px; align-items: flex-start; }
+        .sup-label { font-size: 12px; color: var(--text-secondary); flex-shrink: 0; margin-top: 2px; }
+        .sup-tags { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
+        .sup-tag {
+            font-size: 11px;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .sup-tag-eval {
+            color: var(--success);
+            background: var(--risk-low-bg);
+        }
+        .sup-contact {
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--card);
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-xs);
+            padding: 6px 10px;
+            cursor: pointer;
+            margin-top: 2px;
+        }
+        .sup-contact:active { opacity: 0.7; }
+
         /* CTA 按钮 */
         .page-cta {
             margin-top: 4px;
@@ -2699,6 +2757,30 @@
         .si-v { flex:1; min-width:0; font-size:var(--fs-body); color:var(--n800); line-height:1.6; }
         .si-doc { display:inline-block; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:1px 7px; margin:2px 4px 2px 0; font-size:var(--fs-sm); color:var(--n700); }
         a.step-info-row .si-v { color:var(--trust); font-weight:600; }
+        /* --- 一条龙攻略：顶部几行紧凑选项（平台 / 主体 / 收款 等） --- */
+        .top-asks { display:flex; flex-direction:column; gap:8px; margin:0 20px 14px; }
+        .top-ask { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:11px 13px; }
+        .top-ask-q { font-size:var(--fs-cap); font-weight:700; color:var(--n500); }
+        .top-ask-opts { display:flex; flex-wrap:wrap; gap:7px; margin-top:7px; }
+        .top-ask-opt { padding:7px 12px; border-radius:var(--r-pill); background:var(--n0); border:var(--hair); font-size:var(--fs-body); color:var(--n700); cursor:pointer; }
+        .top-ask-opt.on { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
+        .top-ask-note { margin-top:8px; font-size:var(--fs-sm); color:var(--n500); line-height:1.6; background:var(--n50); border:var(--hair); border-radius:var(--r-sm); padding:8px 11px; }
+        .subject-helper { margin-top:9px; background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); padding:11px 13px; }
+        .sub-q { font-size:var(--fs-body); font-weight:600; color:var(--n900); }
+        .sub-line { margin-top:9px; font-size:var(--fs-body); color:var(--n700); }
+        .sub-opts { display:flex; gap:7px; margin-top:6px; }
+        .sub-opt { padding:6px 12px; border-radius:var(--r-pill); background:var(--n0); border:var(--hair); font-size:var(--fs-body); color:var(--n700); cursor:pointer; }
+        .sub-opt.on { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
+        .sub-suggest { margin-top:10px; padding:10px 12px; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); font-size:var(--fs-body); color:var(--n900); line-height:1.7; }
+        .sub-suggest-btn { display:inline-block; margin-left:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--brand); color:#fff; font-size:var(--fs-sm); font-weight:600; cursor:pointer; }
+        /* --- 一条龙攻略：首页四个方块一排 --- */
+        .guide-list { display:grid; grid-template-columns:repeat(4, 1fr); gap:9px; padding:0 20px 16px; }
+        .guide-card { display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 6px; cursor:pointer; }
+        .guide-card:active { transform: scale(.96); }
+        .guide-card .capy { width:46px; height:46px; flex-shrink:0; }
+        .guide-t { font-size:var(--fs-body); font-weight:700; color:var(--n900); line-height:1.3; }
+        /* --- 攻略占位：平台内容还没做完 --- */
+        .tp-pending { margin:0 20px 16px; padding:26px 20px; text-align:center; background:var(--n50); border:1px dashed var(--n300); border-radius:var(--r-sm); font-size:var(--fs-body); color:var(--n500); line-height:1.8; }
         .tp-steps { margin: 0 20px 14px; background: var(--n0); border: var(--hair); border-radius: var(--r-sm); overflow: hidden; }
         .tp-step { display: flex; gap: 11px; padding: 12px 14px; border-bottom: var(--hair); }
         .tp-step:last-child { border-bottom: none; }
@@ -2941,8 +3023,8 @@
                     <div class="board-stats" id="boardStats"></div>
 
                     <div class="task-head">
-                        <h3>猜您需要</h3>
-                        <span>按你的档案排序</span>
+                        <h3>一条龙攻略</h3>
+                        <span>把一件事从头办到尾</span>
                     </div>
                     <div id="taskGroups"></div>
 
@@ -3027,6 +3109,11 @@
                             <span class="sc-name">出海</span>
                             <span class="sc-desc">主体架构、跨境结算、数据</span>
                         </div>
+                        <div class="service-card" onclick="openTaskPage('电商')">
+                            <span class="sc-icon"><svg class="ic ic-26"><use href="#i-globe"></use></svg></span>
+                            <span class="sc-name">跨境电商</span>
+                            <span class="sc-desc">主体、渠道、收款、合规</span>
+                        </div>
                         <div class="service-card" onclick="openTaskPage('合同')">
                             <span class="sc-icon"><svg class="ic ic-26"><use href="#i-file"></use></svg></span>
                             <span class="sc-name">写合同</span>
@@ -3055,6 +3142,21 @@
                             <span class="sc-name">入驻园区</span>
                             <span class="sc-desc">北辰四大园区与载体政策</span>
                         </div>
+                        <div class="service-card" onclick="openServiceDetail('场地资源')">
+                            <span class="sc-icon"><svg class="ic ic-26"><use href="#i-company"></use></svg></span>
+                            <span class="sc-name">场地资源</span>
+                            <span class="sc-desc">商业体、会展、酒店、写字楼</span>
+                        </div>
+                        <div class="service-card" onclick="openServiceDetail('园区商机')">
+                            <span class="sc-icon"><svg class="ic ic-26"><use href="#i-target"></use></svg></span>
+                            <span class="sc-name">园区商机</span>
+                            <span class="sc-desc">真实场景找首单 · 全流程线上化</span>
+                        </div>
+                        <div class="service-card" onclick="openServiceDetail('找顾问')">
+                            <span class="sc-icon"><svg class="ic ic-26"><use href="#i-scale"></use></svg></span>
+                            <span class="sc-name">找顾问</span>
+                            <span class="sc-desc">注册、财会、法务、知产</span>
+                        </div>
                         <div class="service-card" onclick="openServiceDetail('行政日历')">
                             <span class="sc-icon"><svg class="ic ic-26"><use href="#i-calendar"></use></svg></span>
                             <span class="sc-name">行政日历</span>
@@ -3069,11 +3171,6 @@
                             <span class="sc-icon"><svg class="ic ic-26"><use href="#i-cloud"></use></svg></span>
                             <span class="sc-name">云服务规划</span>
                             <span class="sc-desc">服务器、域名、算力、收款</span>
-                        </div>
-                        <div class="service-card" onclick="openServiceDetail('找顾问')">
-                            <span class="sc-icon"><svg class="ic ic-26"><use href="#i-scale"></use></svg></span>
-                            <span class="sc-name">找顾问</span>
-                            <span class="sc-desc">注册、财会、法务、知产</span>
                         </div>
                     </div>
                 </div>
@@ -3959,6 +4056,7 @@
             '小程序': ['小程序'],
             'aigc': ['aigc', '大模型', '生成式', '算法备案', '模型备案'],
             '自媒体': ['自媒体', '商单', '短视频', '带货', '公众号', '视频号'],
+            '电商': ['电商', '独立站', '网店', '建站', 'shopify'],
             '合同': ['合同', '签约', '用印', '盖章', '违约'],
         };
 
@@ -4531,71 +4629,24 @@
             wallet: 'data:image/webp;base64,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',
         };
 
-        // ===== 首页「猜您需要」入口 =====
-        // 按用户嘴里说得出来的话分类，不按部门分，标题不带「我要」。
-        const TASK_ENTRIES = [
-            { key: '开公司', label: '开公司',     capy: 'sign' },
-            { key: '政策',   label: '政策补助',   capy: 'reading' },
-            { key: '融资',   label: '融资',       capy: 'wallet' },
-            { key: '场地',   label: '入驻园区',   capy: 'labor' },
-            { key: '社保',   label: '交社保',     capy: 'safe' },
-            { key: '发票',   label: '开发票',     capy: 'compliance' },
-            { key: 'app',    label: '上架 App',   capy: 'laptop' },
-            { key: '自媒体', label: '自媒体合规', capy: 'speech' },
-            { key: '小程序', label: '上架小程序', capy: 'laptop' },
-            { key: '游戏',   label: '上架游戏',   capy: 'laptop' },
-            { key: '出海',   label: '出海',       capy: 'abacus' },
-            { key: 'aigc',   label: '大模型备案', capy: 'laptop' },
-            { key: '合同',   label: '写合同',     capy: 'sign' },
+        // ===== 首页「一条龙攻略」入口 =====
+        // 首页只放 4 个「从头办到尾」的攻略方块，外加一个「申政策补贴」入口；点开分别走 openServiceDetail 或 openTaskPage。
+        const GUIDE_ENTRIES = [
+            { key: '政策',   label: '申政策补贴', capy: 'reading', go: "openServiceDetail('政策补贴')" },
+            { key: '小程序', label: '上架小程序', capy: 'laptop',  go: "openTaskPage('小程序')" },
+            { key: '游戏',   label: '上架游戏',   capy: 'laptop',  go: "openTaskPage('游戏')" },
+            { key: '自媒体', label: '做自媒体',   capy: 'speech',  go: "openTaskPage('自媒体')" },
         ];
 
-        // 库内条数一律现算，不写死
-        function policyTagCount(tag) {
-            return policyPool().filter(p => (p.tags || []).indexOf(tag) >= 0).length;
-        }
-        function finTagCount(tag) {
-            return FIN_PRODUCTS.filter(p => (p.tags || []).indexOf(tag) >= 0).length;
-        }
-        // 「开公司」只对还没注册主体的人出现，已经有主体的人看到它是噪音
-        function taskEntryVisible(k) {
-            return k !== '开公司' || state.company === '未注册';
-        }
-        // 首页「猜您需要」：默认只放 4 个核心入口，其余收进「展开/收起」，不再分资源/攻略/指南。
-        const TASK_TOPMOST = ['政策', '融资', '开公司', '场地'];
-        function taskCard(t, top) {
-            return `<div class="task-card${top ? ' tk-top' : ''}" onclick="taskGo('${t.key}')">
-                <img class="capy" src="${CAPY_IMG[t.capy]}" alt="">
-                <div class="task-t">${t.label}</div>
-            </div>`;
-        }
+        // 攻略入口不依赖档案，原来按档案算库内条数、开公司入口显隐的逻辑一并删掉。
         function renderTaskGrid() {
             const box = document.getElementById('taskGroups');
             if (!box) return;
-            const entries = TASK_ENTRIES.filter(t => taskEntryVisible(t.key));
-            const top = TASK_TOPMOST.map(k => entries.find(t => t.key === k)).filter(Boolean);
-            const rest = entries.filter(t => TASK_TOPMOST.indexOf(t.key) < 0);
-            let h = `<div class="task-grid tg-tight">${top.map(t => taskCard(t, true)).join('')}</div>`;
-            if (rest.length) {
-                h += `<div class="task-more" onclick="toggleTaskMore(this)">展开全部<svg class="ic ic-14"><use href="#i-chevron"></use></svg></div>`;
-                h += `<div class="task-grid" id="tg-more" style="display:none">${rest.map(t => taskCard(t, false)).join('')}</div>`;
-            }
-            box.innerHTML = h;
-        }
-        function toggleTaskMore(btn) {
-            const more = document.getElementById('tg-more');
-            if (!more) return;
-            const open = more.style.display !== 'none';
-            more.style.display = open ? 'none' : 'grid';
-            if (btn) {
-                btn.classList.toggle('open', !open);
-                btn.innerHTML = (open ? '展开全部' : '收起') + '<svg class="ic ic-14"><use href="#i-chevron"></use></svg>';
-            }
-        }
-
-        function taskGo(key) {
-            if (key === '政策') { openServiceDetail('政策补贴'); return; }
-            if (key === '融资') { finTab = 'debt'; openServiceDetail('金融服务'); return; }
-            openTaskPage(key);
+            box.innerHTML = `<div class="guide-list">${GUIDE_ENTRIES.map(t => `
+                <div class="guide-card" onclick="${t.go}">
+                    <img class="capy" src="${CAPY_IMG[t.capy]}" alt="">
+                    <div class="guide-t">${t.label}</div>
+                </div>`).join('')}</div>`;
         }
 
         // ===== 办事详情页 =====
@@ -4786,24 +4837,116 @@
             },
             '小程序': {
                 title: '上架小程序', icon: 'mini',
-                lead: '小程序同样在备案范围内，拿到 ICP 备案号才能上架提供服务。同主体同名称的小程序上架在多个平台，每个平台都要单独备案。',
-                steps: [
-                    { t: '主体认证', d: '用企业主体做认证，个人主体能开的类目很有限' },
-                    { t: '平台侧提交备案', d: '在运行平台提交材料，平台初审后报工信部' },
-                    { t: '类目与资质', d: '选定服务类目，按类目补相应经营资质' },
-                    { t: '提审发布', d: '备案号下来后提交审核，驳回按平台反馈逐条改' },
+                stepper: true,
+                lead: '小程序要在备案范围内拿到 ICP 备案号才能上架对外服务。先把顶部的平台、主体、收款三个选项定下来，后面的流程会跟着变。',
+                topAsks: [
+                    { key: 'platform', q: '先定平台', options: [
+                        { label: '微信小程序' },
+                        { label: '支付宝小程序', hint: '内容完善中，先看微信版' },
+                    ] },
+                    { key: 'subject', q: '主体类型', options: [
+                        { label: '企业', hint: '类目最全、能收款、能开票' },
+                        { label: '个体工商户', hint: '能收款、税负更简单' },
+                        { label: '个人', hint: '免费、但无支付、类目少' },
+                        { label: '还没注册', hint: '帮你选一个' },
+                    ] },
+                    { key: 'pay', q: '要不要在线收款', options: [
+                        { label: '要收款', hint: '需要开通微信支付商户' },
+                        { label: '暂不收款', hint: '以后要再加' },
+                    ] },
                 ],
-                where: '在小程序运行平台（微信、支付宝、抖音等）的管理后台提交备案，由平台报工信部。',
-                todos: ['完成小程序主体认证', '在平台后台提交 ICP 备案', '确认服务类目所需资质'],
+                steps: [
+                    { id: 'reg', t: '注册小程序账号', short: '注册', icon: 'edit',
+                      guide: [
+                          { icon: 'globe', title: '进注册入口', text: '打开微信公众平台，点右上角「立即注册」→ 选「小程序」', link: { label: '进入微信公众平台', url: 'https://mp.weixin.qq.com' } },
+                          { icon: 'doc', title: '填邮箱并激活', text: '填一个没注册过公众平台的邮箱，设登录密码，去邮箱点激活链接', docs: ['未注册过的邮箱'] },
+                          { icon: 'edit', title: '选主体类型填信息', text: '个人填姓名与身份证；企业/个体户填名称、统一社会信用代码、住所，传营业执照', docs: ['身份证正反面', '营业执照扫描件（四角完整）'] },
+                          { icon: 'check', title: '企业主体验证', text: '小额打款验证（免费）或微信认证（付费）二选一；企业主体必须完成微信认证，否则后面无法备案和开通支付', cost: '微信认证 300 元/年（个体户目前优惠价 30 元）', time: '认证通常 1-5 个工作日', ref: { label: '以微信官方公示为准', url: 'https://mp.weixin.qq.com' } },
+                          { icon: 'users', title: '填管理员信息', text: '管理员可以是法人或员工，拥有小程序最高权限，核对无误完成注册' },
+                      ] },
+                    { id: 'info', t: '完善基础信息', short: '信息', icon: 'file',
+                      ask: { key: 'category', q: '服务类目大概属于哪一类？', options: [
+                          { label: '工具内容类', hint: '资讯、工具、内容展示' },
+                          { label: '电商交易类', hint: '卖货、下单、交易' },
+                          { label: '特殊行业', hint: '医疗、金融、教育、新闻等需前置资质' },
+                      ] },
+                      guide: [
+                          { icon: 'edit', title: '设置小程序名称', text: '不能与已有小程序重名、不含地名、与备案主体一致且在经营范围内，不碰未获批的前置审批领域；备 3-5 个' },
+                          { icon: 'award', title: '设置服务类目', text: '类目要与实际功能一致，最多选 5 个；特殊类目（如「社交」）要额外提交资质（如增值电信业务经营许可证）' },
+                          { icon: 'file', title: '设置头像和简介', text: '头像与简介按平台规范填，别超范围' },
+                          { icon: 'doc', title: '获取 AppID', text: '「开发管理 → 开发设置」里复制 AppID，这是小程序的唯一标识，开发时必须用' },
+                      ] },
+                    { id: 'dev', t: '开发与后端', short: '开发', icon: 'globe',
+                      ask: { key: 'backend', q: '后端怎么搭？', options: [
+                          { label: '微信云开发', hint: '免服务器和域名，省备案运维，新手推荐' },
+                          { label: '自建后端', hint: '要服务器 + 域名，域名需 ICP 备案' },
+                      ] },
+                      guide: [
+                          { icon: 'doc', title: '下载开发者工具', text: '官网下载微信开发者工具，Windows 与 macOS 都支持', link: { label: '开发者工具', url: 'https://developers.weixin.qq.com' } },
+                          { icon: 'edit', title: '创建项目', text: '扫码登录，点「+」新建项目，填项目名与目录，输入 AppID' },
+                          { icon: 'globe', title: '后端方案', text: '云开发：直接用云数据库、云函数、云存储，不用自建服务器和域名；自建后端：买服务器、注册域名并完成 ICP 备案' },
+                          { icon: 'check', title: '开发与调试', text: '开发阶段可在「详情 → 本地设置」勾「不校验合法域名」方便调试' },
+                      ] },
+                    { id: 'icp', t: '小程序 ICP 备案', short: '备案', icon: 'shield',
+                      guide: [
+                          { icon: 'check', title: '前置条件', text: '必须先完成微信主体认证，才能提交 ICP 备案' },
+                          { icon: 'globe', title: '进备案入口', text: '小程序后台 → 首页「去备案」或「设置 → 小程序备案」' },
+                          { icon: 'doc', title: '填备案信息', text: '按提示填营业执照信息、负责人信息', docs: ['营业执照', '负责人信息'] },
+                          { icon: 'shield', title: '提交与审核', text: '平台初审（通常 1-2 个工作日）→ 工信部短信核验（12381，24 小时内完成）→ 通管局审核（1-20 个工作日）→ 备案成功', time: '全程约 3-20 个工作日', ref: { label: '以工信部公示为准', url: 'https://beian.miit.gov.cn' } },
+                          { icon: 'award', title: '备案取名', text: '优先用与自有注册商标同名、或与营业执照简称一致的名称，通过率最高；别蹭知名品牌、别用冷门自造名' },
+                      ] },
+                    { id: 'pay', t: '开通微信支付', short: '收款', icon: 'coin',
+                      when: 'pay', whenVal: '要收款',
+                      guide: [
+                          { icon: 'bank', title: '开通商户号', text: '微信支付商户号需要企业或个体户主体，个人主体开不了', cost: '以微信支付官方公示为准' },
+                          { icon: 'check', title: '关联小程序', text: '把商户号和小程序绑定，AppID 与商户号对应上' },
+                          { icon: 'coin', title: '结算账户', text: '设好结算银行账户，完成支付协议', docs: ['对公账户或法人结算账户'] },
+                      ] },
+                    { id: 'review', t: '提审与发布', short: '发布', icon: 'check',
+                      guide: [
+                          { icon: 'doc', title: '上传代码', text: '开发者工具点「上传」，填版本号与更新说明' },
+                          { icon: 'edit', title: '提交审核', text: '后台「版本管理 → 提交审核」，填小程序说明与使用流程，上传首页与主要功能页截图，必要时提供测试账号' },
+                          { icon: 'clock', title: '等待审核', text: '首次审核通常 1-7 个工作日；驳回按平台反馈逐条改再重提（常见：隐私协议、类目不符、无测试账号、功能不完整、个人超范围）', time: '首次通常 1-7 个工作日' },
+                          { icon: 'check', title: '审核通过后发布', text: '在「版本管理」点「发布」正式上线；发布后改名称要重新走 ICP 备案，提前定好名字' },
+                      ] },
+                ],
+                where: '注册、认证、备案、提审都在微信公众平台完成；备案由平台初审后报工信部（省级通信管理局）。',
+                todos: ['注册小程序账号并选好主体类型', '完成微信主体认证', '提交小程序 ICP 备案'],
             },
             '游戏': {
                 title: '上架游戏', icon: 'game',
+                stepper: true,
                 lead: '游戏上架比普通 App 多一道前置审批：先拿游戏版号，再走软著与备案，最后才能提审上架。',
+                topAsks: [
+                    { key: 'subject', q: '主体类型', options: [
+                        { label: '企业', hint: '版号与上架基本都要求企业主体' },
+                        { label: '个体工商户', hint: '多数商店不接受个体户上架游戏' },
+                        { label: '个人', hint: '个人无法拿版号，基本走不通' },
+                        { label: '还没注册', hint: '帮你选一个' },
+                    ] },
+                    { key: 'channel', q: '往哪发', options: [
+                        { label: '微信小游戏', hint: '走微信小游戏平台提审' },
+                        { label: '应用商店', hint: 'iOS / 安卓商店提审' },
+                    ] },
+                ],
                 steps: [
-                    { t: '软件著作权登记', d: '商店与版号申请都要求软著，尽早办' },
-                    { t: '游戏版号（出版物号）', d: '经属地出版管理部门报国家新闻出版署审批，是上架前置条件' },
-                    { t: 'ICP 备案与实名认证', d: '完成 ICP 备案，接入防沉迷与实名认证系统' },
-                    { t: '应用商店提审', d: '版号、软著、备案齐了再提交，驳回按平台反馈逐条改' },
+                    { id: 'cr', t: '软件著作权登记', short: '软著', icon: 'award',
+                      guide: [
+                          { icon: 'award', title: '尽早办软著', text: '商店与版号申请都要求软著，尽早办，别卡在这一步' },
+                      ] },
+                    { id: 'isbn', t: '游戏版号', short: '版号', icon: 'file',
+                      guide: [
+                          { icon: 'file', title: '报审游戏版号', text: '经属地出版管理部门报国家新闻出版署审批，是上架的前置条件', time: '审批周期以出版管理部门公示为准' },
+                      ] },
+                    { id: 'icp', t: 'ICP 备案与实名', short: '备案', icon: 'shield',
+                      guide: [
+                          { icon: 'shield', title: '完成 ICP 备案', text: '通过接入服务商提交 ICP 备案' },
+                          { icon: 'lock', title: '实名与防沉迷', text: '接入实名认证与防沉迷系统' },
+                      ] },
+                    { id: 'review', t: '商店提审', short: '提审', icon: 'check',
+                      guide: [
+                          { icon: 'check', title: '提审上架', text: '版号、软著、备案齐了再提交，驳回按平台反馈逐条改' },
+                      ] },
                 ],
                 where: '游戏版号经属地出版管理部门报国家新闻出版署审批，ICP 备案通过接入服务商提交。',
                 todos: ['提交软件著作权登记', '启动游戏版号申请', '准备隐私政策与防沉迷说明'],
@@ -4823,15 +4966,77 @@
                 todos: ['判断产品形态是否触发备案义务', '梳理训练语料来源与授权', '把模型名称与备案号加进产品详情页'],
             },
             '自媒体': {
-                title: '自媒体合规', icon: 'mic',
-                lead: '把自媒体当业务做，账号、内容、收入三条线都要合规，接商单之后尤其要注意。',
-                steps: [
-                    { t: '账号主体认证', d: '用企业主体认证，后续接商单与开票才顺' },
-                    { t: '内容合规', d: '涉及资质的领域先拿资质再发内容' },
-                    { t: '商单与广告标注', d: '有偿推广要标明广告，代言与效果承诺是高风险区' },
-                    { t: '收入申报', d: '平台结算与商单收入按规定入账申报' },
+                title: '做自媒体', icon: 'mic',
+                stepper: true,
+                lead: '把自媒体当业务做，从注册、主体、税务到内容，一条线都要合规；接商单、做特殊领域还要多补几道资质。',
+                topAsks: [
+                    { key: 'subject', q: '主体类型', options: [
+                        { label: '个人', hint: '起步最省事，接商单、开票会受限' },
+                        { label: '个体工商户', hint: '能接商单、能开票' },
+                        { label: '企业', hint: '做机构号、签 MCN 用得上' },
+                        { label: '还没注册', hint: '帮你选一个' },
+                    ] },
+                    { key: 'biz', q: '要不要变现', options: [
+                        { label: '接商单带货', hint: '要办执照、报税，广告要标注' },
+                        { label: '先不接', hint: '先把内容做起来' },
+                    ] },
+                    { key: 'field', q: '内容领域', options: [
+                        { label: '一般内容', hint: '资讯、生活、娱乐等' },
+                        { label: '特殊行业', hint: '医疗、金融、教育、司法等' },
+                    ] },
                 ],
-                todos: ['完成账号企业主体认证', '梳理内容涉及的资质要求', '把商单收入并入正常账务'],
+                steps: [
+                    { id: 'reg', t: '账号注册与实名', short: '注册', icon: 'users',
+                      guide: [
+                          { icon: 'doc', title: '准备材料', text: '实名手机号（未注册过该平台）、身份证正反面（高清无遮挡）、提前想好昵称头像简介和内容领域', docs: ['身份证正反面', '本人实名手机号'] },
+                          { icon: 'edit', title: '通用注册流程', text: '下载官方 App 或访问官网 → 手机号/第三方登录 → 完善昵称头像简介、选内容领域 → 实名认证（身份证 + 人脸）→ 开通创作/收益权限' },
+                          { icon: 'globe', title: '主流平台要点', text: '抖音/快手用 App；头条号用今日头条 App（非极速版）；公众号电脑端 mp.weixin.qq.com 选订阅号；视频号在微信直接开通；B 站实名（手持身份证 + 银行卡）审核 1-3 天', link: { label: '微信公众号注册', url: 'https://mp.weixin.qq.com' } },
+                          { icon: 'check', title: '合规要点', text: '实名认证是开通收益、直播、带货等营利权限的前提；一个身份证/手机号在同一平台通常只能注册 1 个个人号' },
+                      ] },
+                    { id: 'biz', t: '主体与营业执照', short: '主体', icon: 'biz',
+                      guide: [
+                          { icon: 'biz', title: '要不要办执照', text: '只要开展经营性、盈利性经营（带货、直播打赏、广告合作、网店）就必须办营业执照；偶尔单次交易可不办，长期稳定经营必须持证' },
+                          { icon: 'users', title: '主体类型怎么选', text: '自然人：起步期、成本最低；个体工商户：成长期、手续简单税负低、适合单干；公司：规模化期、风险隔离好、可接对公大单' },
+                          { icon: 'doc', title: '个体户线上办理', text: '名称核准 → 确定经营地址与经营范围（部分地区支持居家地址登记；仅网络经营可提交电商平台网络经营场所证明）→ 线上提交 + 刷脸电子签名 → 审核领照', docs: ['《个体工商户登记（备案）申请书》', '经营者身份证', '经营场所使用证明'], time: '审核通常 1-3 个工作日' },
+                          { icon: 'alert', title: '执照后合规义务', text: '年报每年 1 月 1 日至 6 月 30 日申报（零经营也要报）；不超范围经营；地址真实；变更及时备案；不经营要注销' },
+                      ] },
+                    { id: 'tax', t: '税务合规', short: '税务', icon: 'receipt',
+                      guide: [
+                          { icon: 'receipt', title: '纳税义务', text: '平台佣金、广告费、打赏、私域成交、实物置换都要依法申报；实物置换按公允价值确认收入' },
+                          { icon: 'coin', title: '不同主体的税务处理', text: '自然人：次年 6 月 30 日前完成汇算清缴；个体户/公司：办税务登记，按月或按季申报；小规模纳税人月销售额 10 万元以下免征增值税' },
+                          { icon: 'bank', title: '合规要点', text: '电商与直播带货已列入重点监管，严查私户收款、隐匿佣金、转换收入性质；建议开对公账户；成本支出要有合法发票凭证；虚列成本、买虚开发票是重大雷区' },
+                      ] },
+                    { id: 'qual', t: '特殊行业资质', short: '资质', icon: 'award',
+                      when: 'field', whenVal: '特殊行业',
+                      guide: [
+                          { icon: 'award', title: '医疗健康', text: '需完成医生、护士、药师等职业认证；提供医师资格证、执业证、卫健委查询截图等；无资质不得生产发布专业医疗科普' },
+                          { icon: 'shield', title: '金融财经', text: '需取得资质证照且经平台认证后才能发布；理财直播需平台事先认证' },
+                          { icon: 'doc', title: '食品带货', text: '需办理食品经营许可证，且先取得营业执照等合法主体资格' },
+                          { icon: 'file', title: '教育司法等领域', text: '注册时需提供专业背景及相应职业资格或服务资质材料' },
+                      ] },
+                    { id: 'icp', t: 'ICP 备案', short: '备案', icon: 'shield',
+                      guide: [
+                          { icon: 'shield', title: '备案性质', text: '非经营性互联网信息服务走备案；经营性走许可（ICP 许可证）；个人博主通常非经营性，备案即可' },
+                          { icon: 'globe', title: '备案流程', text: '通过服务器接入商（阿里云、腾讯云等）代提交：选接入商 → 验证备案类型 → 填主体信息 → 填网站/App 信息 → 真人核验 → 管局审核', time: '管局审核通常 11-23 个工作日', ref: { label: '以工信部备案系统公示为准', url: 'https://beian.miit.gov.cn' } },
+                          { icon: 'doc', title: '个人备案材料', text: '身份证扫描件、免冠证件照、域名证书（注册人为本人）、负责人联系方式与住址；部分省份需签《信息安全承诺书》' },
+                      ] },
+                    { id: 'content', t: '内容合规', short: '内容', icon: 'file',
+                      guide: [
+                          { icon: 'alert', title: '内容禁止性规定', text: '不得炮制议题、合成伪造、臆测编造、拼凑剪接混淆视听；不得恶意集纳翻炒负面旧闻；不得煽动对立、地域歧视；不得危害未成年人身心健康牟利' },
+                          { icon: 'award', title: '资质认证展示', text: '金融、教育、医疗、司法等领域账号，平台要核验并在主页展示其服务资质、职业资格等认证材料' },
+                          { icon: 'check', title: '营利权限', text: '申请开通营利权限的，需 3 个月内无违规记录' },
+                          { icon: 'doc', title: '信息来源标注', text: '引用新闻、媒体、他人素材须清晰标注来源及信源链接' },
+                          { icon: 'users', title: '如签约 MCN', text: 'MCN 机构需经营主体登记、设内容管理负责人、报省级网信部门备案、展示签约账号所属机构、核实账号身份（《互联网信息内容多渠道分发服务管理规定》2026 年 9 月 1 日施行）' },
+                      ] },
+                    { id: 'ad', t: '商单与广告标注', short: '商单', icon: 'mic',
+                      when: 'biz', whenVal: '接商单带货',
+                      guide: [
+                          { icon: 'mic', title: '标明广告', text: '有偿推广要标明广告' },
+                          { icon: 'alert', title: '代言与效果承诺', text: '代言与效果承诺是高风险区，别做绝对化承诺' },
+                          { icon: 'receipt', title: '收入并入申报', text: '商单收入按规定入账申报' },
+                      ] },
+                ],
+                todos: ['完成账号实名认证', '办理主体登记与营业执照', '办理税务登记并按规定申报'],
             },
             '合同': {
                 title: '写合同', icon: 'file',
@@ -4843,6 +5048,55 @@
                     { t: '归档与履约跟踪', d: '签完存档，把付款与交付节点挂进待办' },
                 ],
                 todos: ['准备一份常用业务的合同模板', '定下用印审批流程', '把在手合同的付款节点录进待办'],
+            },
+            '电商': {
+                title: '做跨境电商', icon: 'globe',
+                stepper: true,
+                lead: '做跨境电商，主体、渠道、收款、合规四件事要按顺序定；可以自己搭独立站，也可以入驻亚马逊等平台，两种走法在开店和收款上不一样。',
+                topAsks: [
+                    { key: 'subject', q: '主体类型', options: [
+                        { label: '企业', hint: '收款、结汇、出口退税都顺' },
+                        { label: '个体工商户', hint: '能收款，适合小生意' },
+                        { label: '个人', hint: '跨境收款通道基本走不通' },
+                        { label: '还没注册', hint: '帮你选一个' },
+                    ] },
+                    { key: 'channel', q: '卖货渠道', options: [
+                        { label: '独立站', hint: '自建站或 Shopify，自己引流' },
+                        { label: '跨境平台', hint: '亚马逊、TikTok Shop、速卖通等' },
+                        { label: '还没定', hint: '先看流程再定' },
+                    ] },
+                    { key: 'market', q: '目标市场', options: [
+                        { label: '欧美', hint: '客单价高，注意合规' },
+                        { label: '东南亚', hint: '增长快、物流近' },
+                        { label: '中东', hint: '客单价高，注意本地化' },
+                        { label: '还没定', hint: '先看流程再定' },
+                    ] },
+                ],
+                steps: [
+                    { id: 'biz', t: '主体与经营资质', short: '主体', icon: 'biz',
+                      guide: [
+                          { icon: 'biz', title: '确定主体', text: '跨境收款基本都要企业或个体户主体，个人主体开不了跨境收款通道' },
+                          { icon: 'file', title: '对外贸易经营者备案', text: '做一般贸易出口需办理对外贸易经营者备案登记（以商务主管部门口径为准）' },
+                          { icon: 'award', title: '目标市场资质', text: '按目标市场与平台要求，可能涉及品牌、认证、类目资质' },
+                      ] },
+                    { id: 'channel', t: '渠道与开店', short: '开店', icon: 'globe',
+                      guide: [
+                          { icon: 'globe', title: '独立站', text: '注册域名、自建或用 Shopify 等 SaaS；海外服务器一般不用国内 ICP 备案，但要自己引流' },
+                          { icon: 'doc', title: '平台入驻', text: '注册亚马逊、TikTok Shop、速卖通等店铺，按平台要求过类目与资质审核' },
+                      ] },
+                    { id: 'pay', t: '跨境收款', short: '收款', icon: 'coin',
+                      guide: [
+                          { icon: 'coin', title: '收单与结汇', text: '独立站接海外收单（PayPal、Stripe 等）；平台用平台收款或对接收款机构，人民币结汇回国', cost: '费率与结汇汇率以收款机构公示为准' },
+                          { icon: 'bank', title: '对公账户', text: '企业主体开对公账户用于结汇与税务' },
+                      ] },
+                    { id: 'compliance', t: '合规与税务', short: '合规', icon: 'shield',
+                      guide: [
+                          { icon: 'shield', title: '隐私与数据合规', text: '面向欧美要留意 GDPR 等数据合规；涉及数据出境的按规申报' },
+                          { icon: 'receipt', title: '税务与申报', text: '销售收入按规定入账申报，符合条件的留意出口退税' },
+                          { icon: 'alert', title: '目标市场规则', text: '不同市场的消费者权益、广告、禁限售规则不同，上架前先核' },
+                      ] },
+                ],
+                todos: ['确定跨境电商主体', '选定卖货渠道并开店', '接通跨境收款与结汇通道'],
             },
         };
 
@@ -4945,22 +5199,89 @@
             const d = TASK_PAGES[key];
             if (d && d.stepper) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
         }
-        function renderStepperPage(key, d) {
-            const cur = ((state.biz || {})[key + '.step']) || 0;
-            let h = `<div class="tp-lead">${d.lead}</div>`;
-            h += renderCityPick();
-            h += `<div class="stepper">`;
-            d.steps.forEach((s, i) => {
-                const cls = i === cur ? ' on' : (i < cur ? ' done' : '');
-                h += `<div class="stepper-step${cls}" onclick="pickStep('${key}', ${i})"><div class="stepper-dot"></div><div class="stepper-label">${s.short || s.t}</div></div>`;
+        // ===== 攻略页顶部紧凑选项 + 分步向导（开公司沿用 renderCityPick，攻略页走 topAsks）=====
+        function visibleSteps(key, d) {
+            const biz = state.biz || {};
+            return (d.steps || []).filter(s => {
+                if (!s.when) return true;
+                return biz[key + '.' + s.when] === s.whenVal;
             });
-            h += `</div><div class="step-pane">${renderStepDetail(key, d, cur)}</div>`;
+        }
+        function renderTopAsks(key, d) {
+            const biz = state.biz || {};
+            let h = `<div class="top-asks">`;
+            d.topAsks.forEach(a => {
+                const val = biz[key + '.' + a.key];
+                const shown = a.key === 'platform' && !val ? '微信小程序' : val;
+                h += `<div class="top-ask"><div class="top-ask-q">${a.q}</div><div class="top-ask-opts">`;
+                a.options.forEach(o => {
+                    const lb = typeof o === 'string' ? o : o.label;
+                    h += `<div class="top-ask-opt${shown === lb ? ' on' : ''}" onclick="pickTop('${key}','${a.key}','${lb}')">${lb}</div>`;
+                });
+                h += `</div>`;
+                if (a.key === 'subject' && val === '还没注册') h += renderSubjectHelper(key);
+                if (a.key === 'platform' && val === '支付宝小程序') h += `<div class="top-ask-note">支付宝小程序的内容还在完善中，流程和微信大体一致，先看微信版。</div>`;
+                h += `</div>`;
+            });
+            h += `</div>`;
+            return h;
+        }
+        function renderSubjectHelper(key) {
+            const biz = state.biz || {};
+            const pay = biz[key + '.subPay'];
+            const team = biz[key + '.subTeam'];
+            let h = `<div class="subject-helper"><div class="sub-q">还没注册的话，先回答两件事，帮你定个建议</div>`;
+            h += `<div class="sub-line">以后要不要在线收款 / 做电商？<div class="sub-opts">` +
+                 ['要', '不要'].map(v => `<span class="sub-opt${pay === v ? ' on' : ''}" onclick="pickTop('${key}','subPay','${v}')">${v}</span>`).join('') + `</div></div>`;
+            h += `<div class="sub-line">是一个人干，还是有团队？<div class="sub-opts">` +
+                 ['一个人', '有团队'].map(v => `<span class="sub-opt${team === v ? ' on' : ''}" onclick="pickTop('${key}','subTeam','${v}')">${v}</span>`).join('') + `</div></div>`;
+            if (pay && team) {
+                const sg = suggestSubject(pay, team);
+                h += `<div class="sub-suggest">建议注册「${sg.label}」——${sg.reason}<span class="sub-suggest-btn" onclick="pickTop('${key}','subject','${sg.label}')">就选它</span></div>`;
+            }
+            h += `</div>`;
+            return h;
+        }
+        function suggestSubject(pay, team) {
+            if (pay === '要') return team === '有团队' ? { label: '企业', reason: '要收款还要接对公客户，企业主体类目最全、能开票。' } : { label: '个体工商户', reason: '要收款，个体户能开收款通道、税负更简单。' };
+            return team === '有团队' ? { label: '企业', reason: '有团队、想正规化，企业主体更稳妥。' } : { label: '个人', reason: '不收款、一个人，个人主体免费、最省事。' };
+        }
+        function pickTop(key, field, value) {
+            state.biz = state.biz || {};
+            state.biz[key + '.' + field] = value;
+            if (field === 'subject' && value !== '还没注册') {
+                delete state.biz[key + '.subPay'];
+                delete state.biz[key + '.subTeam'];
+            }
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function renderStepperPage(key, d) {
+            const biz = state.biz || {};
+            const cur = biz[key + '.step'] || 0;
+            let h = `<div class="tp-lead">${d.lead}</div>`;
+            if (d.topAsks) h += renderTopAsks(key, d);
+            else h += renderCityPick();
+            const steps = visibleSteps(key, d);
+            const pending = d.topAsks && biz[key + '.platform'] === '支付宝小程序';
+            if (pending) {
+                h += `<div class="tp-pending">支付宝小程序的上架攻略还在完善中，先把平台切回「微信小程序」看完整流程。</div>`;
+            } else {
+                h += `<div class="stepper">`;
+                steps.forEach((s, i) => {
+                    const cls = i === cur ? ' on' : (i < cur ? ' done' : '');
+                    h += `<div class="stepper-step${cls}" onclick="pickStep('${key}', ${i})"><div class="stepper-dot"></div><div class="stepper-label">${s.short || s.t}</div></div>`;
+                });
+                h += `</div><div class="step-pane">${renderStepDetail(key, d, cur)}</div>`;
+            }
             if (d.where) h += `<div class="tp-where">在哪办：${d.where}</div>`;
             if (d.todos && d.todos.length) h += `<div class="tp-cta" onclick="taskToPlan('${key}')">${ic('plus', 16)}把这几件事加进我的待办</div>`;
             return h;
         }
+
         function renderStepDetail(key, d, idx) {
-            const s = d.steps[idx];
+            const s = visibleSteps(key, d)[idx];
             if (!s) return '';
             let h = '';
             if (s.ask) {
@@ -5871,13 +6192,60 @@
                 icon: 'scale', demo: true,
                 sections: [
                     { title: '顾问类型', items: [
-                        { icon: 'biz', title: '工商注册顾问', desc: '注册、变更、注销' },
+                        { icon: 'biz', title: '工商注册顾问', desc: '注册、变更、注销',
+                          suppliers: [
+                              { icon: 'company', name: '智企注册服务', intro: '专注科技企业工商登记十余年，覆盖注册、变更、注销全流程',
+                                strengths: ['名称核准加急', '股权架构建议'],
+                                reviews: ['很专业', '响应及时', '速度快'] },
+                              { icon: 'shield', name: '启点企服', intro: '面向早期创业者的工商代办，从核名到领照全程跟进，资料清单清晰',
+                                strengths: ['擅长核名', '全程跟进'],
+                                reviews: ['态度好', '很耐心', '很划算'] },
+                              { icon: 'bolt', name: '快办工商', intro: '线上提交、进度可视、价格透明的小微企业代办平台',
+                                strengths: ['快速出证', '进度可视'],
+                                reviews: ['速度快', '很划算', '响应及时'] },
+                          ] },
                         { icon: 'chart', title: '财税记账顾问', desc: '代理记账、报税' },
                         { icon: 'scale', title: '法律顾问', desc: '合同、合规' },
                         { icon: 'award', title: '专利代理人', desc: '专利申请、答复' },
+                        { icon: 'server', title: '数据服务', desc: '数据采集、治理、上架交易' },
+                        { icon: 'spark', title: 'AI 工具', desc: '大模型、智能体、提示词工程' },
+                        { icon: 'factory', title: '机器人解决方案', desc: '工业与服务机器人集成' },
                     ]},
                 ],
                 cta: '一键联系顾问',
+            },
+            '场地资源': {
+                icon: 'company', demo: true,
+                sections: [
+                    { title: '北辰场景类型', items: [
+                        { icon: 'biz', title: '商业体', desc: '北辰商管旗下商场、街区等消费场景，开放产品试用与展陈' },
+                        { icon: 'flag', title: '会展', desc: '北辰会展场地，开放活动与展示合作' },
+                        { icon: 'home', title: '酒店', desc: '北辰旗下酒店，开放配送、迎宾等机器人服务测试' },
+                        { icon: 'company', title: '写字楼', desc: '北辰写字楼载体，开放安防、清洁、配送等场景' },
+                    ]},
+                    { title: '开放合作', items: [
+                        { icon: 'target', title: '场景测试', desc: '创业团队在北辰真实场景里跑通产品，积累落地案例' },
+                        { icon: 'users', title: '合作机会', desc: '测试效果达标后进入北辰采购与长期合作' },
+                    ]},
+                ],
+                cta: '申请测试场景',
+            },
+            '园区商机': {
+                icon: 'target', demo: true,
+                sections: [
+                    { title: '园区需求', items: [
+                        { icon: 'spark', title: 'AI 企业', desc: '智能客服、内容生成等场景，在北辰找到首单' },
+                        { icon: 'factory', title: '机器人企业', desc: '配送、清洁、巡检等场景，在北辰落地' },
+                        { icon: 'server', title: '数据服务企业', desc: '数据治理、上架交易等场景，与北辰合作' },
+                    ]},
+                    { title: '线上化全流程', items: [
+                        { icon: 'doc', title: '需求发布', desc: '北辰场景方在线发布真实需求' },
+                        { icon: 'edit', title: '方案竞标', desc: '创业团队提交方案，面向北辰需求竞标' },
+                        { icon: 'rocket', title: '试点落地', desc: '中标后在北辰真实场景试点' },
+                        { icon: 'chart', title: '效果评估', desc: '按效果数据评估，进入北辰长期合作' },
+                    ]},
+                ],
+                cta: '发布需求 / 提交方案',
             },
             '出海去': {
                 icon: 'globe', demo: true,
@@ -6256,6 +6624,37 @@
             (data.sections || []).forEach(section => {
                 html += `<div class="page-section-title">${section.title}</div>`;
                 section.items.forEach(item => {
+                    if (item.suppliers && item.suppliers.length) {
+                        html += `<div class="pg-exp">
+                            <div class="page-card" onclick="toggleSupplier(this)">
+                                <span class="pg-icon">${ic(item.icon, 20)}</span>
+                                <div class="pg-body">
+                                    <div class="pg-title">${item.title}</div>
+                                    ${item.desc ? `<div class="pg-desc">${item.desc}</div>` : ''}
+                                </div>
+                                <span class="pg-arrow">${ic('chevron', 16)}</span>
+                            </div>
+                            <div class="sup-panel">
+                                ${item.suppliers.map(s => `
+                                    <div class="sup-card">
+                                        <div class="sup-main">
+                                            <div class="sup-head"><span class="sup-ic">${ic(s.icon, 16)}</span><span class="sup-name">${s.name}</span></div>
+                                            <div class="sup-intro">${s.intro}</div>
+                                            <div class="sup-row">
+                                                <span class="sup-label">擅长方向</span>
+                                                <span class="sup-tags">${(s.strengths || []).map(t => `<span class="sup-tag">${t}</span>`).join('')}</span>
+                                            </div>
+                                            <div class="sup-row">
+                                                <span class="sup-label">客户评价</span>
+                                                <span class="sup-tags">${(s.reviews || []).map(t => `<span class="sup-tag sup-tag-eval">${t}</span>`).join('')}</span>
+                                            </div>
+                                        </div>
+                                        <button class="sup-contact" onclick="openSupplierContact('${s.name}')">联系方式</button>
+                                    </div>`).join('')}
+                            </div>
+                        </div>`;
+                        return;
+                    }
                     html += `<div class="page-card">
                         <span class="pg-icon">${ic(item.icon, 20)}</span>
                         <div class="pg-body">
@@ -6270,6 +6669,17 @@
                 html += `<div class="page-cta">${data.cta}</div>`;
             }
             document.getElementById('pageScroll').innerHTML = html;
+        }
+
+        function toggleSupplier(el) {
+            el.parentElement.classList.toggle('open');
+        }
+
+        function openSupplierContact(name) {
+            document.getElementById('modalTitle').innerHTML = ic('phone', 18) + ' 联系 ' + name;
+            document.getElementById('modalSub').textContent = '联系方式';
+            document.getElementById('modalContent').innerHTML = '<div class="mc-item">这项服务还没有收录联系方式，点页面下方「一键联系顾问」，管家帮你对接。</div>';
+            document.getElementById('modalOverlay').classList.add('active');
         }
 
         function openServicePage(name) {
