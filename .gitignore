@@ -1,0 +1,15 @@
+# 命题给的原始材料（xlsx / PPT），不入库
+data/
+
+# 部署与自查产物
+dist/
+qa-out/
+.wrangler/
+
+# 结构化脚本的输出，内容已经内联进 html，不重复入库
+tools/policy-db.js
+tools/finance-db.js
+
+.DS_Store
+__pycache__/
+*.pyc
