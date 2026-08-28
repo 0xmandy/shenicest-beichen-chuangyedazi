@@ -5,7 +5,7 @@
 给北辰园区中小微创业企业的 AI 创业管家。企业把基本情况交给管家一次，之后政策、融资、待办、风险到了该动手的时候管家主动提醒，人只做确认和决定。
 
 - 线上：https://chuangyedazi.pages.dev
-- 完整规格与复现步骤：[`docs/shenicest-北辰命题-创业搭子-需求文档-Claude-2026-08-27.md`](docs/shenicest-北辰命题-创业搭子-需求文档-Claude-2026-08-27.md)（当前 v5）
+- 完整规格与复现步骤：[`docs/shenicest-北辰命题-创业搭子-需求文档-Claude-2026-08-27.md`](docs/shenicest-北辰命题-创业搭子-需求文档-Claude-2026-08-27.md)（当前 v6）
 
 ---
 
@@ -13,11 +13,12 @@
 
 | 路径 | 是什么 |
 |---|---|
-| `shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html` | **主产物**。单文件、纯静态、零外部依赖，两个数据库和全部图标都内联在里面。480KB |
+| `shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html` | **主产物**。单文件、纯静态、零外部依赖，两个数据库和全部图标都内联在里面。489KB |
 | `assets/capy-icons/` | 首页「猜您需要」那 9 只卡皮巴拉的源文件（144px PNG）。html 里存的是它们转成 WebP 后的 base64，源文件留着是为了以后能重出 |
 | `docs/…需求文档….md` | 需求、数据层规格、匹配规则、界面结构、复现步骤、踩坑记录。改之前先读它 |
 | `tools/shenicest-tool-语法自查.sh` | 抽出 `<script>` 段做 `node --check` |
-| `tools/shenicest-tool-v3改版-qa截图与溢出探针.sh` | 15 个状态各跑一遍截图与横向溢出探针 |
+| `tools/shenicest-tool-v3改版-qa截图与溢出探针.sh` | 17 个状态各跑一遍截图与横向溢出探针 |
+| `tools/shenicest-tool-档案可改行为自测.py` | 20 条断言验企业档案改动后的连带重算，只看状态机不看排版 |
 | `tools/shenicest-tool-部署到cloudflare-pages.sh` | 一条命令部署到 Pages |
 | `tools/shenicest-tool-政策库结构化.py` | 把政策 xlsx 结构化成前端数据块 |
 | `tools/shenicest-tool-金融库结构化.py` | 把金融工具 xlsx 结构化成前端数据块 |
@@ -31,14 +32,17 @@
 
 主产物就是那一个 html，**直接改它**。改版脚本是历史记录，不是构建流程，别再往里加新脚本改文件。
 
-改完这两步必须走，顺序不能反：
+改完这三步必须走，顺序不能反：
 
 ```bash
 zsh tools/shenicest-tool-语法自查.sh                   # node --check
 zsh tools/shenicest-tool-v3改版-qa截图与溢出探针.sh      # 截图 + 横向溢出探针
+python3 tools/shenicest-tool-档案可改行为自测.py .        # 档案改动的连带重算
 ```
 
-自查脚本会把截图与 dump 落在 `qa-out/`（已进 `.gitignore`），并在最后打印每个状态的溢出结论。**冷启动页 `onboard` 那一条是已知项**：团队原始 demo 自带的 30px 溢出，被 `phone-shell` 的 `overflow:hidden` 兜住，截图上看不出来，不用修。其余状态出现非 `none` 就是新引入的，先拿改动前的版本跑同一个探针对比再动手。
+前两步是排版，第三步是状态机。第三步单独存在的理由：档案字段改一下要牵动六七处渲染，漏掉哪一处截图上完全看不出来，只有断言逮得到。
+
+自查脚本会把截图与 dump 落在 `qa-out/`（已进 `.gitignore`），并在最后打印每个状态的溢出结论。**冷启动页 `onboard` 那一条是已知项**：团队原始 demo 自带的 30px 溢出（探针报 `onboarding active`），被 `phone-shell` 的 `overflow:hidden` 兜住，截图上看不出来，不用修。它跟探针跑的时机有关，同一份文件连跑两次可能一次报一次不报，别拿「这次没报」当它修好了。其余 16 个状态任何时候都该是 `none`，出现非 `none` 就是新引入的，先拿改动前的版本跑同一个探针对比再动手。
 
 需要 Chrome。不在默认位置就 `CYD_CHROME=/path/to/chrome` 指过去。
 
@@ -77,7 +81,8 @@ wrangler 的 OAuth 令牌会过期，过期了在交互终端跑一次 `npx --ye
 - `.page-scroll` 是 flex 列容器，往里加带 `overflow:hidden` 的块必须配 `flex-shrink:0`，否则内容一长就被压成一条 2px 的线。短页面正常、长页面塌，肉眼很容易漏判
 - macOS 上没有 `timeout` 命令，套上去直接 `exit 127`，还会把输出文件写成 0 字节，看着像页面炸了
 - 无头 Chrome 截完图不退进程。QA 脚本已经改成轮询产物而不是 `wait`，但如果手动跑 Chrome，记得收尾 `pkill -f "user-data-dir=/tmp/cyd"`
-- grep 溢出探针结果要滤掉探针自己的源码：`grep -o "QAOVERFLOW\[[^]]*\]" | grep -v "bad.length"`
+- grep 溢出探针结果要滤掉探针自己的源码：`grep -o "QAOVERFLOW\[[^]]*\]" | grep -v "bad.length"`。写新探针的话更省事的做法是把标记字符串在运行时拼出来（`['CYD','RESULT'].join('')`），源码里就不存在完整标记，不用再滤
+- `--dump-dom` 出来的 DOM 会把探针文本里的 `<<` `>>` 转义成 `&lt;&lt;` `&gt;&gt;`。按原文去 find 会一无所获，看着像探针没跑，其实跑完了还全是 PASS
 - 整行删代码前先确认那行是不是完整语句。删跨行表达式的末行会留下悬空的 `+`，只有 `node --check` 逮得到
 
 ---
