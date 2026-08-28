@@ -3724,10 +3724,6 @@
             const conds = state.finCond || [];
 
             let head = `
-                <div class="pol-tabbar">
-                    <span class="pol-tabitem ${policyTab === 'match' ? 'on' : ''}" onclick="switchPolicyTab('match')">匹配我</span>
-                    <span class="pol-tabitem ${policyTab === 'all' ? 'on' : ''}" onclick="switchPolicyTab('all')">全库检索</span>
-                </div>
                 <div class="pol-hero">
                     <div class="pol-hero-num">${m.strong.length}</div>
                     <div class="pol-hero-txt">
