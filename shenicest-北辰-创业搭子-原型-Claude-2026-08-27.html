@@ -2129,7 +2129,7 @@
         }
 
         /* ===== 政策匹配页 ===== */
-        .pol-hero { display:flex; align-items:center; gap:14px; background:linear-gradient(135deg,#FF6B35,#E5532B); color:#fff; border-radius:var(--radius); padding:16px 18px; margin:14px 20px 10px; }
+        .pol-hero { display:flex; align-items:center; gap:14px; background:linear-gradient(135deg,#FF6B35,#E5532B); color:#fff; border-radius:var(--radius); padding:16px 18px; margin:0 20px 10px; }
         .pol-hero-num { font-size:38px; font-weight:700; line-height:1; }
         .pol-hero-label { font-size:12px; opacity:.9; }
         .pol-hero-sub { font-size:13px; font-weight:600; margin-top:3px; }
@@ -2474,6 +2474,72 @@
         .tp-case-t { font-size: var(--fs-md); font-weight: 600; color: var(--n900); line-height: 1.45; }
         .tp-case-d { font-size: var(--fs-sm); color: var(--n500); line-height: 1.75; margin-top: 4px; }
         .tp-where { margin: 0 20px 14px; padding: 11px 14px; background: var(--brand-50); border-radius: var(--r-sm); font-size: var(--fs-sm); color: var(--brand); line-height: 1.7; }
+
+        /* --- 模块内管家对话引导：老周开口 → 点选反问 → 老周回复 --- */
+        .intro { margin: 0 20px; }
+        .intro-chat { display: flex; flex-direction: column; gap: 10px; }
+        .cv-row { display: flex; align-items: flex-start; gap: 8px; }
+        .cv-row.cv-user { justify-content: flex-end; }
+        .cv-avatar {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8A5C 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+        }
+        .cv-bubble {
+            max-width: 82%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            font-size: var(--fs-body);
+            line-height: 1.7;
+            color: var(--n900);
+            background: var(--n0);
+            border: var(--hair);
+            box-shadow: var(--sh-1);
+            animation: msgIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .cv-user .cv-bubble {
+            background: var(--brand);
+            color: #fff;
+            border: none;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 4px;
+            font-weight: 500;
+        }
+        .cv-ask { font-weight: 600; }
+        .cv-branch { margin-top: 4px; }
+        .cv-block { margin-top: 10px; }
+        .cv-block:first-child { margin-top: 0; }
+        .cv-block-t { font-size: var(--fs-cap); font-weight: 700; color: var(--n500); margin-bottom: 5px; letter-spacing: .2px; }
+        .cv-item { display: flex; gap: 7px; align-items: flex-start; margin-bottom: 5px; font-size: var(--fs-body); line-height: 1.6; color: var(--n700); }
+        .cv-item:last-child { margin-bottom: 0; }
+        .cv-item .ic { flex-shrink: 0; margin-top: 3px; color: var(--brand); }
+        .cv-item.cv-watch .ic { color: var(--risk-mid); }
+        .cv-item.cv-plan .ic { color: var(--trust); }
+        .cv-quick { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 2px; }
+        .cv-qbtn {
+            padding: 7px 13px; border-radius: var(--r-pill);
+            background: var(--n0); border: var(--hair);
+            font-size: var(--fs-body); color: var(--n700); cursor: pointer;
+            transition: all .2s cubic-bezier(.25,.46,.45,.94);
+            font-family: var(--font);
+        }
+        .cv-qbtn:active { transform: scale(.95); }
+        .cv-qbtn.on { background: var(--brand-50); border-color: var(--brand); color: var(--brand); font-weight: 600; }
+        .cv-typing { display: flex; gap: 4px; align-items: center; padding: 13px 16px; }
+        .cv-typing span {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--n400);
+            animation: cvBlink 1.2s infinite ease-in-out;
+        }
+        .cv-typing span:nth-child(2) { animation-delay: .2s; }
+        .cv-typing span:nth-child(3) { animation-delay: .4s; }
+        @keyframes cvBlink {
+            0%, 80%, 100% { opacity: .3; transform: translateY(0); }
+            40% { opacity: 1; transform: translateY(-3px); }
+        }
 
         /* --- 6 管公司页：经营事项 / 合规风险两栏 --- */
         #cmBizPane .page-section-title { margin-left: 0; margin-right: 0; }
@@ -3114,7 +3180,44 @@
             city: '北京',     // 产品服务对象就是北辰园区企业，城市固定，冷启动不再问
             industry: '',    // 政策匹配的主输入，进政策页时选
             finCond: [],     // 金融匹配的主输入，进金融页时勾
+            biz: {},         // 模块内反选的分支记录（开公司到哪步、社保怎么成立的），随档案持久化
         };
+
+        // ===== 本地档案（纯前端持久化）=====
+        // 只存「你是谁 + 你做过什么」；政策/金融库内联在 HTML，不进这里。
+        // 无痕或禁用 localStorage 时静默降级为「每次进来重新问」，不崩。
+        const PROFILE_KEY = 'cydz_profile_v1';
+        function saveProfile() {
+            try {
+                localStorage.setItem(PROFILE_KEY, JSON.stringify({
+                    v: 1,
+                    company: state.company,
+                    industry: state.industry,
+                    graduation: state.graduation,
+                    overseas: state.overseas,
+                    finCond: state.finCond || [],
+                    biz: state.biz || {},
+                }));
+            } catch (e) { /* 静默 */ }
+        }
+        function loadProfile() {
+            try {
+                const raw = localStorage.getItem(PROFILE_KEY);
+                if (!raw) return false;
+                const d = JSON.parse(raw);
+                if (!d || !d.company) return false;   // 身份是核心字段，缺了就不算有档案
+                state.company = d.company || '';
+                state.industry = d.industry || '';
+                state.graduation = d.graduation || '';
+                state.overseas = d.overseas || '';
+                state.finCond = d.finCond || [];
+                state.biz = d.biz || {};
+                return true;
+            } catch (e) { return false; }
+        }
+        function clearProfile() {
+            try { localStorage.removeItem(PROFILE_KEY); } catch (e) { /* 静默 */ }
+        }
 
         // ===== 政策库（来源：命题方《政策智能体数据库.xlsx》，由脚本结构化，未改一字标题）=====
         // 库一 = 全文导入的政策原文 86 份；库二 = URL 接入的政策与官方解读 89 条。
@@ -3240,6 +3343,10 @@
         function policyFilterLevel(lv) {
             policyLevel = lv;
             policyShown = 20;
+            const bar = document.getElementById('polLevelBar');
+            if (bar) {
+                bar.innerHTML = POLICY_LEVELS.map(x => `<span class="pol-lv ${policyLevel === x ? 'on' : ''}" onclick="policyFilterLevel('${x}')">${x}</span>`).join('');
+            }
             renderPolicyList();
         }
 
@@ -3286,6 +3393,17 @@
             document.getElementById('pageTitle').textContent = '政策匹配';
 
             const head = `
+                <div class="pol-tabbar">
+                    <span class="pol-tabitem ${policyTab === 'match' ? 'on' : ''}" onclick="switchPolicyTab('match')">匹配我</span>
+                    <span class="pol-tabitem ${policyTab === 'all' ? 'on' : ''}" onclick="switchPolicyTab('all')">全库检索</span>
+                </div>
+                ${policyTab === 'match' ? `
+                <div class="pol-industry">
+                    <div class="pol-industry-label">你的行业（决定匹配结果）</div>
+                    <div class="pol-chips">
+                        ${Object.keys(INDUSTRY_TAGS).map(k => `<span class="pol-chip ${industry === k ? 'on' : ''}" onclick="setIndustry('${k}')">${k}</span>`).join('')}
+                    </div>
+                </div>
                 <div class="pol-hero">
                     <div class="pol-hero-num">${m.strong.length}</div>
                     <div class="pol-hero-txt">
@@ -3293,16 +3411,8 @@
                         <div class="pol-hero-sub">条高匹配政策 · 另有 ${m.related.length} 条相关</div>
                     </div>
                 </div>
-                <div class="pol-industry">
-                    <div class="pol-industry-label">你的行业（决定匹配结果）</div>
-                    <div class="pol-chips">
-                        ${Object.keys(INDUSTRY_TAGS).map(k => `<span class="pol-chip ${industry === k ? 'on' : ''}" onclick="setIndustry('${k}')">${k}</span>`).join('')}
-                    </div>
-                </div>
-                <div class="pol-tabbar">
-                    <span class="pol-tabitem ${policyTab === 'match' ? 'on' : ''}" onclick="switchPolicyTab('match')">匹配结果</span>
-                    <span class="pol-tabitem ${policyTab === 'all' ? 'on' : ''}" onclick="switchPolicyTab('all')">全库检索</span>
-                </div>`;
+                ` : ''}
+                `;
 
             let body = '';
             if (policyTab === 'match') {
@@ -3317,7 +3427,7 @@
                     || '<div class="pol-empty">暂无相关条目</div>';
             } else {
                 body += `<div class="pol-search"><input type="text" placeholder="搜政策名或主题，比如 机器人 / 专精特新 / 数据要素" oninput="policySearch(this.value)"></div>`;
-                body += `<div class="pol-levelbar">${POLICY_LEVELS.map(lv => `<span class="pol-lv ${policyLevel === lv ? 'on' : ''}" onclick="policyFilterLevel('${lv}')">${lv}</span>`).join('')}</div>`;
+                body += `<div class="pol-levelbar" id="polLevelBar">${POLICY_LEVELS.map(lv => `<span class="pol-lv ${policyLevel === lv ? 'on' : ''}" onclick="policyFilterLevel('${lv}')">${lv}</span>`).join('')}</div>`;
                 body += `<div id="polListBox"></div>`;
             }
 
@@ -3575,6 +3685,10 @@
             const conds = state.finCond || [];
 
             let head = `
+                <div class="pol-tabbar">
+                    <span class="pol-tabitem ${policyTab === 'match' ? 'on' : ''}" onclick="switchPolicyTab('match')">匹配我</span>
+                    <span class="pol-tabitem ${policyTab === 'all' ? 'on' : ''}" onclick="switchPolicyTab('all')">全库检索</span>
+                </div>
                 <div class="pol-hero">
                     <div class="pol-hero-num">${m.strong.length}</div>
                     <div class="pol-hero-txt">
@@ -4341,6 +4455,38 @@
         const TASK_PAGES = {
             '开公司': {
                 title: '开公司', icon: 'biz',
+                intro: {
+                    greet: '开公司是把主体先立起来，后面融资、补贴、开票才有落脚点。北京 e 窗通一网通办，一天能办结，不用跑大厅。',
+                    ask: '你现在到哪一步了？',
+                    options: [
+                        { label: '还没开始，想先了解', to: 'start' },
+                        { label: '名字/经营范围还没定', to: 'naming' },
+                        { label: '已提交，在等执照', to: 'waiting' },
+                        { label: '执照拿到了，往下办', to: 'licensed' },
+                    ],
+                    branches: {
+                        start: {
+                            todo: ['在 e 窗通提交名称自主申报', '备齐章程与股东身份材料'],
+                            watch: ['经营范围一次想清楚，后面的开票类目跟着它走'],
+                            plan: ['自己线上办（e 窗通一网通办，推荐）', '到企业开办大厅一窗领取办理结果'],
+                        },
+                        naming: {
+                            todo: ['在 e 窗通把名称报上去', '把经营范围想清楚，同时备好章程与股东材料'],
+                            watch: ['名称要自主申报，和经营范围一起定，避免后面来回改'],
+                            plan: ['先核名再提交设立登记', '经营范围拿不准的，问老周或园区企服中心'],
+                        },
+                        waiting: {
+                            todo: ['预约银行开对公户', '想好首批员工社保信息要不要一并采集'],
+                            watch: ['执照一下来，税务这条线就开始计时，要去做税（费）种认定'],
+                            plan: ['执照和公章可邮寄，也可到大厅一窗领取'],
+                        },
+                        licensed: {
+                            todo: ['去做税（费）种认定、网签三方协议', '预约银行开对公户'],
+                            watch: ['税务登记随注册已同步，但税种认定要自己发起'],
+                            plan: ['先做税种认定，再申请开发票', '对公户开完才能从账户扣缴税款'],
+                        },
+                    },
+                },
                 lead: '北京开办企业走「e 窗通」一网通办：营业执照、免费公章、涉税事项、五险一金信息采集、银行预约开户在一个平台一次填报，一天办结。',
                 steps: [
                     { t: '名称自主申报', d: '在 e 窗通 先把公司名报上，同时把经营范围想清楚' },
@@ -4355,6 +4501,26 @@
             },
             '社保': {
                 title: '交社保', icon: 'shield',
+                intro: {
+                    greet: '交社保这事，先看你单位是怎么成立的——成立方式不一样，要办的手续差挺多。',
+                    ask: '你的单位是怎么成立的？',
+                    options: [
+                        { label: '通过 e 窗通新设', to: 'ewindow' },
+                        { label: '早年成立，或数据没同步', to: 'legacy' },
+                    ],
+                    branches: {
+                        ewindow: {
+                            todo: ['确认社保登记是否已随注册同步', '把首批员工做增员申报'],
+                            watch: ['社会保险、就业、劳动用工备案统一登记，一次填报三件事一起办'],
+                            plan: ['不用单独跑登记，直接进社保网上服务平台做增员'],
+                        },
+                        legacy: {
+                            todo: ['在社保网上服务平台单独办单位参保登记', '办理公积金单位开户'],
+                            watch: ['缴费基数与申报期以社保经办机构当期公告为准'],
+                            plan: ['先单独办单位参保登记，再做员工增员'],
+                        },
+                    },
+                },
                 lead: '先看你的单位是怎么成立的，这一步决定了你要不要单独跑社保登记。',
                 cases: [
                     { t: '通过 e 窗通 新设的单位', d: '社保登记已经随注册同步完成，不用再单独登记。直接进社保网上服务平台做增员就行。' },
@@ -4511,6 +4677,74 @@
 
         let currentTaskKey = '';
 
+        // ===== 模块内管家对话引导：老周开口 → 点选反问 → 老周回复 =====
+        // 分支内容全部预写，数字只来自办事流程官方口径，不新增任何数字。
+        let introTypingKey = null;   // 正在打字回复的模块 key，用来先显示 typing 再出回复
+
+        function renderIntro(key, intro) {
+            const picked = (state.biz || {})[key];
+            const typing = introTypingKey === key;
+            const labelOf = to => { const o = intro.options.find(x => x.to === to); return o ? o.label : to; };
+            let h = `<div class="intro-chat">`;
+            h += `<div class="cv-row cv-ai"><div class="cv-avatar">🧑‍💼</div><div class="cv-bubble">${intro.greet}</div></div>`;
+            h += `<div class="cv-row cv-ai"><div class="cv-avatar">🧑‍💼</div><div class="cv-bubble cv-ask">${intro.ask}</div></div>`;
+            if (picked && intro.branches[picked]) {
+                h += `<div class="cv-row cv-user"><div class="cv-bubble">${labelOf(picked)}</div></div>`;
+                h += `<div class="cv-row cv-ai"><div class="cv-avatar">🧑‍💼</div>`;
+                if (typing) {
+                    h += `<div class="cv-bubble cv-typing"><span></span><span></span><span></span></div>`;
+                } else {
+                    h += `<div class="cv-bubble">${renderBranch(intro.branches[picked])}</div>`;
+                }
+                h += `</div>`;
+            }
+            h += `<div class="cv-quick">`;
+            intro.options.forEach(o => {
+                h += `<button class="cv-qbtn${picked === o.to ? ' on' : ''}" onclick="pickIntro('${key}','${o.to}')">${o.label}</button>`;
+            });
+            h += `</div>`;
+            h += `</div>`;
+            return h;
+        }
+
+        function pickIntro(key, branch) {
+            state.biz = state.biz || {};
+            state.biz[key] = branch;
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (!d || !d.intro) return;
+            const box = document.getElementById('introBox');
+            if (!box) return;
+            introTypingKey = key;
+            box.innerHTML = renderIntro(key, d.intro);   // 先出用户气泡 + 打字动画
+            setTimeout(() => {
+                introTypingKey = null;
+                const b2 = document.getElementById('introBox');
+                if (b2) b2.innerHTML = renderIntro(key, d.intro);   // 再出老周的最终回复
+            }, 700);
+        }
+
+        function renderBranch(b) {
+            let h = `<div class="cv-branch">`;
+            if (b.todo && b.todo.length) {
+                h += `<div class="cv-block"><div class="cv-block-t">接下来，可以这样办</div>`;
+                h += b.todo.map(t => `<div class="cv-item">${ic('check', 16)}<span>${t}</span></div>`).join('');
+                h += `</div>`;
+            }
+            if (b.watch && b.watch.length) {
+                h += `<div class="cv-block"><div class="cv-block-t">需要留意</div>`;
+                h += b.watch.map(w => `<div class="cv-item cv-watch">${ic('alert', 16)}<span>${w}</span></div>`).join('');
+                h += `</div>`;
+            }
+            if (b.plan && b.plan.length) {
+                h += `<div class="cv-block"><div class="cv-block-t">可选方案</div>`;
+                h += b.plan.map(p => `<div class="cv-item cv-plan">${ic('target', 16)}<span>${p}</span></div>`).join('');
+                h += `</div>`;
+            }
+            h += `</div>`;
+            return h;
+        }
+
         function openTaskPage(key) {
             const d = TASK_PAGES[key];
             if (!d) return;
@@ -4524,8 +4758,8 @@
             const d = TASK_PAGES[key];
             let h = `<div class="tp-lead">${d.lead}</div>`;
 
-            // 政府口径要分情况的（交社保），先把情况摆出来
-            if (d.cases) {
+            // 政府口径要分情况的（交社保）：有管家反选就由反选回答，没有反选的才把情况摆出来
+            if (d.cases && !d.intro) {
                 h += `<div class="page-section-title">先看你属于哪种情况</div>`;
                 h += d.cases.map(c => `<div class="tp-case">
                     <div class="tp-case-t">${c.t}</div>
@@ -4548,6 +4782,11 @@
                         <span class="tp-no">${i + 1}</span>
                         <div><div class="tp-t">${s.t}</div><div class="tp-d">${s.d}</div></div>
                     </div>`).join('') + '</div>';
+            }
+
+            // 管家对话引导放在办理顺序之后：先看全貌，再按你的情况往下聊
+            if (d.intro) {
+                h += `<div id="introBox">${renderIntro(key, d.intro)}</div>`;
             }
 
             if (d.where) h += `<div class="tp-where">在哪办：${d.where}</div>`;
@@ -4792,6 +5031,12 @@
                 showToast('先选一个：已注册，还是还没注册');
                 return;
             }
+            saveProfile();
+            enterHome();
+        }
+
+        // 走完冷启动、或刷新时有档案，都从这里进首页，共用一份渲染
+        function enterHome() {
             state.onboardingDone = true;
             document.getElementById('onboarding').classList.remove('active');
             document.getElementById('onboarding').style.display = 'none';
@@ -4799,24 +5044,24 @@
             updateProfileInfo();
             switchTab('home');
             const greeting = document.getElementById('homeGreeting');
-            if (state.company === '已注册') {
-                greeting.innerHTML = `你好，<strong>创业者</strong>`;
-            } else if (state.company === '未注册') {
-                greeting.innerHTML = `你好，<strong>未来创业者</strong>`;
-            } else {
-                greeting.innerHTML = `你好，<strong>创业者</strong>`;
-            }
+            greeting.innerHTML = state.company === '未注册'
+                ? `你好，<strong>未来创业者</strong>`
+                : `你好，<strong>创业者</strong>`;
             renderButlerMessage();
             renderHomeAlerts();
             renderBoard();
         }
 
         function resetOnboarding() {
+            clearProfile();
             state.onboardingDone = false;
             state.company = '';
             state.graduation = '';
             state.city = '北京';
             state.overseas = '';
+            state.industry = '';
+            state.finCond = [];
+            state.biz = {};
             document.getElementById('onboarding').style.display = 'flex';
             document.getElementById('onboarding').classList.add('active');
             document.getElementById('tabBar').style.display = 'none';
@@ -5486,9 +5731,13 @@
         // Hide tab bar initially
         document.getElementById('tabBar').style.display = 'none';
 
-        // Initial state
-        document.getElementById('onboarding').classList.add('active');
-        document.getElementById('onboarding').style.display = 'flex';
+        // 有本地档案就跳过冷启动直接进首页，否则走 onboarding
+        if (loadProfile()) {
+            enterHome();
+        } else {
+            document.getElementById('onboarding').classList.add('active');
+            document.getElementById('onboarding').style.display = 'flex';
+        }
 
         // 渲染小事广场
         renderPlaza();
