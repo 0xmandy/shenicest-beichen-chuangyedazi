@@ -2465,7 +2465,7 @@
         .task-head { display: flex; align-items: baseline; gap: 8px; padding: 2px 20px 10px; }
         .task-head h3 { font-size: var(--fs-lg); font-weight: 700; color: var(--n900); }
         .task-head span { font-size: var(--fs-cap); color: var(--n500); }
-        .task-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; padding: 0 20px 16px; }
+        .task-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; padding: 0 20px 16px; }
         .task-card {
             display: flex; flex-direction: column; align-items: center; gap: 3px;
             background: var(--n0); border: var(--hair); border-radius: var(--r-md);
@@ -2482,6 +2482,11 @@
         .tp-case-t { font-size: var(--fs-md); font-weight: 600; color: var(--n900); line-height: 1.45; }
         .tp-case-d { font-size: var(--fs-sm); color: var(--n500); line-height: 1.75; margin-top: 4px; }
         .tp-where { margin: 0 20px 14px; padding: 11px 14px; background: var(--brand-50); border-radius: var(--r-sm); font-size: var(--fs-sm); color: var(--brand); line-height: 1.7; }
+        /* --- 首页猜您需要：默认 4 个核心入口，其余收进「展开/收起」 --- */
+        .task-grid.tg-tight { padding-bottom: 6px; }
+        .task-more { display: flex; align-items: center; justify-content: center; gap: 3px; padding: 2px 20px 14px; font-size: var(--fs-body); color: var(--n600); cursor: pointer; }
+        .task-more .ic { transition: transform .25s; transform: rotate(90deg); }
+        .task-more.open .ic { transform: rotate(-90deg); }
 
         /* --- 模块内管家对话引导：老周开口 → 点选反问 → 老周回复 --- */
         .intro { margin: 0 20px; }
@@ -2587,9 +2592,9 @@
         .step-pane { display:flex; flex-direction:column; gap:12px; }
         .step-city { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 14px; }
         .step-city-q { font-size:var(--fs-md); font-weight:600; color:var(--n900); }
-        .step-city-opts { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-        .step-city-opt { padding:7px 13px; border-radius:var(--r-pill); background:var(--n50); border:var(--hair); font-size:var(--fs-body); color:var(--n700); cursor:pointer; }
-        .step-city-opt.on { background:var(--brand); color:#fff; border-color:var(--brand); font-weight:600; }
+        .step-city-select-wrap { position:relative; margin-top:10px; }
+        .step-city-select { width:100%; padding:10px 36px 10px 12px; font-size:var(--fs-body); color:var(--n900); background:var(--n0); border:var(--hair); border-radius:var(--r-sm); appearance:none; -webkit-appearance:none; -moz-appearance:none; cursor:pointer; }
+        .step-city-arrow { position:absolute; right:12px; top:50%; transform:translateY(-50%) rotate(90deg); color:var(--n500); pointer-events:none; }
         .step-ask { background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); padding:12px 14px; }
         .step-ask-q { font-size:var(--fs-md); font-weight:600; color:var(--n900); }
         .step-ask-done { margin-top:8px; font-size:var(--fs-body); color:var(--brand); font-weight:600; }
@@ -2650,6 +2655,7 @@
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.4"/><path d="M15.6 15.6 20 20"/></symbol>
 <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.4 5.6 15.8 12l-6.4 6.4"/></symbol>
 <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.4 2.8 4.6 13.6h6.2l-.8 7.6 8.8-10.8h-6.2Z"/></symbol>
+<symbol id="i-game" viewBox="0 0 24 24"><path d="M7 7h10a5 5 0 0 1 5 5v2.2a1.8 1.8 0 0 1-3 1.4l-1.6-1.5H6.6L5 15.6a1.8 1.8 0 0 1-3-1.4V12a5 5 0 0 1 5-5Z"/><path d="M8 11.5v2.6M6.7 12.8h2.6"/><circle cx="15.4" cy="12.8" r=".9"/><circle cx="17.4" cy="10.9" r=".9"/></symbol>
 <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.8" y="10.4" width="14.4" height="9.8" rx="1.8"/><path d="M8.2 10.4V7.8a3.8 3.8 0 0 1 7.6 0v2.6"/></symbol>
 <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.4 11.6a7.4 7.4 0 0 1-8 7.4c-.9 0-1.8-.15-2.6-.44L4.2 20.4l1.9-5.4A7.4 7.4 0 1 1 20.4 11.6Z"/></symbol>
 <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.8"/><path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0"/></symbol>
@@ -2847,7 +2853,7 @@
                         <h3>猜您需要</h3>
                         <span>按你的档案排序</span>
                     </div>
-                    <div class="task-grid" id="taskGrid"></div>
+                    <div id="taskGroups"></div>
 
                     <div class="section-header">
                         <h3>待办日历</h3>
@@ -4457,10 +4463,11 @@
             { key: '社保',   label: '交社保',     capy: 'safe' },
             { key: '发票',   label: '开发票',     capy: 'compliance' },
             { key: 'app',    label: '上架 App',   capy: 'laptop' },
-            { key: '自媒体', label: '做自媒体',   capy: 'speech' },
+            { key: '自媒体', label: '自媒体合规', capy: 'speech' },
             { key: '小程序', label: '上架小程序', capy: 'laptop' },
+            { key: '游戏',   label: '上架游戏',   capy: 'laptop' },
             { key: '出海',   label: '出海',       capy: 'abacus' },
-            { key: 'aigc',   label: 'AIGC',       capy: 'laptop' },
+            { key: 'aigc',   label: '大模型备案', capy: 'laptop' },
             { key: '合同',   label: '写合同',     capy: 'sign' },
         ];
 
@@ -4472,32 +4479,39 @@
             return FIN_PRODUCTS.filter(p => (p.tags || []).indexOf(tag) >= 0).length;
         }
         // 「开公司」只对还没注册主体的人出现，已经有主体的人看到它是噪音
-        function taskEntries() {
-            return TASK_ENTRIES.filter(t => t.key !== '开公司' || state.company === '未注册');
+        function taskEntryVisible(k) {
+            return k !== '开公司' || state.company === '未注册';
         }
-        // 排序跟着画像走：还没注册主体的第一件事是开公司，然后政策、场地；已有主体的先看政策、融资、场地。
-        // 做人工智能与机器人的，把 AIGC 提到第三位。
-        function taskOrder() {
-            const top = state.company === '未注册' ? ['开公司', '政策', '场地'] : ['政策', '融资', '场地'];
-            if (['人工智能', '智能机器人', '数据要素'].indexOf(state.industry) >= 0) {
-                top.splice(2, 0, 'aigc');
-                top.length = 3;
-            }
-            const rest = taskEntries().map(t => t.key).filter(k => top.indexOf(k) < 0);
-            return top.concat(rest);
+        // 首页「猜您需要」：默认只放 4 个核心入口，其余收进「展开/收起」，不再分资源/攻略/指南。
+        const TASK_TOPMOST = ['政策', '融资', '开公司', '场地'];
+        function taskCard(t, top) {
+            return `<div class="task-card${top ? ' tk-top' : ''}" onclick="taskGo('${t.key}')">
+                <img class="capy" src="${CAPY_IMG[t.capy]}" alt="">
+                <div class="task-t">${t.label}</div>
+            </div>`;
         }
-
         function renderTaskGrid() {
-            const box = document.getElementById('taskGrid');
+            const box = document.getElementById('taskGroups');
             if (!box) return;
-            box.innerHTML = taskOrder().map((k, i) => {
-                const t = TASK_ENTRIES.filter(x => x.key === k)[0];
-                if (!t) return '';
-                return `<div class="task-card${i < 3 ? ' tk-top' : ''}" onclick="taskGo('${t.key}')">
-                    <img class="capy" src="${CAPY_IMG[t.capy]}" alt="">
-                    <div class="task-t">${t.label}</div>
-                </div>`;
-            }).join('');
+            const entries = TASK_ENTRIES.filter(t => taskEntryVisible(t.key));
+            const top = TASK_TOPMOST.map(k => entries.find(t => t.key === k)).filter(Boolean);
+            const rest = entries.filter(t => TASK_TOPMOST.indexOf(t.key) < 0);
+            let h = `<div class="task-grid tg-tight">${top.map(t => taskCard(t, true)).join('')}</div>`;
+            if (rest.length) {
+                h += `<div class="task-more" onclick="toggleTaskMore(this)">展开全部<svg class="ic ic-14"><use href="#i-chevron"></use></svg></div>`;
+                h += `<div class="task-grid" id="tg-more" style="display:none">${rest.map(t => taskCard(t, false)).join('')}</div>`;
+            }
+            box.innerHTML = h;
+        }
+        function toggleTaskMore(btn) {
+            const more = document.getElementById('tg-more');
+            if (!more) return;
+            const open = more.style.display !== 'none';
+            more.style.display = open ? 'none' : 'grid';
+            if (btn) {
+                btn.classList.toggle('open', !open);
+                btn.innerHTML = (open ? '展开全部' : '收起') + '<svg class="ic ic-14"><use href="#i-chevron"></use></svg>';
+            }
         }
 
         function taskGo(key) {
@@ -4700,8 +4714,20 @@
                 where: '在小程序运行平台（微信、支付宝、抖音等）的管理后台提交备案，由平台报工信部。',
                 todos: ['完成小程序主体认证', '在平台后台提交 ICP 备案', '确认服务类目所需资质'],
             },
+            '游戏': {
+                title: '上架游戏', icon: 'game',
+                lead: '游戏上架比普通 App 多一道前置审批：先拿游戏版号，再走软著与备案，最后才能提审上架。',
+                steps: [
+                    { t: '软件著作权登记', d: '商店与版号申请都要求软著，尽早办' },
+                    { t: '游戏版号（出版物号）', d: '经属地出版管理部门报国家新闻出版署审批，是上架前置条件' },
+                    { t: 'ICP 备案与实名认证', d: '完成 ICP 备案，接入防沉迷与实名认证系统' },
+                    { t: '应用商店提审', d: '版号、软著、备案齐了再提交，驳回按平台反馈逐条改' },
+                ],
+                where: '游戏版号经属地出版管理部门报国家新闻出版署审批，ICP 备案通过接入服务商提交。',
+                todos: ['提交软件著作权登记', '启动游戏版号申请', '准备隐私政策与防沉迷说明'],
+            },
             'aigc': {
-                title: 'AIGC', icon: 'spark',
+                title: '大模型备案', icon: 'spark',
                 lead: '做生成式 AI 产品，备案是门槛，政策是资源。依《生成式人工智能服务管理暂行办法》，提供具有舆论属性或者社会动员能力的生成式 AI 服务，要通过属地网信部门履行备案或登记程序。',
                 steps: [
                     { t: '判断是否落入备案范围', d: '看服务有没有舆论属性或社会动员能力，拿不准先问属地网信部门' },
@@ -4715,7 +4741,7 @@
                 todos: ['判断产品形态是否触发备案义务', '梳理训练语料来源与授权', '把模型名称与备案号加进产品详情页'],
             },
             '自媒体': {
-                title: '做自媒体', icon: 'mic',
+                title: '自媒体合规', icon: 'mic',
                 lead: '把自媒体当业务做，账号、内容、收入三条线都要合规，接商单之后尤其要注意。',
                 steps: [
                     { t: '账号主体认证', d: '用企业主体认证，后续接商单与开票才顺' },
@@ -4821,11 +4847,13 @@
         const CITY_OPTIONS = ['北京', '上海', '深圳', '广州', '杭州', '其他'];
         function renderCityPick() {
             const cur = state.city || '';
-            let h = `<div class="step-city"><div class="step-city-q">你在哪个城市？</div><div class="step-city-opts">`;
+            let h = `<div class="step-city"><div class="step-city-q">你在哪个城市？</div>`;
+            h += `<div class="step-city-select-wrap"><select class="step-city-select" onchange="pickCity(this.value)">`;
+            if (!cur) h += `<option value="" disabled selected>请选择城市</option>`;
             CITY_OPTIONS.forEach(c => {
-                h += `<div class="step-city-opt${cur === c ? ' on' : ''}" onclick="pickCity('${c}')">${c}</div>`;
+                h += `<option value="${c}"${cur === c ? ' selected' : ''}>${c}</option>`;
             });
-            h += `</div></div>`;
+            h += `</select><svg class="ic ic-16 step-city-arrow"><use href="#i-chevron"></use></svg></div></div>`;
             return h;
         }
         function pickCity(city) {
