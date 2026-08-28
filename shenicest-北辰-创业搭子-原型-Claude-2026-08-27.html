@@ -2565,6 +2565,36 @@
         .page-scroll > .tp-note, .page-scroll > .tp-park, .page-scroll > .tp-case,
         .page-scroll > .tp-where { margin-top: 0; margin-bottom: 0; }
         .tp-lead { margin: 0 20px 12px; font-size: var(--fs-body); color: var(--n700); line-height: 1.8; }
+        /* --- 开公司分步向导：顶部线+点进度条 + 分步内容 --- */
+        .stepper { display:flex; align-items:flex-start; margin:0 14px 10px; }
+        .stepper-step { flex:1; display:flex; flex-direction:column; align-items:center; position:relative; cursor:pointer; }
+        .stepper-step::before { content:''; position:absolute; top:7px; left:-50%; width:100%; height:2px; background:var(--n200); }
+        .stepper-step:first-child::before { display:none; }
+        .stepper-step.done::before { background:var(--brand); }
+        .stepper-dot { width:14px; height:14px; border-radius:50%; background:var(--n0); border:2px solid var(--n300); position:relative; z-index:1; box-sizing:border-box; }
+        .stepper-step.on .stepper-dot { background:var(--brand); border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-50); }
+        .stepper-step.done .stepper-dot { background:var(--brand-50); border-color:var(--brand); }
+        .stepper-label { font-size:10px; color:var(--n500); margin-top:5px; text-align:center; white-space:nowrap; }
+        .stepper-step.on .stepper-label { color:var(--brand); font-weight:600; }
+        .step-pane { display:flex; flex-direction:column; gap:12px; }
+        .step-city { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 14px; }
+        .step-city-q { font-size:var(--fs-md); font-weight:600; color:var(--n900); }
+        .step-city-opts { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+        .step-city-opt { padding:7px 13px; border-radius:var(--r-pill); background:var(--n50); border:var(--hair); font-size:var(--fs-body); color:var(--n700); cursor:pointer; }
+        .step-city-opt.on { background:var(--brand); color:#fff; border-color:var(--brand); font-weight:600; }
+        .step-ask { background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); padding:12px 14px; }
+        .step-ask-q { font-size:var(--fs-md); font-weight:600; color:var(--n900); }
+        .step-ask-done { margin-top:8px; font-size:var(--fs-body); color:var(--brand); font-weight:600; }
+        .step-ask-opts { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+        .step-ask-opt { padding:9px 14px; border-radius:var(--r-sm); background:var(--n0); border:var(--hair); font-size:var(--fs-body); color:var(--n700); cursor:pointer; }
+        .step-ask-opt-hint { font-size:11px; color:var(--n500); margin-top:2px; line-height:1.4; }
+        .step-guide { display:flex; flex-direction:column; gap:8px; }
+        .step-g-item { display:flex; gap:10px; align-items:flex-start; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:11px 13px; }
+        .step-g-icon { flex-shrink:0; width:30px; height:30px; border-radius:8px; background:var(--brand-50); color:var(--brand); display:flex; align-items:center; justify-content:center; }
+        .step-g-body { flex:1; min-width:0; }
+        .step-g-t { font-size:var(--fs-md); font-weight:600; color:var(--n900); }
+        .step-g-d { font-size:var(--fs-body); color:var(--n700); line-height:1.7; margin-top:2px; }
+        .step-g-link { display:inline-flex; align-items:center; gap:4px; margin-top:6px; font-size:var(--fs-sm); color:var(--trust); font-weight:600; }
         .tp-steps { margin: 0 20px 14px; background: var(--n0); border: var(--hair); border-radius: var(--r-sm); overflow: hidden; }
         .tp-step { display: flex; gap: 11px; padding: 12px 14px; border-bottom: var(--hair); }
         .tp-step:last-child { border-bottom: none; }
@@ -2968,6 +2998,9 @@
                             <div class="plaza-helper-title"><svg class="ic ic-16"><use href="#i-bolt"></use></svg> 小事广场</div>
                             <div class="plaza-helper-desc">陈述句进看板，同时写进行政日历<br>疑问句发到广场，政策类的挂上政策库原文<br>说完成就勾掉待办、推进度、解除风险<br>感谢沉淀成园区口碑与 OPC Token</div>
                         </div>
+                        <button class="my-events-btn" onclick="openSmallThing()">
+                            <svg class="ic ic-16"><use href="#i-plus"></use></svg> 记一件小事
+                        </button>
                         <button class="my-events-btn" onclick="openMyEvents()">
                             <svg class="ic ic-16"><use href="#i-book"></use></svg> 我的小事
                             <span class="my-events-count" id="myEventsCount">4</span>
@@ -4455,46 +4488,53 @@
         const TASK_PAGES = {
             '开公司': {
                 title: '开公司', icon: 'biz',
-                intro: {
-                    greet: '开公司是把主体先立起来，后面融资、补贴、开票才有落脚点。北京 e 窗通一网通办，一天能办结，不用跑大厅。',
-                    ask: '你现在到哪一步了？',
-                    options: [
-                        { label: '还没开始，想先了解', to: 'start' },
-                        { label: '名字/经营范围还没定', to: 'naming' },
-                        { label: '已提交，在等执照', to: 'waiting' },
-                        { label: '执照拿到了，往下办', to: 'licensed' },
-                    ],
-                    branches: {
-                        start: {
-                            todo: ['在 e 窗通提交名称自主申报', '备齐章程与股东身份材料'],
-                            watch: ['经营范围一次想清楚，后面的开票类目跟着它走'],
-                            plan: ['自己线上办（e 窗通一网通办，推荐）', '到企业开办大厅一窗领取办理结果'],
-                        },
-                        naming: {
-                            todo: ['在 e 窗通把名称报上去', '把经营范围想清楚，同时备好章程与股东材料'],
-                            watch: ['名称要自主申报，和经营范围一起定，避免后面来回改'],
-                            plan: ['先核名再提交设立登记', '经营范围拿不准的，问老周或园区企服中心'],
-                        },
-                        waiting: {
-                            todo: ['预约银行开对公户', '想好首批员工社保信息要不要一并采集'],
-                            watch: ['执照一下来，税务这条线就开始计时，要去做税（费）种认定'],
-                            plan: ['执照和公章可邮寄，也可到大厅一窗领取'],
-                        },
-                        licensed: {
-                            todo: ['去做税（费）种认定、网签三方协议', '预约银行开对公户'],
-                            watch: ['税务登记随注册已同步，但税种认定要自己发起'],
-                            plan: ['先做税种认定，再申请开发票', '对公户开完才能从账户扣缴税款'],
-                        },
-                    },
-                },
+                stepper: true,
                 lead: '北京开办企业走「e 窗通」一网通办：营业执照、免费公章、涉税事项、五险一金信息采集、银行预约开户在一个平台一次填报，一天办结。',
                 steps: [
-                    { t: '名称自主申报', d: '在 e 窗通 先把公司名报上，同时把经营范围想清楚' },
-                    { t: '设立登记', d: '提交章程、股东与法定代表人信息，实名认证后申请营业执照' },
-                    { t: '免费刻章', d: '开办环节的公章由政府买单，跟执照一起做' },
-                    { t: '涉税事项', d: '同一份表里同步做税务信息确认与票种核定申请' },
-                    { t: '五险一金信息采集', d: '员工参保信息在这一步一并填，社保登记会随注册同步过去' },
-                    { t: '银行预约开户', d: '平台上直接预约合作银行，执照下来就能去开对公户' },
+                    { id: 'name', t: '名称自主申报', short: '名称', icon: 'edit',
+                      guide: [
+                          { icon: 'globe', title: '打开网站', text: '访问北京市企业服务 e 窗通平台', link: { label: '进入 e 窗通', url: '#' } },
+                          { icon: 'edit', title: '点名称申报', text: '在首页点「名称自主申报」模块' },
+                          { icon: 'doc', title: '填公司名', text: '按「行政区划 + 字号 + 行业 + 组织形式」填公司名' },
+                          { icon: 'check', title: '选经营范围', text: '把经营范围想清楚，提交后等名称核准结果' },
+                      ] },
+                    { id: 'reg', t: '设立登记', short: '登记', icon: 'file',
+                      ask: { key: 'biz.companyType', q: '你的公司类型是？', options: [
+                          { label: '有限公司', hint: '股东以出资为限担责，适合合伙创业' },
+                          { label: '个体工商户', hint: '个人或家庭经营，税负更简单' },
+                          { label: '合伙企业', hint: '适合律师、会计师等专业团队' },
+                      ] },
+                      guide: [
+                          { icon: 'doc', title: '提交章程', text: '提交公司章程' },
+                          { icon: 'users', title: '填股东信息', text: '填股东与法定代表人信息' },
+                          { icon: 'check', title: '实名认证', text: '完成实名认证' },
+                          { icon: 'file', title: '申请执照', text: '提交后申请营业执照' },
+                      ] },
+                    { id: 'seal', t: '免费刻章', short: '刻章', icon: 'check',
+                      guide: [
+                          { icon: 'check', title: '免费刻章', text: '开办环节的公章由政府买单' },
+                          { icon: 'award', title: '跟执照一起做', text: '公章、财务章等跟执照一起发放' },
+                      ] },
+                    { id: 'tax', t: '涉税事项', short: '涉税', icon: 'receipt',
+                      ask: { key: 'biz.needInvoice', q: '你需要开发票吗？', options: [
+                          { label: '需要开票', hint: '要接对公客户，开票基本是刚需' },
+                          { label: '暂不需要', hint: '后续有需要再申请票种核定' },
+                      ] },
+                      guide: [
+                          { icon: 'receipt', title: '税务信息确认', text: '同一份表里做税务信息确认' },
+                          { icon: 'doc', title: '票种核定', text: '按业务类型申请票种核定' },
+                      ] },
+                    { id: 'social', t: '五险一金信息采集', short: '五险一金', icon: 'shield',
+                      guide: [
+                          { icon: 'users', title: '员工参保采集', text: '员工参保信息在这一步一并填' },
+                          { icon: 'shield', title: '社保同步', text: '社保登记会随注册同步过去' },
+                      ] },
+                    { id: 'bank', t: '银行预约开户', short: '开户', icon: 'bank',
+                      guide: [
+                          { icon: 'bank', title: '预约银行', text: '平台上直接预约合作银行' },
+                          { icon: 'calendar', title: '领执照开对公户', text: '执照下来就能去开对公户' },
+                          { icon: 'coin', title: '对公户缴税', text: '对公户开完才能从账户扣缴税款' },
+                      ] },
                 ],
                 where: '北京市企业服务 e 窗通平台。执照、公章、发票与税控设备打包成「办理结果」服务包，可以邮寄，也可以到企业开办大厅一窗领取。',
                 todos: ['在 e 窗通 提交名称自主申报', '备齐章程与股东身份材料', '预约银行开对公户'],
@@ -4754,8 +4794,77 @@
             document.getElementById('pageOverlay').classList.add('active');
         }
 
+        // ===== 开公司分步向导：顶部进度条 + 分步内容 =====
+        const CITY_OPTIONS = ['北京', '上海', '深圳', '广州', '杭州', '其他'];
+        function renderCityPick() {
+            const cur = state.city || '';
+            let h = `<div class="step-city"><div class="step-city-q">你在哪个城市？</div><div class="step-city-opts">`;
+            CITY_OPTIONS.forEach(c => {
+                h += `<div class="step-city-opt${cur === c ? ' on' : ''}" onclick="pickCity('${c}')">${c}</div>`;
+            });
+            h += `</div></div>`;
+            return h;
+        }
+        function pickCity(city) {
+            state.city = city;
+            saveProfile();
+            const key = currentTaskKey;
+            const d = TASK_PAGES[key];
+            if (d && d.stepper) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function renderStepperPage(key, d) {
+            const cur = ((state.biz || {})[key + '.step']) || 0;
+            let h = `<div class="tp-lead">${d.lead}</div>`;
+            h += renderCityPick();
+            h += `<div class="stepper">`;
+            d.steps.forEach((s, i) => {
+                const cls = i === cur ? ' on' : (i < cur ? ' done' : '');
+                h += `<div class="stepper-step${cls}" onclick="pickStep('${key}', ${i})"><div class="stepper-dot"></div><div class="stepper-label">${s.short || s.t}</div></div>`;
+            });
+            h += `</div><div class="step-pane">${renderStepDetail(key, d, cur)}</div>`;
+            if (d.where) h += `<div class="tp-where">在哪办：${d.where}</div>`;
+            if (d.todos && d.todos.length) h += `<div class="tp-cta" onclick="taskToPlan('${key}')">${ic('plus', 16)}把这几件事加进我的待办</div>`;
+            return h;
+        }
+        function renderStepDetail(key, d, idx) {
+            const s = d.steps[idx];
+            if (!s) return '';
+            let h = '';
+            if (s.ask) {
+                const stored = (state.biz || {})[key + '.' + s.id];
+                h += `<div class="step-ask"><div class="step-ask-q">${s.ask.q}</div>`;
+                if (stored) h += `<div class="step-ask-done">已记录：${stored}</div>`;
+                else { h += `<div class="step-ask-opts">`; s.ask.options.forEach(o => { const lb = typeof o === 'string' ? o : o.label; const hint = (o && o.hint) ? `<div class="step-ask-opt-hint">${o.hint}</div>` : ''; h += `<div class="step-ask-opt" onclick="pickAsk('${key}','${s.id}','${lb}')">${lb}${hint}</div>`; }); h += `</div>`; }
+                h += `</div>`;
+            }
+            h += `<div class="step-guide">`;
+            (s.guide || []).forEach(g => {
+                h += `<div class="step-g-item"><div class="step-g-icon">${ic(g.icon, 16)}</div><div class="step-g-body"><div class="step-g-t">${g.title}</div><div class="step-g-d">${g.text}</div>`;
+                if (g.link) h += `<a class="step-g-link" href="${g.link.url}" target="_blank" rel="noopener">${g.link.label}${ic('external', 12)}</a>`;
+                h += `</div></div>`;
+            });
+            h += `</div>`;
+            return h;
+        }
+        function pickStep(key, idx) {
+            state.biz = state.biz || {};
+            state.biz[key + '.step'] = idx;
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function pickAsk(key, stepId, value) {
+            state.biz = state.biz || {};
+            state.biz[key + '.' + stepId] = value;
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
         function renderTaskPage(key) {
             const d = TASK_PAGES[key];
+            if (d.stepper) {
+                return renderStepperPage(key, d);
+            }
             let h = `<div class="tp-lead">${d.lead}</div>`;
 
             // 政府口径要分情况的（交社保）：有管家反选就由反选回答，没有反选的才把情况摆出来
@@ -5114,23 +5223,17 @@
             document.getElementById('pageOverlay').classList.remove('active');
         }
 
-        // 悬浮按钮一颗两用：首页是老周的对话入口，小事广场是记一件小事，其余两个 tab 不显示
+        // 悬浮按钮常驻所有页面：统一是老周的对话入口
         function syncFab(tab) {
             const fab = document.getElementById('fabAdd');
             if (!fab) return;
-            if (tab === 'home') {
-                fab.classList.add('fab-chat');
-                fab.innerHTML = ic('chat', 22);
-            } else if (tab === 'circle') {
-                fab.classList.remove('fab-chat');
-                fab.textContent = '+';
-            }
-            fab.style.display = (tab === 'home' || tab === 'circle') ? 'flex' : 'none';
+            fab.classList.add('fab-chat');
+            fab.innerHTML = ic('chat', 22);
+            fab.style.display = 'flex';
         }
 
         function fabTap() {
-            if (state.currentTab === 'home') { openChat(); return; }
-            openSmallThing();
+            openChat();
         }
 
         // ===== Chat Logic =====
