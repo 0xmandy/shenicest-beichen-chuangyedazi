@@ -2998,9 +2998,6 @@
                             <div class="plaza-helper-title"><svg class="ic ic-16"><use href="#i-bolt"></use></svg> 小事广场</div>
                             <div class="plaza-helper-desc">陈述句进看板，同时写进行政日历<br>疑问句发到广场，政策类的挂上政策库原文<br>说完成就勾掉待办、推进度、解除风险<br>感谢沉淀成园区口碑与 OPC Token</div>
                         </div>
-                        <button class="my-events-btn" onclick="openSmallThing()">
-                            <svg class="ic ic-16"><use href="#i-plus"></use></svg> 记一件小事
-                        </button>
                         <button class="my-events-btn" onclick="openMyEvents()">
                             <svg class="ic ic-16"><use href="#i-book"></use></svg> 我的小事
                             <span class="my-events-count" id="myEventsCount">4</span>
@@ -5223,16 +5220,22 @@
             document.getElementById('pageOverlay').classList.remove('active');
         }
 
-        // 悬浮按钮常驻所有页面：统一是老周的对话入口
+        // 悬浮按钮按 tab 换身份：前三个页面是对话气泡，小事广场是记一件小事的加号
         function syncFab(tab) {
             const fab = document.getElementById('fabAdd');
             if (!fab) return;
-            fab.classList.add('fab-chat');
-            fab.innerHTML = ic('chat', 22);
+            if (tab === 'circle') {
+                fab.classList.remove('fab-chat');
+                fab.textContent = '+';
+            } else {
+                fab.classList.add('fab-chat');
+                fab.innerHTML = ic('chat', 22);
+            }
             fab.style.display = 'flex';
         }
 
         function fabTap() {
+            if (state.currentTab === 'circle') { openSmallThing(); return; }
             openChat();
         }
 
