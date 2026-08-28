@@ -863,44 +863,52 @@
             width: 0;
         }
         .service-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         .service-card {
             background: var(--card);
             border-radius: var(--radius-sm);
-            padding: 16px 14px;
+            padding: 12px 14px;
             box-shadow: var(--shadow);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
             position: relative;
             overflow: hidden;
         }
         .service-card:active {
-            transform: scale(0.95);
+            transform: scale(0.98);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         .service-card .sc-icon {
             font-size: 28px;
             line-height: 1;
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
         }
         .service-card .sc-name {
             font-size: 15px;
             font-weight: 600;
             color: var(--text);
+            flex: 0 0 auto;
+            white-space: nowrap;
         }
         .service-card .sc-desc {
             font-size: 12px;
             color: var(--text-secondary);
             line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            margin-left: auto;
+            text-align: right;
+            white-space: nowrap;
             overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
         }
         .service-card .sc-badge {
             position: absolute;
@@ -2353,6 +2361,70 @@
         .rk-tag.low { color: var(--success); }
         .rk-tag.medium { color: var(--warning); }
         .rk-tag.high { color: var(--danger); }
+
+        /* ===== 风险自评 checklist（勾选「我已做到」，没勾的算风险）===== */
+        .rk-grade { position: relative; overflow: hidden; }
+        .rk-grade-top { position: relative; z-index: 2; }
+        .rk-grade-actions { display: flex; align-items: center; gap: 8px; }
+        .rk-self {
+            display: inline-flex; align-items: center; gap: 4px;
+            border: 1px solid var(--brand); color: var(--brand);
+            background: var(--brand-50); border-radius: 20px;
+            font-size: 11px; font-weight: 600; padding: 3px 10px;
+            font-family: var(--font); cursor: pointer; white-space: nowrap;
+        }
+        .rk-self:active { opacity: .7; }
+        .rk-grade-foot {
+            margin-top: 12px; padding-top: 10px; border-top: var(--hair);
+            font-size: 11px; color: var(--text-light); text-align: center;
+        }
+        .rk-sample {
+            position: absolute; top: 46%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-18deg);
+            font-size: 15px; font-weight: 700; letter-spacing: 4px;
+            color: var(--trust); opacity: .22;
+            border: 1.5px solid var(--trust); border-radius: 8px;
+            padding: 6px 16px; white-space: nowrap; pointer-events: none;
+        }
+        .ck-topbar {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 12px; border-radius: var(--radius-sm);
+            background: var(--bg); margin-bottom: 14px;
+        }
+        .ck-count { font-size: 12px; color: var(--text-secondary); }
+        .ck-group { margin-bottom: 14px; }
+        .ck-dim { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .ck-dim-name { font-size: 13px; font-weight: 700; color: var(--text); }
+        .ck-dim-tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 5px; }
+        .ck-dim-tag.low { background: var(--risk-low-bg); color: var(--risk-low); }
+        .ck-dim-tag.medium { background: var(--risk-mid-bg); color: var(--risk-mid); }
+        .ck-dim-tag.high { background: var(--risk-high-bg); color: var(--risk-high); }
+        .ck-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 11px 12px; border-radius: 10px;
+            background: var(--bg); margin-bottom: 6px; cursor: pointer;
+            transition: background .15s;
+        }
+        .ck-item.on { background: var(--brand-50); }
+        .ck-box {
+            width: 20px; height: 20px; flex: 0 0 auto; margin-top: 1px;
+            border-radius: 6px; border: 1.5px solid var(--n300);
+            background: var(--card); display: flex; align-items: center;
+            justify-content: center; color: #fff;
+        }
+        .ck-item.on .ck-box { background: var(--brand); border-color: var(--brand); }
+        .ck-txt { font-size: 13px; color: var(--text); line-height: 1.5; }
+        .ck-actions { display: flex; gap: 10px; margin-top: 4px; }
+        .ck-reset {
+            flex: 1; border: 1px solid var(--border); background: var(--card);
+            color: var(--text-secondary); font-size: 14px; font-weight: 600;
+            font-family: var(--font); border-radius: var(--radius-sm); padding: 13px;
+        }
+        .ck-done {
+            flex: 1.5; border: none; color: #fff; font-size: 15px; font-weight: 600;
+            font-family: var(--font); border-radius: var(--radius-sm); padding: 13px;
+            background: linear-gradient(135deg, var(--brand-bright), var(--brand));
+        }
         .rk-card { background: var(--card); border-radius: var(--radius); padding: 13px 14px; margin: 0 20px 10px; box-shadow: var(--shadow); border-left: 3px solid var(--border); }
         .rk-card.high { border-left-color: var(--danger); }
         .rk-card.medium { border-left-color: var(--warning); }
@@ -3219,6 +3291,8 @@
             industry: '人工智能',    // 政策匹配的主输入。默认给园区主导产业，进来就有匹配结果，档案页与找机会页都能改
             finCond: [],     // 金融匹配的主输入，进金融页时勾
             biz: {},         // 模块内反选的分支记录（开公司到哪步、社保怎么成立的），随档案持久化
+            riskCheck: {},            // 风险自评勾选结果，按身份存 { 已注册: { 资质申报:[bool,...] } }
+            riskCheckOpened: false,   // 是否打开过自评弹窗，控制条形图「示例数据」水印
         };
 
         // ===== 本地档案（纯前端持久化）=====
@@ -3235,6 +3309,8 @@
                     overseas: state.overseas,
                     finCond: state.finCond || [],
                     biz: state.biz || {},
+                    riskCheck: state.riskCheck || {},
+                    riskCheckOpened: !!state.riskCheckOpened,
                 }));
             } catch (e) { /* 静默 */ }
         }
@@ -3250,6 +3326,8 @@
                 state.overseas = d.overseas || '';
                 state.finCond = d.finCond || [];
                 state.biz = d.biz || {};
+                state.riskCheck = d.riskCheck || {};
+                state.riskCheckOpened = !!d.riskCheckOpened;
                 return true;
             } catch (e) { return false; }
         }
@@ -5112,6 +5190,200 @@
             return `<div class="rk-src" onclick="event.stopPropagation();openPolicyDetail('${hit.id}')">查库内原文：${hit.name.length > 22 ? hit.name.slice(0, 22) + '…' : hit.name}</div>`;
         }
 
+        // ===== 风险自评 checklist：勾选「我已经做到的」，没勾的按风险提示 =====
+        const RISK_CHECKLIST = {
+            '已注册': [
+                { key: '资质申报', name: '资质申报', items: [
+                    '已拿到高新 / 专精特新等认定',
+                    '清楚自己能申哪些资质和补贴',
+                    '申报材料数字口径一致',
+                    '有专人盯政策、不漏申报窗口',
+                ]},
+                { key: '数据合规', name: '数据合规', items: [
+                    '已做隐私政策 / 用户告知',
+                    '已核对境外客户的数据出境要求',
+                    '做过数据安全 / 个人信息保护自查',
+                ]},
+                { key: '备案事项', name: '备案事项', items: [
+                    '生成式 AI 服务已完成算法备案',
+                    '小程序 / App / 网站已完成备案',
+                    '清楚自己业务要不要备案、备哪种',
+                ]},
+                { key: '税务合规', name: '税务合规', items: [
+                    '已完成税务登记 / 核税种',
+                    '账目、申报、开票相互一致',
+                    '发票管理规范、及时开票',
+                ]},
+                { key: '知识产权', name: '知识产权', items: [
+                    '核心品牌名 / 商标已注册',
+                    '软件著作权 / 专利已申请',
+                    '员工或外包写的代码归属已写进合同',
+                ]},
+                { key: '劳动用工', name: '劳动用工', items: [
+                    '全员签劳动合同、缴社保',
+                    '工资、加班费发放记录规范',
+                    '核心岗位已签保密 / 竞业限制协议',
+                ]},
+            ],
+            '未注册': [
+                { key: '经营资质', name: '经营资质', items: [
+                    '已注册企业主体',
+                    '经营范围覆盖实际业务',
+                    '需要的前置许可已办',
+                ]},
+                { key: '收款合规', name: '收款合规', items: [
+                    '用商户收款 / 对公账户收款',
+                    '个人收入与经营收入已分清',
+                    '已换成商户收款',
+                ]},
+                { key: '知识产权', name: '知识产权', items: [
+                    '品牌名已查重、已申请商标',
+                    '核心产品 / 代码已做著作权登记',
+                    '合伙人成果归属已约定清楚',
+                ]},
+                { key: '税务合规', name: '税务合规', items: [
+                    '已完成税务登记',
+                    '收入已申报',
+                ]},
+                { key: '劳动用工', name: '劳动用工', items: [
+                    '用人已签合同、缴社保',
+                    '有工资发放记录',
+                ]},
+            ],
+        };
+
+        function riskKey() {
+            return state.company || '已注册';
+        }
+        function riskChecklist() {
+            return RISK_CHECKLIST[riskKey()] || RISK_CHECKLIST['已注册'];
+        }
+        // 每个维度当前的勾选布尔数组；没填过的维度按全 false 处理
+        function riskChecks() {
+            const list = riskChecklist();
+            const saved = (state.riskCheck || {})[riskKey()] || {};
+            const map = {};
+            list.forEach(d => {
+                map[d.key] = (saved[d.key] || []).slice(0, d.items.length);
+                while (map[d.key].length < d.items.length) map[d.key].push(false);
+            });
+            return map;
+        }
+        function dimLevel(n, done) {
+            const missing = n - done;
+            if (missing <= 0) return 'low';
+            if (missing <= 2) return 'medium';
+            return 'high';
+        }
+        function dimWidth(lv) {
+            return lv === 'low' ? 12 : (lv === 'medium' ? 45 : 70);
+        }
+        function lvText(lv) {
+            return lv === 'low' ? '低' : (lv === 'medium' ? '中' : '高');
+        }
+        // 是否自评过：state.riskCheck 里有当前身份的勾选记录就算自评过
+        function hasSelfCheck() {
+            return !!(state.riskCheck || {})[riskKey()];
+        }
+        function riskBars() {
+            if (!hasSelfCheck()) return riskProfile().bars;
+            const checks = riskChecks();
+            return riskChecklist().map(d => {
+                const done = checks[d.key].filter(Boolean).length;
+                const lv = dimLevel(d.items.length, done);
+                return { n: d.name, lv: lv, w: dimWidth(lv) };
+            });
+        }
+        function riskGrade() {
+            if (!hasSelfCheck()) return { grade: riskProfile().grade, gradeLv: riskProfile().gradeLv };
+            const checks = riskChecks();
+            let high = 0, mid = 0;
+            riskChecklist().forEach(d => {
+                const done = checks[d.key].filter(Boolean).length;
+                const lv = dimLevel(d.items.length, done);
+                if (lv === 'high') high++;
+                else if (lv === 'medium') mid++;
+            });
+            if (high >= 2) return { grade: '高风险', gradeLv: 'high' };
+            if (high === 1 || mid >= 3) return { grade: '中等风险', gradeLv: 'medium' };
+            return { grade: '低风险', gradeLv: 'low' };
+        }
+
+        function openRiskCheck() {
+            if (!state.riskCheckOpened) {
+                state.riskCheckOpened = true;
+                saveProfile();
+                renderRiskTab();   // 打开即视为看过，去掉「示例数据」水印
+            }
+            document.getElementById('modalTitle').textContent = '风险自评';
+            document.getElementById('modalSub').textContent = '勾选你已经做到的，没勾的会按风险提示你';
+            renderRiskCheck();
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function renderRiskCheck() {
+            const list = riskChecklist();
+            const checks = riskChecks();
+            let total = 0, doneCount = 0;
+            list.forEach(d => d.items.forEach(() => total++));
+            list.forEach(d => (checks[d.key] || []).forEach(v => { if (v) doneCount++; }));
+            const g = riskGrade();
+            let html = `
+                <div class="ck-topbar">
+                    <span class="rk-grade-v ${g.gradeLv}">${g.grade}</span>
+                    <span class="ck-count">已做到 ${doneCount} / ${total} 项 · 没勾的按风险提示</span>
+                </div>`;
+            list.forEach(d => {
+                const arr = checks[d.key] || [];
+                const done = arr.filter(Boolean).length;
+                const lv = dimLevel(d.items.length, done);
+                html += `
+                <div class="ck-group">
+                    <div class="ck-dim">
+                        <span class="ck-dim-name">${d.name}</span>
+                        <span class="ck-dim-tag ${lv}">${lvText(lv)}</span>
+                    </div>
+                    ${d.items.map((t, i) => `
+                        <div class="ck-item ${arr[i] ? 'on' : ''}" onclick="toggleRiskItem('${d.key}', ${i})">
+                            <span class="ck-box">${arr[i] ? ic('check', 14) : ''}</span>
+                            <span class="ck-txt">${t}</span>
+                        </div>`).join('')}
+                </div>`;
+            });
+            html += `
+                <div class="ck-actions">
+                    <button class="ck-reset" onclick="clearRiskCheck()">重来</button>
+                    <button class="ck-done" onclick="applyRiskCheck()">完成评估</button>
+                </div>`;
+            document.getElementById('modalContent').innerHTML = html;
+        }
+
+        function toggleRiskItem(dim, idx) {
+            const k = riskKey();
+            const dimDef = riskChecklist().find(d => d.key === dim);
+            if (!dimDef) return;
+            if (!state.riskCheck) state.riskCheck = {};
+            if (!state.riskCheck[k]) state.riskCheck[k] = {};
+            const arr = (state.riskCheck[k][dim] || []).slice(0, dimDef.items.length);
+            while (arr.length < dimDef.items.length) arr.push(false);
+            arr[idx] = !arr[idx];
+            state.riskCheck[k][dim] = arr;
+            renderRiskCheck();
+        }
+
+        function clearRiskCheck() {
+            const k = riskKey();
+            if (state.riskCheck && state.riskCheck[k]) delete state.riskCheck[k];
+            renderRiskCheck();
+        }
+
+        function applyRiskCheck() {
+            saveProfile();
+            document.getElementById('modalOverlay').classList.remove('active');
+            renderRiskTab();
+            showToast('风险评级已按自评更新');
+        }
+
         function renderRiskTab() {
             const box = document.getElementById('riskScroll');
             const rp = riskProfile();
@@ -5123,18 +5395,25 @@
             if (seg) { seg.textContent = highs > 0 ? highs : ''; seg.classList.toggle('on', highs > 0); }
             if (!box) return;
 
+            const g = riskGrade();
+            const bars = riskBars();
             let html = `
-                <div class="rk-grade">
+                <div class="rk-grade" onclick="openRiskCheck()">
+                    ${state.riskCheckOpened ? '' : '<div class="rk-sample">示例数据</div>'}
                     <div class="rk-grade-top">
                         <span class="rk-grade-t">当前风险评级</span>
-                        <span class="rk-grade-v ${rp.gradeLv}">${rp.grade}</span>
+                        <span class="rk-grade-actions">
+                            <span class="rk-grade-v ${g.gradeLv}">${g.grade}</span>
+                            <button class="rk-self" onclick="event.stopPropagation();openRiskCheck()">${ic('edit', 14)} 自评</button>
+                        </span>
                     </div>
-                    ${rp.bars.map(b => `
+                    ${bars.map(b => `
                     <div class="rk-bar">
                         <span class="rk-name">${b.n}</span>
                         <div class="rk-track"><div class="rk-fill ${b.lv}" style="width:${b.w}%"></div></div>
-                        <span class="rk-tag ${b.lv}">${b.lv === 'low' ? '低' : (b.lv === 'medium' ? '中' : '高')}</span>
+                        <span class="rk-tag ${b.lv}">${lvText(b.lv)}</span>
                     </div>`).join('')}
+                    <div class="rk-grade-foot">点击自评 · 勾选你已经做到的，各维度风险当场重算</div>
                 </div>`;
 
             html += '<div class="page-section-title">风险提醒 · 按你的身份</div>';
