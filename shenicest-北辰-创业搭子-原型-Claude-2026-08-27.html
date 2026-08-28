@@ -1017,6 +1017,17 @@
             background: #f5f2ef;
             margin: 6px 0;
         }
+        /* 企业档案可改字段：点一行，选项在那一行底下就地展开 */
+        .pf-lead { font-size: 12px; color: var(--text-light); margin: -4px 0 8px; line-height: 1.6; }
+        .pf-row .pf-arrow { display: flex; align-items: center; transition: transform 0.2s; }
+        .pf-row .pf-arrow.open { transform: rotate(90deg); }
+        .pf-fixed { cursor: default; color: var(--text-secondary); }
+        .pf-fixed:active { background: transparent; padding-left: 0; }
+        .pf-panel { padding: 2px 0 10px 30px; }
+        .pf-hint { font-size: 11px; color: var(--text-light); line-height: 1.6; margin-bottom: 8px; }
+        .pf-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+        .pf-chip { font-size: 12px; padding: 6px 11px; border-radius: 20px; background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
+        .pf-chip.on { background: var(--primary-light); color: var(--primary-dark); border-color: var(--primary); font-weight: 600; }
 
         /* Chat Overlay */
         .chat-overlay {
@@ -3051,25 +3062,12 @@
                 <div class="profile-scroll">
                     <div class="profile-card">
                         <h4><svg class="ic ic-16"><use href="#i-tag"></use></svg> 企业档案</h4>
-                        <div class="pc-item">
-                            <span class="pc-icon"><svg class="ic ic-18"><use href="#i-flag"></use></svg></span>
-                            <span id="profileStage">企业阶段：--</span>
-                            <span class="pc-arrow">→</span>
-                        </div>
-                        <div class="pc-item">
+                        <div class="pf-lead">点任意一行改，改完当场重算政策、融资、风险</div>
+                        <div id="profileFields"></div>
+                        <div class="pc-divider"></div>
+                        <div class="pc-item pf-fixed">
                             <span class="pc-icon"><svg class="ic ic-18"><use href="#i-pin"></use></svg></span>
-                            <span id="profileCity">所在城市：--</span>
-                            <span class="pc-arrow">→</span>
-                        </div>
-                        <div class="pc-item">
-                            <span class="pc-icon"><svg class="ic ic-18"><use href="#i-factory"></use></svg></span>
-                            <span id="profileIndustry">行业：--</span>
-                            <span class="pc-arrow">→</span>
-                        </div>
-                        <div class="pc-item">
-                            <span class="pc-icon"><svg class="ic ic-18"><use href="#i-target"></use></svg></span>
-                            <span id="profileFocus">关注：--</span>
-                            <span class="pc-arrow">→</span>
+                            <span id="profileCity">所在园区：--</span>
                         </div>
                     </div>
                     <div class="profile-card">
@@ -3210,7 +3208,7 @@
             currentTab: 'home',
             chatOpen: false,
             city: '北京',     // 产品服务对象就是北辰园区企业，城市固定，冷启动不再问
-            industry: '',    // 政策匹配的主输入，进政策页时选
+            industry: '人工智能',    // 政策匹配的主输入。默认给园区主导产业，进来就有匹配结果，档案页与找机会页都能改
             finCond: [],     // 金融匹配的主输入，进金融页时勾
             biz: {},         // 模块内反选的分支记录（开公司到哪步、社保怎么成立的），随档案持久化
         };
@@ -3239,7 +3237,7 @@
                 const d = JSON.parse(raw);
                 if (!d || !d.company) return false;   // 身份是核心字段，缺了就不算有档案
                 state.company = d.company || '';
-                state.industry = d.industry || '';
+                state.industry = d.industry || '人工智能';   // 老档案里存的是空串，落回默认行业，别让它把默认值冲掉
                 state.graduation = d.graduation || '';
                 state.overseas = d.overseas || '';
                 state.finCond = d.finCond || [];
@@ -3350,14 +3348,15 @@
         let policyKeyword = '';
         let policyLevel = '全部';
         let policyShown = 20;
+        // 政策页、金融页、行政日历共用 pageScroll 这一个容器。记住当前打开的是哪一页，
+        // 档案改动重算时只重渲染它，否则在金融页里改行业会把金融页内容盖成政策页。
+        let currentServicePage = '';
 
+        // 政策页、找机会页、我的页三处都能改行业，统一走档案重算，不各自渲染各自那一页
         function setIndustry(v) {
+            if (state.industry === v) return;
             state.industry = v;
-            if (typeof updateProfileInfo === 'function') updateProfileInfo();
-            renderPolicyPage();
-            renderButlerMessage();
-            renderHomeAlerts();
-            renderBoard();
+            applyProfileChange();
         }
 
         function switchPolicyTab(t) {
@@ -3665,10 +3664,7 @@
             const i = state.finCond.indexOf(c);
             if (i >= 0) state.finCond.splice(i, 1); else state.finCond.push(c);
             finShown = 12;
-            saveProfile();
-            renderFinancePage();
-            renderOpportunityTab();
-            renderBoard();
+            applyProfileChange();
         }
 
         function switchFinTab(t) {
@@ -5019,11 +5015,19 @@
                     </div>
                 </div>`;
 
-            if (!state.industry) html += '<div class="pol-hint">还没选行业，政策这栏只按地域和企业阶段排。去政策页选一个行业，结果会重算。</div>';
-
+            // 行业选择器直接摆在这一栏里。以前这里只有一句「去政策页选」，
+            // 换行业得先跳出去再跳回来，改完还看不到这一栏的变化。
             html += '<div class="page-section-title">政策机会</div>';
+            html += `
+                <div class="pol-industry">
+                    <div class="pol-industry-label">你的行业（决定政策匹配结果，点一下当场重算）</div>
+                    <div class="pol-chips">
+                        ${Object.keys(INDUSTRY_TAGS).map(k => `<span class="pol-chip ${state.industry === k ? 'on' : ''}" onclick="setIndustry('${k}')">${k}</span>`).join('')}
+                    </div>
+                </div>`;
+            if (state.industry === '暂未确定') html += '<div class="pol-hint">行业选了暂未确定，这一栏只按地域和企业阶段排。选一个具体行业，结果会重算。</div>';
             html += mp.strong.slice(0, 4).map(p => policyCard(p, true)).join('')
-                || '<div class="pol-empty">当前画像没算出可申报政策。补上行业再看。</div>';
+                || '<div class="pol-empty">当前画像没算出可申报政策。换一个行业再看。</div>';
 
             // 融资这栏的筛选条件就摆在本栏里。空着的时候不写「去金融页勾」这种打发人的话，
             // 直接把可勾的条件摆出来，点一下当场重算。
@@ -5228,7 +5232,7 @@
             state.graduation = '';
             state.city = '北京';
             state.overseas = '';
-            state.industry = '';
+            state.industry = '人工智能';
             state.finCond = [];
             state.biz = {};
             document.getElementById('onboarding').style.display = 'flex';
@@ -5239,17 +5243,126 @@
             document.querySelectorAll('.ob-option').forEach(opt => opt.classList.remove('selected'));
         }
 
+        // ===== 我的页 · 企业档案（就地可改）=====
+        // 这五项都真实参与打分，不是展示字段：
+        // company 决定政策的阶段加分、哪些金融产品用得上、风险页是哪一套维度、猜您需要里出不出现「开公司」；
+        // industry 是政策匹配主输入；graduation 走青年人才类加权；overseas 走企业出海类加权；
+        // finCond 是金融匹配主输入，和找机会页融资那一栏共用同一份数据。
+        const PROFILE_FIELDS = [
+            {
+                key: 'company', icon: 'flag', label: '企业阶段',
+                opts: [{ v: '已注册', t: '已注册' }, { v: '未注册', t: '还没注册' }],
+                hint: '决定政策的阶段加分、哪些金融产品用得上、风险页是哪一套维度。从还没注册改成已注册，首页的开公司入口会收起来。',
+            },
+            {
+                key: 'industry', icon: 'factory', label: '行业',
+                opts: Object.keys(INDUSTRY_TAGS).map(k => ({ v: k, t: k })),
+                hint: '政策匹配的主输入，换一个当场重排。',
+            },
+            {
+                key: 'graduation', icon: 'grad', label: '毕业状态',
+                opts: [{ v: '在校', t: '在校生' }, { v: '已毕业', t: '已毕业' }],
+                hint: '在校生会给青年人才、大学生创业类条目加权。',
+            },
+            {
+                key: 'overseas', icon: 'globe', label: '出海业务',
+                opts: [{ v: '有', t: '已在海外运营' }, { v: '计划中', t: '计划中' }, { v: '无', t: '暂无打算' }],
+                hint: '选了有或计划中，企业出海类政策会往前排。',
+            },
+            {
+                key: 'finCond', icon: 'target', label: '融资条件', multi: true,
+                opts: Object.keys(FIN_CONDITIONS).map(k => ({ v: k, t: k })),
+                hint: '金融匹配的主输入，可多选。和找机会页融资那一栏是同一份，改哪边都一样。',
+            },
+        ];
+
+        let openProfileField = '';   // 当前展开的那一行，空串是全收起
+
+        function profileFieldText(f) {
+            if (f.multi) {
+                const arr = state[f.key] || [];
+                return arr.length ? arr.join('、') : '未设置';
+            }
+            const hit = f.opts.filter(o => o.v === state[f.key])[0];
+            return hit ? hit.t : '未设置';
+        }
+
+        function renderProfileFields() {
+            const box = document.getElementById('profileFields');
+            if (!box) return;
+            box.innerHTML = PROFILE_FIELDS.map((f, i) => {
+                const open = openProfileField === f.key;
+                const chips = f.opts.map(o => {
+                    const on = f.multi ? (state[f.key] || []).indexOf(o.v) >= 0 : state[f.key] === o.v;
+                    return `<span class="pf-chip${on ? ' on' : ''}" onclick="setProfileField(event,'${f.key}','${o.v}')">${o.t}</span>`;
+                }).join('');
+                return `${i ? '<div class="pc-divider"></div>' : ''}
+                    <div class="pc-item pf-row" onclick="toggleProfileField('${f.key}')">
+                        <span class="pc-icon">${ic(f.icon, 18)}</span>
+                        <span>${f.label}：${profileFieldText(f)}</span>
+                        <span class="pc-arrow pf-arrow${open ? ' open' : ''}">${ic('chevron', 14)}</span>
+                    </div>
+                    ${open ? `<div class="pf-panel"><div class="pf-hint">${f.hint}</div><div class="pf-chips">${chips}</div></div>` : ''}`;
+            }).join('');
+        }
+
+        function toggleProfileField(k) {
+            openProfileField = openProfileField === k ? '' : k;
+            renderProfileFields();
+        }
+
+        function setProfileField(ev, key, v) {
+            if (ev) ev.stopPropagation();   // 别冒泡回那一行，否则选完立刻被收起
+            const f = PROFILE_FIELDS.filter(x => x.key === key)[0];
+            if (!f) return;
+            if (f.multi) {
+                const arr = (state[key] || []).slice();
+                const i = arr.indexOf(v);
+                if (i >= 0) arr.splice(i, 1); else arr.push(v);
+                state[key] = arr;
+                applyProfileChange();
+                showToast('融资条件已更新，匹配结果重算了');
+                return;
+            }
+            if (state[key] === v) return;   // 点已经选中的那个不做事，避免误触
+            state[key] = v;
+            applyProfileChange();
+            showToast(f.label + '改成' + (f.opts.filter(o => o.v === v)[0] || {}).t + '，匹配结果重算了');
+        }
+
+        // 档案任何一项改了都走这里。各改各的一定会漏：阶段一变，首页问候语、
+        // 猜您需要里的开公司入口、风险维度、金融打分全都要跟着变。
+        function applyProfileChange() {
+            saveProfile();
+            updateProfileInfo();
+            const greeting = document.getElementById('homeGreeting');
+            if (greeting) greeting.innerHTML = state.company === '未注册'
+                ? '你好，<strong>未来创业者</strong>'
+                : '你好，<strong>创业者</strong>';
+            renderButlerMessage();
+            renderHomeAlerts();
+            renderTaskGrid();
+            renderBoard();
+            if (state.currentTab === 'opportunity') renderOpportunityTab();
+            if (state.currentTab === 'company') renderRiskTab();
+            // 只重渲染真正打开着的那一页。行政日历不吃档案，重渲染会把选中的日期冲掉
+            const overlay = document.getElementById('pageOverlay');
+            if (overlay && overlay.classList.contains('active')
+                && ['政策补贴', '金融服务', '融资机会'].indexOf(currentServicePage) >= 0) {
+                renderServicePage(currentServicePage);
+            }
+        }
+
         function updateProfileInfo() {
-            // 更新“我的”页面信息
+            // 我的页顶部与固定展示项。可改的五项交给 renderProfileFields
             const stage = state.company === '已注册' ? '初创期' : (state.company === '未注册' ? '准备中' : '未知');
-            document.getElementById('profileStage').textContent = `企业阶段：${stage}`;
+            const os = (state.overseas === '有' || state.overseas === '计划中') ? ' · 出海' + state.overseas : '';
             document.getElementById('profileCity').textContent = '所在园区：北辰产业云社区 · 朝阳区';
-            document.getElementById('profileIndustry').textContent = '行业：' + (state.industry || '未设置，去政策页选');
-            document.getElementById('profileFocus').textContent = `关注：未设置`;
             const pc = document.getElementById('profileCompany');
-            pc.textContent = `北辰产业云社区 · ${stage}${state.overseas ? ' · 出海' + state.overseas : ''}`;
+            pc.textContent = `北辰产业云社区 · ${stage}${os}`;
             const pn = document.getElementById('profileName');
             pn.textContent = state.company === '未注册' ? '未来创业者' : '创业者';
+            renderProfileFields();
         }
 
         // ===== Tab Switching =====
@@ -5279,7 +5392,9 @@
             document.getElementById('modalOverlay').classList.remove('active');
             if (tab === 'opportunity') renderOpportunityTab();
             if (tab === 'company') renderRiskTab();
+            if (tab === 'profile') { openProfileField = ''; renderProfileFields(); }
             // Close service page
+            currentServicePage = '';
             document.getElementById('pageOverlay').classList.remove('active');
         }
 
@@ -5818,6 +5933,7 @@
 
         // 渲染通用服务独立页
         function renderServicePage(name) {
+            currentServicePage = name;
             if (name === '行政日历') {
                 renderCalendarPage();
                 return;
@@ -5865,6 +5981,7 @@
         }
 
         function closeServicePage() {
+            currentServicePage = '';
             document.getElementById('pageOverlay').classList.remove('active');
         }
 
