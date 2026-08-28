@@ -4526,7 +4526,8 @@
                 steps: [
                     { id: 'name', t: '名称自主申报', short: '名称', icon: 'edit',
                       guide: [
-                          { icon: 'globe', title: '打开网站', text: '访问北京市企业服务 e 窗通平台', link: { label: '进入 e 窗通', url: '#' } },
+                          // e 窗通官网。2026-08-28 核实：带浏览器 UA 请求返回 200，标题「北京市企业服务e窗通平台」
+                          { icon: 'globe', title: '打开网站', text: '访问北京市企业服务 e 窗通平台', link: { label: '进入 e 窗通', url: 'https://ect.scjgj.beijing.gov.cn' } },
                           { icon: 'edit', title: '点名称申报', text: '在首页点「名称自主申报」模块' },
                           { icon: 'doc', title: '填公司名', text: '按「行政区划 + 字号 + 行业 + 组织形式」填公司名' },
                           { icon: 'check', title: '选经营范围', text: '把经营范围想清楚，提交后等名称核准结果' },
