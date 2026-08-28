@@ -2608,6 +2608,14 @@
         .step-g-t { font-size:var(--fs-md); font-weight:600; color:var(--n900); }
         .step-g-d { font-size:var(--fs-body); color:var(--n700); line-height:1.7; margin-top:2px; }
         .step-g-link { display:inline-flex; align-items:center; gap:4px; margin-top:6px; font-size:var(--fs-sm); color:var(--trust); font-weight:600; }
+        /* 小动作卡片里的细化信息：线下 / 成本 / 时间 / 材料 / 参考，按需挂在对应动作下 */
+        .step-info { display:flex; flex-direction:column; gap:4px; margin-top:8px; }
+        .step-info-row { display:flex; gap:8px; align-items:flex-start; padding:8px 10px; background:var(--n50); border-radius:var(--r-sm); text-decoration:none; }
+        .si-ic { flex-shrink:0; color:var(--brand); display:flex; align-items:center; margin-top:2px; }
+        .si-k { flex-shrink:0; font-size:var(--fs-sm); font-weight:700; color:var(--n500); min-width:52px; line-height:1.6; }
+        .si-v { flex:1; min-width:0; font-size:var(--fs-body); color:var(--n800); line-height:1.6; }
+        .si-doc { display:inline-block; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:1px 7px; margin:2px 4px 2px 0; font-size:var(--fs-sm); color:var(--n700); }
+        a.step-info-row .si-v { color:var(--trust); font-weight:600; }
         .tp-steps { margin: 0 20px 14px; background: var(--n0); border: var(--hair); border-radius: var(--r-sm); overflow: hidden; }
         .tp-step { display: flex; gap: 11px; padding: 12px 14px; border-bottom: var(--hair); }
         .tp-step:last-child { border-bottom: none; }
@@ -2961,7 +2969,7 @@
                         </div>
                         <div class="service-card" onclick="openTaskPage('场地')">
                             <span class="sc-icon"><svg class="ic ic-26"><use href="#i-pin"></use></svg></span>
-                            <span class="sc-name">找场地</span>
+                            <span class="sc-name">入驻园区</span>
                             <span class="sc-desc">北辰四大园区与载体政策</span>
                         </div>
                         <div class="service-card" onclick="openServiceDetail('行政日历')">
@@ -3210,7 +3218,7 @@
             currentTab: 'home',
             chatOpen: false,
             city: '北京',     // 产品服务对象就是北辰园区企业，城市固定，冷启动不再问
-            industry: '',    // 政策匹配的主输入，进政策页时选
+            industry: '人工智能',  // 政策匹配的主输入，默认人工智能，可在政策页改选
             finCond: [],     // 金融匹配的主输入，进金融页时勾
             biz: {},         // 模块内反选的分支记录（开公司到哪步、社保怎么成立的），随档案持久化
         };
@@ -4459,7 +4467,7 @@
             { key: '开公司', label: '开公司',     capy: 'sign' },
             { key: '政策',   label: '政策补助',   capy: 'reading' },
             { key: '融资',   label: '融资',       capy: 'wallet' },
-            { key: '场地',   label: '找场地',     capy: 'labor' },
+            { key: '场地',   label: '入驻园区',   capy: 'labor' },
             { key: '社保',   label: '交社保',     capy: 'safe' },
             { key: '发票',   label: '开发票',     capy: 'compliance' },
             { key: 'app',    label: '上架 App',   capy: 'laptop' },
@@ -4526,14 +4534,14 @@
             '开公司': {
                 title: '开公司', icon: 'biz',
                 stepper: true,
-                lead: '北京开办企业走「e 窗通」一网通办：营业执照、免费公章、涉税事项、五险一金信息采集、银行预约开户在一个平台一次填报，一天办结。',
+                lead: '北京开办企业走「e 窗通」一网通办：营业执照、免费公章、涉税事项、社保登记、银行预约开户在一个平台一次填报，一天办结。',
                 steps: [
                     { id: 'name', t: '名称自主申报', short: '名称', icon: 'edit',
                       guide: [
-                          { icon: 'globe', title: '打开网站', text: '访问北京市企业服务 e 窗通平台', link: { label: '进入 e 窗通', url: '#' } },
+                          { icon: 'globe', title: '打开网站', text: '访问北京市企业服务 e 窗通平台', link: { label: '进入 e 窗通', url: 'https://ect.scjgj.beijing.gov.cn' } },
                           { icon: 'edit', title: '点名称申报', text: '在首页点「名称自主申报」模块' },
-                          { icon: 'doc', title: '填公司名', text: '按「行政区划 + 字号 + 行业 + 组织形式」填公司名' },
-                          { icon: 'check', title: '选经营范围', text: '把经营范围想清楚，提交后等名称核准结果' },
+                          { icon: 'doc', title: '填公司名', text: '按「行政区划 + 字号 + 行业 + 组织形式」填公司名', docs: ['拟用公司名称（多备几个）'] },
+                          { icon: 'check', title: '选经营范围', text: '把经营范围想清楚，提交后等名称核准结果', cost: '免费', time: '即时（线上申报）', ref: { label: '北京市市场监督管理局', url: 'https://scjgj.beijing.gov.cn' } },
                       ] },
                     { id: 'reg', t: '设立登记', short: '登记', icon: 'file',
                       ask: { key: 'biz.companyType', q: '你的公司类型是？', options: [
@@ -4542,15 +4550,16 @@
                           { label: '合伙企业', hint: '适合律师、会计师等专业团队' },
                       ] },
                       guide: [
-                          { icon: 'doc', title: '提交章程', text: '提交公司章程' },
-                          { icon: 'users', title: '填股东信息', text: '填股东与法定代表人信息' },
-                          { icon: 'check', title: '实名认证', text: '完成实名认证' },
-                          { icon: 'file', title: '申请执照', text: '提交后申请营业执照' },
+                          { icon: 'globe', title: '打开 e 窗通', text: '点「企业开办」模块，一次填报', link: { label: '进入 e 窗通', url: 'https://ect.scjgj.beijing.gov.cn' } },
+                          { icon: 'doc', title: '提交章程', text: '上传公司章程', docs: ['公司章程'] },
+                          { icon: 'users', title: '填股东信息', text: '填股东与法定代表人信息', docs: ['股东、法定代表人身份证件'] },
+                          { icon: 'check', title: '实名认证', text: '全体股东与高管完成实名认证' },
+                          { icon: 'file', title: '申请执照', text: '提交后申请营业执照', offline: '各区市场监督管理局政务服务中心 · 企业开办综合窗口（可就近选择）', docs: ['住所（经营场所）证明：不动产权证或租赁合同', '涉及前置审批的许可文件'], cost: '免费（免营业执照工本费）', time: '1 个工作日（e 窗通一天办结）', ref: { label: '市监局 · 企业设立登记', url: 'https://scjgj.beijing.gov.cn' } },
                       ] },
                     { id: 'seal', t: '免费刻章', short: '刻章', icon: 'check',
                       guide: [
-                          { icon: 'check', title: '免费刻章', text: '开办环节的公章由政府买单' },
-                          { icon: 'award', title: '跟执照一起做', text: '公章、财务章等跟执照一起发放' },
+                          { icon: 'check', title: '免费刻章', text: '开办环节的公章由政府买单', cost: '免费（政府买单）' },
+                          { icon: 'award', title: '跟执照一起做', text: '公章、财务章等跟执照一起发放', offline: '随营业执照一并在「办理结果」服务包中领取，或到政务服务中心一窗领取', time: '随营业执照一起发放', ref: { label: '市监局 · 免费刻章说明', url: 'https://scjgj.beijing.gov.cn' } },
                       ] },
                     { id: 'tax', t: '涉税事项', short: '涉税', icon: 'receipt',
                       ask: { key: 'biz.needInvoice', q: '你需要开发票吗？', options: [
@@ -4558,19 +4567,21 @@
                           { label: '暂不需要', hint: '后续有需要再申请票种核定' },
                       ] },
                       guide: [
-                          { icon: 'receipt', title: '税务信息确认', text: '同一份表里做税务信息确认' },
+                          { icon: 'receipt', title: '税务信息确认', text: '在 e 窗通同一份表里做税务信息确认', offline: '所属税务机关办税服务厅（多数事项可线上办）', docs: ['营业执照', '法定代表人身份证件', '银行账户信息', '财务负责人与办税人员信息'] },
                           { icon: 'doc', title: '票种核定', text: '按业务类型申请票种核定' },
+                          { icon: 'globe', title: '电子税务局', text: '后续申报、领票走电子税务局', link: { label: '进入电子税务局', url: 'https://beijing.chinatax.gov.cn' }, cost: '免费', time: '随注册同步，当天完成', ref: { label: '北京市电子税务局', url: 'https://beijing.chinatax.gov.cn' } },
                       ] },
-                    { id: 'social', t: '五险一金信息采集', short: '五险一金', icon: 'shield',
+                    { id: 'social', t: '社保登记', short: '社保', icon: 'shield',
                       guide: [
-                          { icon: 'users', title: '员工参保采集', text: '员工参保信息在这一步一并填' },
-                          { icon: 'shield', title: '社保同步', text: '社保登记会随注册同步过去' },
+                          { icon: 'users', title: '员工参保采集', text: '员工参保信息在这一步一并填', docs: ['营业执照', '法定代表人信息', '首批员工参保信息'] },
+                          { icon: 'shield', title: '社保同步', text: '社保登记会随注册同步过去', link: { label: '社保网上服务平台', url: 'https://rsj.beijing.gov.cn' }, offline: '随注册同步，无需单独跑窗口；未同步的再线上填报', cost: '免费', time: '随注册同步，无需单独办' },
+                          { icon: 'globe', title: '公积金预登记', text: '公积金同一平台「单位预登记」', link: { label: '公积金中心', url: 'https://gjj.beijing.gov.cn' }, ref: { label: '北京市人力资源和社会保障局', url: 'https://rsj.beijing.gov.cn' } },
                       ] },
                     { id: 'bank', t: '银行预约开户', short: '开户', icon: 'bank',
                       guide: [
-                          { icon: 'bank', title: '预约银行', text: '平台上直接预约合作银行' },
-                          { icon: 'calendar', title: '领执照开对公户', text: '执照下来就能去开对公户' },
-                          { icon: 'coin', title: '对公户缴税', text: '对公户开完才能从账户扣缴税款' },
+                          { icon: 'bank', title: '预约银行', text: '平台上直接预约合作银行', link: { label: 'e 窗通预约开户', url: 'https://ect.scjgj.beijing.gov.cn' } },
+                          { icon: 'calendar', title: '领执照开对公户', text: '执照下来就能去开对公户', offline: '预约银行网点柜台（面签开户）', docs: ['营业执照正副本', '公章、财务章、法人章', '法定代表人身份证原件', '公司章程', '基本存款账户申请书'] },
+                          { icon: 'coin', title: '对公户缴税', text: '对公户开完才能从账户扣缴税款', cost: '多数银行对小微企业免开户费', time: '1-2 个工作日', ref: { label: '合作银行开户指引（以预约银行为准）', url: 'https://ect.scjgj.beijing.gov.cn' } },
                       ] },
                 ],
                 where: '北京市企业服务 e 窗通平台。执照、公章、发票与税控设备打包成「办理结果」服务包，可以邮寄，也可以到企业开办大厅一窗领取。',
@@ -4666,7 +4677,7 @@
                 todos: ['盘点已有技术方案，定专利布局清单', '提交商标注册申请', '给核心代码做软著登记'],
             },
             '场地': {
-                title: '找场地', icon: 'pin',
+                title: '入驻园区', icon: 'pin',
                 lead: '北辰产业云社区四大园区，按产业方向选。下面挂的是园区载体相关的支持政策。',
                 parks: [
                     { n: '朝阳数据要素产业园', d: '数据要素方向' },
@@ -4892,6 +4903,16 @@
             (s.guide || []).forEach(g => {
                 h += `<div class="step-g-item"><div class="step-g-icon">${ic(g.icon, 16)}</div><div class="step-g-body"><div class="step-g-t">${g.title}</div><div class="step-g-d">${g.text}</div>`;
                 if (g.link) h += `<a class="step-g-link" href="${g.link.url}" target="_blank" rel="noopener">${g.link.label}${ic('external', 12)}</a>`;
+                // 细化信息挂在小动作卡片里：线下 / 成本 / 时间 / 材料 / 参考，按需填
+                if (g.offline || g.cost || g.time || (g.docs && g.docs.length) || g.ref) {
+                    h += `<div class="step-info">`;
+                    if (g.offline) h += `<div class="step-info-row"><span class="si-ic">${ic('pin', 14)}</span><span class="si-k">线下办理</span><span class="si-v">${g.offline}</span></div>`;
+                    if (g.cost) h += `<div class="step-info-row"><span class="si-ic">${ic('coin', 14)}</span><span class="si-k">成本费用</span><span class="si-v">${g.cost}</span></div>`;
+                    if (g.time) h += `<div class="step-info-row"><span class="si-ic">${ic('clock', 14)}</span><span class="si-k">预计时间</span><span class="si-v">${g.time}</span></div>`;
+                    if (g.docs && g.docs.length) h += `<div class="step-info-row"><span class="si-ic">${ic('file', 14)}</span><span class="si-k">要交的材料</span><span class="si-v">${g.docs.map(x => `<span class="si-doc">${x}</span>`).join('')}</span></div>`;
+                    if (g.ref) h += `<a class="step-info-row" href="${g.ref.url}" target="_blank" rel="noopener"><span class="si-ic">${ic('doc', 14)}</span><span class="si-k">参考资料</span><span class="si-v">${g.ref.label}</span>${ic('external', 12)}</a>`;
+                    h += `</div>`;
+                }
                 h += `</div></div>`;
             });
             h += `</div>`;
@@ -5228,7 +5249,7 @@
             state.graduation = '';
             state.city = '北京';
             state.overseas = '';
-            state.industry = '';
+            state.industry = '人工智能';
             state.finCond = [];
             state.biz = {};
             document.getElementById('onboarding').style.display = 'flex';
