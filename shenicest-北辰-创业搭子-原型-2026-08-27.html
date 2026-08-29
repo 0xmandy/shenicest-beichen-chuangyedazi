@@ -1481,6 +1481,14 @@
         }
         .sup-contact:active { opacity: 0.7; }
 
+        /* 服务详情展开区块（场地资源 / 园区商机） */
+        .dt-panel { display: none; margin-top: 8px; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; }
+        .pg-exp.open .dt-panel { display: block; }
+        .dt-row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--border); }
+        .dt-row:last-child { border-bottom: none; }
+        .dt-k { flex: 0 0 68px; font-size: 12px; color: var(--text-light); }
+        .dt-v { flex: 1; font-size: 12px; color: var(--text); line-height: 1.7; }
+
         /* CTA 按钮 */
         .page-cta {
             margin-top: 4px;
@@ -2252,6 +2260,12 @@
         .pd-link { display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:12px; color:var(--text); text-decoration:none; background:var(--bg); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:7px; line-height:1.6; }
         .pd-go { flex:0 0 auto; font-size:11px; font-weight:600; color:var(--primary-dark); }
         .pd-cta { text-align:center; background:var(--primary); color:#fff; font-size:14px; font-weight:600; border-radius:var(--radius-sm); padding:12px; margin-top:6px; }
+        /* 园区结构化介绍弹层 */
+        .pk-facts { background:var(--bg); border-radius:var(--radius-sm); padding:4px 12px; }
+        .pk-fact { display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); }
+        .pk-fact:last-child { border-bottom:none; }
+        .pk-k { flex:0 0 74px; font-size:12px; color:var(--text-light); }
+        .pk-v { flex:1; font-size:12px; color:var(--text); line-height:1.7; }
 
         /* 管家问答里的政策卡 */
         .msg-rich { background:var(--card); color:var(--text); max-width:88%; }
@@ -2930,9 +2944,11 @@
             border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; gap: 7px;
         }
         .tp-note { margin: 0 20px 14px; font-size: var(--fs-cap); color: var(--n500); line-height: 1.8; }
-        .tp-park { margin: 0 20px 10px; padding: 13px 14px; background: var(--n0); border: var(--hair); border-radius: var(--r-sm); }
+        .tp-park { margin: 0 20px 10px; padding: 13px 14px; background: var(--n0); border: var(--hair); border-radius: var(--r-sm); cursor: pointer; }
+        .tp-park:active { background: var(--n100); }
         .tp-park-n { font-size: var(--fs-md); font-weight: 600; color: var(--n900); }
         .tp-park-d { font-size: var(--fs-sm); color: var(--n500); line-height: 1.7; margin-top: 4px; }
+        .tp-park-go { display: flex; align-items: center; gap: 4px; font-size: var(--fs-cap); font-weight: 600; color: var(--brand); margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -3839,6 +3855,33 @@
             if (!p) return;
             document.getElementById('modalOverlay').classList.remove('active');
             showToast('已加入待办：' + (p.name.length > 12 ? p.name.slice(0, 12) + '…' : p.name));
+        }
+
+        // ===== 入驻园区：四个园区点开结构化介绍半弹窗 =====
+        function openParkDetail(i) {
+            const parks = (TASK_PAGES['场地'] && TASK_PAGES['场地'].parks) || [];
+            const p = parks[i];
+            if (!p) return;
+            document.getElementById('modalTitle').textContent = p.n;
+            document.getElementById('modalSub').textContent = p.d;
+            document.getElementById('modalContent').innerHTML = parkDetailHTML(p);
+            document.getElementById('modalOverlay').classList.add('active');
+        }
+
+        function parkDetailHTML(p) {
+            let h = '';
+            if (p.intro) h += `<div class="pd-block"><div class="pd-line">${p.intro}</div></div>`;
+            if (p.facts && p.facts.length) {
+                h += `<div class="pd-block"><div class="pd-h">基本信息</div><div class="pk-facts">` +
+                    p.facts.map(f => `<div class="pk-fact"><span class="pk-k">${f.k}</span><span class="pk-v">${f.v}</span></div>`).join('') +
+                    `</div></div>`;
+            }
+            (p.blocks || []).forEach(b => {
+                h += `<div class="pd-block"><div class="pd-h">${b.h}</div>` +
+                    (b.lines || []).map(l => `<div class="pd-line">${l}</div>`).join('') +
+                    `</div>`;
+            });
+            return h;
         }
 
         // ===== 管家问答接入政策库 =====
@@ -5168,10 +5211,61 @@
                 title: '入驻园区', icon: 'pin',
                 lead: '北辰产业云社区四大园区，按产业方向选。下面挂的是园区载体相关的支持政策。',
                 parks: [
-                    { n: '朝阳数据要素产业园', d: '数据要素方向' },
-                    { n: '人工智能会展产业园', d: '人工智能与会展方向' },
-                    { n: '智能机器人创新应用基地', d: '智能机器人方向' },
-                    { n: '北辰 AI 超维社区', d: 'AI 应用社区方向' },
+                    { n: '朝阳数据要素产业园', d: '数据要素方向',
+                      intro: '朝阳数据要素产业园是北京市朝阳区重点打造的数据要素产业集聚区，于 2025年1月16日 正式揭牌开园。',
+                      facts: [
+                          { k: '开园时间', v: '2025年1月16日' },
+                          { k: '地理位置', v: '北辰世纪中心（朝阳北部科创带，亚奥核心区）' },
+                          { k: '产业面积', v: '9.6万平方米' },
+                          { k: '建设主体', v: '朝阳区与北辰集团共建，由中关村朝阳园管委会（区科信局）联合北辰商管共同打造' },
+                          { k: '定位', v: '朝阳区承接北京市数据要素基础制度先行区的主承载区' },
+                      ],
+                      blocks: [
+                          { h: '核心功能', lines: ['园区围绕"一中心六平台"服务体系建设：', '一中心：朝阳区数据要素综合服务中心（位于世纪中心A座209）', '六平台：数据要素流通平台、数据跨境流通服务平台、数据标准建设服务平台、数据产品应用服务平台、数据人才培养服务平台、数据要素产业集聚平台'] },
+                          { h: '入驻企业', lines: ['目前已集聚 29家 数据要素企业，包括：', '北京国际大数据交易所（北数所）—— 数据要素重要交易平台', '元保数科 —— 数字经济高成长企业', '博远友辰 —— 医疗健康行业数据经纪服务商', '数业专攻 —— 数据领域高成长性企业'] },
+                          { h: '服务内容', lines: ['为入驻企业提供覆盖数据要素全生命周期的服务：', '数据治理、数据资产登记、资产评估、入表咨询', '金融对接等数据资产全过程服务', '数据交易撮合、数据合规咨询', '数据跨境流通服务'] },
+                          { h: '政策支持', lines: ['入驻企业可享受《朝阳区关于支持数据要素产业发展的若干措施》相关优惠政策。'] },
+                          { h: '未来展望', lines: ['园区将依托亚奥商圈丰富的商务会展、消费、金融等资源，推动数据要素在会展、金融、文旅、商贸等领域的成果转化和场景应用，并逐渐辐射至亚奥区域 60余万平方米 产业空间，助力北京打造国家数据管理中心、国家数据资源中心和国家数据流通交易中心。'] },
+                      ] },
+                    { n: '人工智能会展产业园', d: '人工智能与会展方向',
+                      intro: '人工智能会展产业园（北京朝阳区）是由北辰集团（北京北辰实业股份有限公司）联合多方力量推动建设的项目，位于北京市朝阳区奥林匹克中心区，是北辰集团"会展+"生态布局的重要组成部分。',
+                      blocks: [
+                          { h: '项目背景', lines: ['2025年9月23日，人工智能会展生态联盟在北京成立，由北辰集团联合多方力量倡议发起，汇聚政府部门、50余家企业及科研院校等多元主体。在成立仪式上，中关村朝阳园管委会、北辰集团、北辰商管、朝科创联合启动了"人工智能会展产业园合作计划"。'] },
+                          { h: '园区定位', lines: ['该产业园旨在整合区域资源，打造集以下功能于一体的会展创新园区：', '技术研发、场景测试、企业孵化、产业集聚'] },
+                          { h: '运营进展', lines: ['根据北辰实业2026年中期报告，该产业园已实现一体化统筹运营，与朝阳数据要素产业园、智能机器人创新应用基地协同发展，成为北辰实业产业园区板块的重要组成部分。'] },
+                          { h: '相关配套', lines: ['首都会展科技创新产业基金：由北辰集团联合朝科创基金、北京国管、米奥会展、北创投设立，为联盟内企业的技术研发和项目落地提供资金支持。', '会展可信数据空间建设：联合北京电信、腾讯云等企业，通过区块链、隐私计算等技术构建会展数据可信流通体系。'] },
+                      ] },
+                    { n: '智能机器人创新应用基地', d: '智能机器人方向',
+                      intro: '智能机器人创新应用基地位于北京市朝阳区亚奥商圈核心地带的北辰时代大厦，是北京朝阳区智能机器人产业"一园两基地"布局的重要组成部分。',
+                      facts: [
+                          { k: '开园时间', v: '2025年12月19日' },
+                          { k: '共建方', v: '中关村朝阳园管委会（区科信局）、亚运村街道、北辰集团（北辰商管与数智云科联合共建）' },
+                          { k: '地址', v: '北京市朝阳区北辰时代大厦' },
+                          { k: '总规划面积', v: '13.9万平方米，首期约2万平方米' },
+                          { k: '定位', v: '集产业服务、产学研合作、孵化器、创新赛事与公共空间于一体的产业集聚区' },
+                      ],
+                      blocks: [
+                          { h: '核心功能', lines: ['基地构建了三大功能分区：', '展览展示区 — 展示前沿机器人技术与产品', '产业孵化区 — 为初创企业提供成长空间', '共性技术平台 — 提供公共技术支撑服务', '办公空间从100至2200平方米不等，涵盖孵化工位、独立办公、定制化空间等多梯度产品，满足不同发展阶段企业的需求。'] },
+                          { h: '场景优势：从"展厅"到"实战"', lines: ['基地最大的特色在于场景落地能力。北辰集团拥有高端写字楼、国际会展、五星级酒店、商业综合体、文化剧院和服务式公寓六大核心业态，为机器人企业提供现成的"训练场"和"首单客户"：', '五洲大酒店 — 前台接待、客房送物、床铺整理等酒店服务场景', '国家会议中心 — 智能客房清洁、智能讲解、智能搬运等会展服务场景', '高端写字楼 — 前台接待与物料配送场景', '商业综合体 — 智慧导览和安防巡检场景', '入驻企业可以"带着机器人下楼"，在真实运营环境中完成测试迭代，解决技术验证到商业落地的"最后一公里"难题。'] },
+                          { h: '入驻企业', lines: ['开园以来，已有8家重点机器人企业签约落户，包括深朴智能、大咖机器人、睿尔曼RealBOT等，覆盖人形机器人、服务机器人、特种机器人等多个细分领域。'] },
+                          { h: '区域协同', lines: ['该基地是朝阳区"一园两基地"机器人产业布局的关键一环：', '一园：北京奥林匹克中心区机器人创新公园（2026-2030年规划建设）', '两基地：北京人形机器人赛训基地 + 智能机器人创新应用基地', '基地已被纳入《北京奥林匹克中心区机器人创新公园规划建设方案（2026-2030年）》，作为"产业培育节点"，承接赛训技术落地，成为机器人技术转化枢纽。'] },
+                      ] },
+                    { n: '北辰 AI 超维社区', d: 'AI 应用社区方向',
+                      intro: '北辰·AI超维社区是北京市朝阳区亚运村街道于2026年4月正式发布并揭牌的新型产业社区项目，是亚运村"AI全域场景实验街道"的重要空间承载。',
+                      facts: [
+                          { k: '正式名称', v: '北辰·AI超维社区' },
+                          { k: '发布时间', v: '2026年4月10日' },
+                          { k: '所在区域', v: '北京市朝阳区亚运村街道，亚奥核心区' },
+                          { k: '运营主体', v: '北辰商管（北辰实业旗下）' },
+                          { k: '地址', v: '北京市朝阳区北辰东路8号院' },
+                      ],
+                      blocks: [
+                          { h: '核心定位与特色', lines: ['该社区依托亚奥核心区独特的双奥遗产与商务会展产业集群优势，以"职住一体、三区联动"为核心理念，打破传统产业园区边界。', '三大核心方向：', '人工智能与具身智能产业为核心引擎', 'AI+商务会展、AI+商业消费为典型场景', '优质企业与"一人公司"（OPC）为创新主体'] },
+                          { h: '空间布局', lines: ['社区统筹布局以下功能空间：', '具身智能产业园区', 'OPC共享办公空间', '多层次AI人才公寓', '路演展示与交流互动空间'] },
+                          { h: '服务体系', lines: ['围绕企业全生命周期创新发展需求，搭建全要素、一站式技术与服务平台：', '灵活工位租赁与普惠算力支撑', '一站式商务代办与政策红利直达', '产业订单对接与金融赋能', '工商注册、财税管理、法务咨询等全链条服务', '先锋人才培养与全程陪跑引导'] },
+                          { h: '发展目标', lines: ['北辰·AI超维社区致力于建设成为：', '全国领先的AI超级个体集聚区', '未来产业示范区', '朝阳区首批11个OPC社区之一，定位为"国企主导、职住一体的超级个体孵化器"'] },
+                          { h: '相关配套', lines: ['该项目与亚运村街道"AI全域场景实验街道"建设同步推进，配套启动了AI场景实验室、智能机器人孵化器等产业服务平台，以及2026智能机器人创新应用大赛等创新赛事。'] },
+                      ] },
                 ],
                 where: '可租面积、租金与入驻条件问园区企服中心，不同园区口径不一样。',
                 policyTag: '园区载体',
@@ -5941,6 +6035,7 @@
             const biz = state.biz || {};
             const open = !!biz[key + '.identQuizOpen'];
             let h = `<div class="ident-first">${ic('bolt', 16)}<div><b>先验证，再注册。</b>不一定要现在注册公司——先把 Demo / 网页版做出来验证，等有真实的人愿意付费，再注册、上线也不迟。</div></div>`;
+            h += `<div class="ident-warn">${ic('refresh', 16)}<div><b>主体变更的坑：</b>个人能转企业，但要脱层皮——审核费、公证、ICP 重备案，而且只能往企业方向转、不能转回个人。第一步就尽量选对。</div></div>`;
             h += `<div class="ident-quick${open ? ' open' : ''}">`;
             h += `<div class="iq-head" onclick="toggleIdentQuiz('${key}')"><div class="iq-head-main"><div class="ident-quick-title">三问对号入座</div><div class="iq-sub">${open ? '点箭头收起' : '点开看三个问题，对号入座'}</div></div><span class="iq-chevron">${ic('chevron', 16)}</span></div>`;
             if (open) {
@@ -5966,7 +6061,6 @@
                 h += `<div class="ident-cost-item">${ic(c.icon, 14)}<span>${c.t}</span></div>`;
             });
             h += `<div class="ident-cost-note">费用与规则为 2026 年 8 月公开口径，微信政策可能调整，以官方最新页面为准。</div></div>`;
-            h += `<div class="ident-warn">${ic('refresh', 16)}<div><b>主体变更的坑：</b>个人能转企业，但要脱层皮——审核费、公证、ICP 重备案，而且只能往企业方向转、不能转回个人。第一步就尽量选对。</div></div>`;
             return h;
         }
         function toggleIdentQuiz(key) {
@@ -6056,9 +6150,10 @@
 
             if (d.parks) {
                 h += `<div class="page-section-title">北辰产业云社区四大园区</div>`;
-                h += d.parks.map(p => `<div class="tp-park">
+                h += d.parks.map((p, i) => `<div class="tp-park" onclick="openParkDetail(${i})">
                     <div class="tp-park-n">${p.n}</div>
                     <div class="tp-park-d">${p.d}</div>
+                    <div class="tp-park-go">查看园区介绍 ${ic('chevron', 14)}</div>
                 </div>`).join('');
             }
 
@@ -7165,14 +7260,42 @@
                 icon: 'company', demo: true,
                 sections: [
                     { title: '北辰场景类型', items: [
-                        { icon: 'biz', title: '商业体', desc: '北辰商管旗下商场、街区等消费场景，开放产品试用与展陈' },
-                        { icon: 'flag', title: '会展', desc: '北辰会展场地，开放活动与展示合作' },
-                        { icon: 'home', title: '酒店', desc: '北辰旗下酒店，开放配送、迎宾等机器人服务测试' },
-                        { icon: 'company', title: '写字楼', desc: '北辰写字楼载体，开放安防、清洁、配送等场景' },
+                        { icon: 'biz', title: '商业体', desc: '北辰商管旗下商场、街区等消费场景，开放产品试用与展陈',
+                          detail: [
+                              { k: '适用方向', v: '零售科技、智慧导览、AR 展陈、消费类机器人' },
+                              { k: '能测什么', v: '产品试用、快闪展陈、客流与动线数据回传' },
+                              { k: '怎么申请', v: '提交产品说明，管家匹配具体商场后排期进店' },
+                          ] },
+                        { icon: 'flag', title: '会展', desc: '北辰会展场地，开放活动与展示合作',
+                          detail: [
+                              { k: '适用方向', v: '智能讲解、会议服务、翻译、搬运机器人' },
+                              { k: '能测什么', v: '展会现场展示、会议活动服务、接待引导' },
+                              { k: '怎么申请', v: '结合北辰会展档期，管家安排活动场次' },
+                          ] },
+                        { icon: 'home', title: '酒店', desc: '北辰旗下酒店，开放配送、迎宾等机器人服务测试',
+                          detail: [
+                              { k: '适用方向', v: '配送、迎宾、客房清洁机器人' },
+                              { k: '能测什么', v: '客房送物、前台接待、床铺整理' },
+                              { k: '怎么申请', v: '优先五洲大酒店等旗舰门店，分批进场测试' },
+                          ] },
+                        { icon: 'company', title: '写字楼', desc: '北辰写字楼载体，开放安防、清洁、配送等场景',
+                          detail: [
+                              { k: '适用方向', v: '安防巡检、清洁、物料配送' },
+                              { k: '能测什么', v: '前台接待、楼宇巡检、物资配送' },
+                              { k: '怎么申请', v: '按楼宇点位排期，先试点再扩面' },
+                          ] },
                     ]},
                     { title: '开放合作', items: [
-                        { icon: 'target', title: '场景测试', desc: '创业团队在北辰真实场景里跑通产品，积累落地案例' },
-                        { icon: 'users', title: '合作机会', desc: '测试效果达标后进入北辰采购与长期合作' },
+                        { icon: 'target', title: '场景测试', desc: '创业团队在北辰真实场景里跑通产品，积累落地案例',
+                          detail: [
+                              { k: '怎么跑', v: '在北辰真实运营场景里完成测试迭代，解决从技术验证到商业落地的最后一公里' },
+                              { k: '交付物', v: '测试报告、客户证言、现场影像' },
+                          ] },
+                        { icon: 'users', title: '合作机会', desc: '测试效果达标后进入北辰采购与长期合作',
+                          detail: [
+                              { k: '怎么进', v: '测试效果达标后进入北辰采购与长期合作' },
+                              { k: '合作形式', v: '供应商入库、联合项目、长期采购' },
+                          ] },
                     ]},
                 ],
                 cta: '申请测试场景',
@@ -7181,15 +7304,34 @@
                 icon: 'target', demo: true,
                 sections: [
                     { title: '园区需求', items: [
-                        { icon: 'spark', title: 'AI 企业', desc: '智能客服、内容生成等场景，在北辰找到首单' },
-                        { icon: 'factory', title: '机器人企业', desc: '配送、清洁、巡检等场景，在北辰落地' },
-                        { icon: 'server', title: '数据服务企业', desc: '数据治理、上架交易等场景，与北辰合作' },
+                        { icon: 'spark', title: 'AI 企业', desc: '智能客服、内容生成等场景，在北辰找到首单',
+                          detail: [
+                              { k: '方向', v: '智能客服、内容生成、大模型应用' },
+                              { k: '在哪找首单', v: '对接会展、酒店、商业体的 AI 需求' },
+                              { k: '怎么接', v: '需求发布 → 方案竞标 → 试点落地' },
+                          ] },
+                        { icon: 'factory', title: '机器人企业', desc: '配送、清洁、巡检等场景，在北辰落地',
+                          detail: [
+                              { k: '方向', v: '配送、清洁、巡检、迎宾' },
+                              { k: '在哪落地', v: '五洲大酒店、国家会议中心、写字楼、商业综合体' },
+                              { k: '怎么接', v: '带着机器人下楼，在真实场景跑测试' },
+                          ] },
+                        { icon: 'server', title: '数据服务企业', desc: '数据治理、上架交易等场景，与北辰合作',
+                          detail: [
+                              { k: '方向', v: '数据治理、数据上架交易、数据合规' },
+                              { k: '在哪合作', v: '朝阳数据要素产业园、北京国际大数据交易所' },
+                              { k: '怎么接', v: '数据资产登记 → 入表咨询 → 上架交易' },
+                          ] },
                     ]},
                     { title: '线上化全流程', items: [
-                        { icon: 'doc', title: '需求发布', desc: '北辰场景方在线发布真实需求' },
-                        { icon: 'edit', title: '方案竞标', desc: '创业团队提交方案，面向北辰需求竞标' },
-                        { icon: 'rocket', title: '试点落地', desc: '中标后在北辰真实场景试点' },
-                        { icon: 'chart', title: '效果评估', desc: '按效果数据评估，进入北辰长期合作' },
+                        { icon: 'doc', title: '需求发布', desc: '北辰场景方在线发布真实需求',
+                          detail: [{ k: '这一步', v: '场景方把真实需求发到平台，创业团队按需认领' }] },
+                        { icon: 'edit', title: '方案竞标', desc: '创业团队提交方案，面向北辰需求竞标',
+                          detail: [{ k: '这一步', v: '提交产品与落地方案，说明能解决什么问题、怎么落地' }] },
+                        { icon: 'rocket', title: '试点落地', desc: '中标后在北辰真实场景试点',
+                          detail: [{ k: '这一步', v: '中标后在北辰真实场景试点，跑通真实业务流程' }] },
+                        { icon: 'chart', title: '效果评估', desc: '按效果数据评估，进入北辰长期合作',
+                          detail: [{ k: '这一步', v: '按效果数据评估，达标后进入北辰长期合作' }] },
                     ]},
                 ],
                 cta: '发布需求 / 提交方案',
@@ -7567,6 +7709,7 @@
             const data = servicePages[name];
             if (!data) return;
             document.getElementById('pageTitle').innerHTML = ic(data.icon, 18) + ' ' + name;
+            let firstDetailDone = false;   // 每个页面第一个带详情的卡片默认展开
             let html = '';
             (data.sections || []).forEach(section => {
                 html += `<div class="page-section-title">${section.title}</div>`;
@@ -7598,6 +7741,24 @@
                                         </div>
                                         <button class="sup-contact" onclick="openSupplierContact('${s.name}')">联系方式</button>
                                     </div>`).join('')}
+                            </div>
+                        </div>`;
+                        return;
+                    }
+                    if (item.detail && item.detail.length) {
+                        const open = firstDetailDone ? '' : ' open';
+                        firstDetailDone = true;
+                        html += `<div class="pg-exp${open}">
+                            <div class="page-card" onclick="toggleSupplier(this)">
+                                <span class="pg-icon">${ic(item.icon, 20)}</span>
+                                <div class="pg-body">
+                                    <div class="pg-title">${item.title}</div>
+                                    ${item.desc ? `<div class="pg-desc">${item.desc}</div>` : ''}
+                                </div>
+                                <span class="pg-arrow">${ic('chevron', 16)}</span>
+                            </div>
+                            <div class="dt-panel">
+                                ${item.detail.map(r => `<div class="dt-row"><span class="dt-k">${r.k}</span><span class="dt-v">${r.v}</span></div>`).join('')}
                             </div>
                         </div>`;
                         return;
