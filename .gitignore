@@ -17,6 +17,10 @@ tools/policy-db.js
 tools/finance-db.js
 tools/subsidy-db.js
 
+# 技术方案与开发过程那一份，刻意只留本地不入库。
+# 写全名不写通配，免得把 docs/ 下别的文档一起挡掉。
+docs/shenicest-北辰-创业搭子-技术方案与开发过程-2026-08-30.md
+
 # 方案文档的派生产物：mermaid 渲染出的 PNG 与拆出来的六份 docx。
 # 改内容改那份 md，再重跑 出图png / 出docx分册 两个脚本，不入库。
 # 注意 tools/mermaid.min.js 是入库的，它是脚本要读的画图库本体，不是产物。
