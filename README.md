@@ -15,7 +15,9 @@
 |---|---|
 | `shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html` | **主产物**。单文件、纯静态、零外部依赖，两个数据库和全部图标都内联在里面。489KB |
 | `assets/capy-icons/` | 首页「猜您需要」那 9 只卡皮巴拉的源文件（144px PNG）。html 里存的是它们转成 WebP 后的 base64，源文件留着是为了以后能重出 |
-| `docs/…产品方案文档….md` | **交给命题方的必交文档**。产品定位、五大模块架构图、四条用户旅程流程图、创新点、商业模式与积分设计、数据安全与合规。图是 mermaid，GitHub 与 Obsidian 直接渲染 |
+| `docs/…产品方案文档….md` | **交给命题方的必交文档，唯一真理**。产品定位、五大模块架构图、四条用户旅程流程图、创新点、商业模式与积分设计、数据安全与合规。图是 mermaid，GitHub 与 Obsidian 直接渲染 |
+| `tools/shenicest-tool-方案文档出图png.py` | 把上面那份 md 里的 mermaid 逐张渲染成 PNG。无头 Chrome 出图、Pillow 按白底裁边、两倍缩放。要同目录下有 `mermaid.min.js` |
+| `tools/shenicest-tool-方案文档出docx分册.py` | 按六个交付项把 md 拆成六份 docx（A4、微软雅黑 10.5pt、手写目录、图按长宽比卡宽或卡高）。**docx 是派生产物不入库**，改内容改 md 再重跑这两个脚本 |
 | `docs/…需求文档….md` | 需求、数据层规格、匹配规则、界面结构、复现步骤、踩坑记录。改之前先读它 |
 | `tools/shenicest-tool-语法自查.sh` | 抽出 `<script>` 段做 `node --check` |
 | `tools/shenicest-tool-v3改版-qa截图与溢出探针.sh` | 24 个状态各跑一遍截图与横向溢出探针 |
