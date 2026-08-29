@@ -86,7 +86,8 @@ def main():
         key, title, urls = s['key'], s['title'], s['urls']
         picked, txt = None, ''
         for url in urls:
-            ext = '.pdf' if url.lower().split('?')[0].endswith('.pdf') else '.html'
+            low = url.lower().split('?')[0]
+            ext = next((e for e in ('.pdf', '.docx', '.doc') if low.endswith(e)), '.html')
             dst = os.path.join(DOCS, key + ext)
             if not (os.path.exists(dst) and os.path.getsize(dst) > 1200):
                 r = subprocess.run(['curl', '-sS', '-L', '-m', '45', '-A', UA,
@@ -97,7 +98,15 @@ def main():
                     continue
             if not os.path.exists(dst):
                 continue
-            cand = fetch_pdf_text(dst) if ext == '.pdf' else body_of(decode(open(dst, 'rb').read()))
+            if ext == '.pdf':
+                cand = fetch_pdf_text(dst)
+            elif ext in ('.doc', '.docx'):
+                # 政府站的附件常是 doc，macOS 自带 textutil 能转，别拿 HTML 解析器去啃二进制
+                rr = subprocess.run(['textutil', '-convert', 'txt', '-stdout', dst],
+                                    capture_output=True, text=True)
+                cand = rr.stdout.strip()
+            else:
+                cand = body_of(decode(open(dst, 'rb').read()))
             cand = re.sub(r'\n\s*\n+', '\n', cand).strip()
             # 一图读懂是图片页，抓下来只有导航文字，长度骗人，直接判负
             if '一图读懂' in cand[:200] or '图解' in cand[:120]:

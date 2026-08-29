@@ -91,6 +91,24 @@ def main():
         else:
             fails.append((pid, '金额排序值', '来源只能是 quoted / derived / na，实际是 ' + str(src)))
 
+        # 门槛依据必须逐字来自原文。没有可判门槛的条目允许为空，但那样 reg/quals/人数/年限
+        # 必须全是空的 —— 有门槛却没依据，就是凭空判人。
+        gate = it.get('判定门槛')
+        if gate is None:
+            fails.append((pid, '判定门槛', '缺 判定门槛'))
+        else:
+            hard = bool(gate.get('reg') or gate.get('quals') or gate.get('maxStaff')
+                        or gate.get('maxYears') or gate.get('legal'))
+            ev = it.get('门槛依据')
+            if hard and not ev:
+                fails.append((pid, '门槛依据', '设了门槛却没有原文依据'))
+            elif ev:
+                checked += 1
+                if norm(ev) not in body:
+                    fails.append((pid, '门槛依据', '依据句在原文里找不到: ' + ev[:40]))
+            if not gate.get('beyond'):
+                fails.append((pid, '判定门槛', 'beyond 不能空，判不了的部分要写出来'))
+
         # 卡面那一格和排序值必须是同一个数，两边分开写就会有一天对不上
         txt = it.get('卡面金额')
         if not txt:

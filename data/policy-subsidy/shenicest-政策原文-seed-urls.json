@@ -246,5 +246,28 @@
   "urls": [
    "http://www.bjchy.gov.cn/dynamic/zwhd/4028805a9d13d033019d47bae8c72f07.html"
   ]
+ },
+ {
+  "key": "gj-zhongxiao-huaxing-2011",
+  "title": "中小企业划型标准规定（工信部联企业〔2011〕300号）",
+  "urls": [
+   "https://www.gov.cn/zwgk/2011-07/04/content_1898747.htm",
+   "https://www.miit.gov.cn/jgsj/zxqys/wjfb/art/2020/art_5c15dc5ae0f24d17b8a24ec7f8f3fdbd.html",
+   "https://www.hljtma.com/u/20210426/60864896d4c59.pdf"
+  ]
+ },
+ {
+  "key": "gj-tongji-huafen-2017",
+  "title": "统计上大中小微型企业划分办法（2017）",
+  "urls": [
+   "https://www.stats.gov.cn/xxgk/tjbz/gjtjbz/202008/t20200811_1782335.html"
+  ]
+ },
+ {
+  "key": "bj-tidupeiyu-fujian1",
+  "title": "北京市优质中小企业梯度培育管理实施细则 附件1（含创新型中小企业与专精特新评价标准）",
+  "urls": [
+   "https://www.beijing.gov.cn/zhengce/gfxwj/202304/W020230417612059649656.doc"
+  ]
  }
 ]

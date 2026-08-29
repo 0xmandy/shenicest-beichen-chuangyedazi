@@ -129,6 +129,54 @@ setTimeout(function () {
   var capOK = SUBSIDY_ITEMS.every(function (s) { return typeof s.capWan === 'number'; });
   ok('I9 每条都有金额排序值', capOK, '有条目缺 capWan');
 
+  // J 够不够得着的判定（v7 第二轮新增）。守的是「不硬判」与「判了要判对」两件事。
+  state.company = '已注册'; state.industry = '人工智能';
+  state.regPlace = ''; state.founded = ''; state.staff = ''; state.quals = [];
+  switchTab('opportunity'); setOppTab('money');
+  ok('J1 档案没填全时不摆判定，只给入口', !subsidyProfileReady()
+     && document.getElementById('oppScroll').innerHTML.indexOf('sub-ask-btn') >= 0, '没给入口');
+
+  // 填成朝阳区、成立 1-3 年、2-10 人、还没有任何资质
+  setProfileField(null, 'regPlace', '朝阳区');
+  setProfileField(null, 'founded', '1-3年');
+  setProfileField(null, 'staff', '2-10人');
+  ok('J2 三项填全后判定生效', subsidyProfileReady(), '还是没齐');
+
+  var byId = {};
+  matchSubsidy().all.forEach(function (x) { byId[x.id] = x; });
+  ok('J3 朝阳区企业对朝阳区条目判符合', byId['CY-DATA-01']._fit.st === 'pass', byId['CY-DATA-01']._fit.st);
+  ok('J4 朝阳区企业对经开区条目判不符合', byId['BDA-01']._fit.st === 'no', byId['BDA-01']._fit.st);
+  ok('J5 不符合时说得出为什么', byId['BDA-01']._fit.why.join('').indexOf('经开区') >= 0, byId['BDA-01']._fit.why.join(''));
+  ok('J6 没资质时要资质的条目判差一项', byId['BJ-GJJ-23']._fit.st === 'gap', byId['BJ-GJJ-23']._fit.st);
+  ok('J7 原文没写门槛的照实标注不硬判', byId['CY-AI-01']._fit.st === 'unknown', byId['CY-AI-01']._fit.st);
+
+  // 拿到专精特新之后，差一项那条要翻成符合
+  setProfileField(null, 'quals', '专精特新中小企业');
+  var after = {}; matchSubsidy().all.forEach(function (x) { after[x.id] = x; });
+  ok('J8 补上资质后判定跟着翻', after['BJ-GJJ-23']._fit.st === 'pass', after['BJ-GJJ-23']._fit.st);
+
+  // 人数超限要判不符合
+  setProfileField(null, 'staff', '500人以上');
+  var big = {}; matchSubsidy().all.forEach(function (x) { big[x.id] = x; });
+  ok('J9 人数超限判不符合', big['BJ-VOUCHER-02']._fit.st === 'no', big['BJ-VOUCHER-02']._fit.st);
+  setProfileField(null, 'staff', '2-10人');
+
+  // 未注册时要独立法人的条目判不符合，收创业团队的那几条不受影响
+  setProfileField(null, 'company', '未注册');
+  var un = {}; matchSubsidy().all.forEach(function (x) { un[x.id] = x; });
+  ok('J10 未注册时要法人资格的判不符合', un['CY-DATA-01']._fit.st === 'no', un['CY-DATA-01']._fit.st);
+  ok('J11 收创业团队的条目不受未注册影响', un['BJ-GJJ-21']._fit.st !== 'no', un['BJ-GJJ-21']._fit.st);
+  setProfileField(null, 'company', '已注册');
+
+  // 默认排序主键是够不够得着
+  var ms2 = matchSubsidy();
+  var firstFit = sortSubsidy(ms2.all.filter(x => x._win.st !== 'closed'), 'fit')[0];
+  ok('J12 默认排序把你符合的排最前', firstFit._fit.st === 'pass', firstFit.id + ' ' + firstFit._fit.st);
+  ok('J13 每条都写了判不了的部分', SUBSIDY_ITEMS.every(x => x.gate && x.gate.beyond), '有条目 beyond 是空的');
+  ok('J14 设了硬门槛的都有原文依据',
+     SUBSIDY_ITEMS.every(x => !(x.gate.reg || x.gate.legal || (x.gate.quals || []).length) || x.gateFrom),
+     '有条目设了门槛却没依据');
+
   // H 重设档案后行业回到默认而不是空
   resetOnboarding();
   ok('H1 重设档案后行业回默认', state.industry === '人工智能', state.industry);

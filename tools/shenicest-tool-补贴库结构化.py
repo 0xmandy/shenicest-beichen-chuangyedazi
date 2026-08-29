@@ -59,6 +59,8 @@ for it in items:
         'win': it['申报窗口'],
         'moneyQuote': it['金额原文'],
         'condQuote': it['条件原文'],
+        'gate': it['判定门槛'],
+        'gateFrom': it.get('门槛依据') or '',
         'url': it['来源']['url'],
     })
 
