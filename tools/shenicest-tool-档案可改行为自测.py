@@ -166,6 +166,18 @@ setTimeout(function () {
   var un = {}; matchSubsidy().all.forEach(function (x) { un[x.id] = x; });
   ok('J10 未注册时要法人资格的判不符合', un['CY-DATA-01']._fit.st === 'no', un['CY-DATA-01']._fit.st);
   ok('J11 收创业团队的条目不受未注册影响', un['BJ-GJJ-21']._fit.st !== 'no', un['BJ-GJJ-21']._fit.st);
+
+  // 能领的钱那栏顶上的解锁对照条，三个数是现算的。这里守住它和 judgeSubsidy 同一个口径：
+  // 界面上「开完公司解锁 N 笔」用的是 gate 字段直接数，判定结果用的是 judgeSubsidy，
+  // 两者对不上就说明有一边改了另一边没跟上，界面会摆出一个判定支撑不了的数字。
+  var unAll = matchSubsidy().all;
+  var lockedN = SUBSIDY_ITEMS.filter(function (x) { var g = x.gate || {}; return !g.teamOK && (g.legal || g.reg); }).length;
+  var judgedNo = unAll.filter(function (x) { return x._fit.st === 'no'; }).length;
+  ok('J15 解锁对照条的笔数与判定结果同口径', lockedN === judgedNo, lockedN + ' vs ' + judgedNo);
+  ok('J16 未注册时现在就能报的至少有一笔',
+     unAll.filter(function (x) { return x._fit.st === 'pass' && x._win.st === 'open'; }).length >= 1,
+     unAll.filter(function (x) { return x._fit.st === 'pass' && x._win.st === 'open'; }).length);
+
   setProfileField(null, 'company', '已注册');
 
   // 默认排序主键是够不够得着

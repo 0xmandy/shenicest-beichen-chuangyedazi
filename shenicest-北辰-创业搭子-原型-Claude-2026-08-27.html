@@ -2435,6 +2435,16 @@
         .sub-ask-t { font-size:13px; font-weight:600; color:var(--primary-dark); line-height:1.5; }
         .sub-ask-d { font-size:11.5px; color:var(--text-secondary); line-height:1.7; margin-top:5px; }
         .sub-ask-btn { margin-top:10px; text-align:center; background:var(--primary); color:#fff; font-size:13px; font-weight:600; border-radius:var(--radius-sm); padding:10px; }
+        /* 还没注册时的解锁对照。44 笔里 33 笔卡在有没有主体上，把这道算术摆出来 */
+        .sub-unlock { margin:0 20px 12px; background:var(--card); border:var(--hair); border-radius:var(--radius); padding:13px 14px; box-shadow:var(--shadow); }
+        .sub-unlock-t { font-size:13px; font-weight:700; color:var(--text); line-height:1.5; }
+        .sub-unlock-nums { display:flex; gap:8px; margin-top:10px; }
+        .sub-unlock-n { flex:1; text-align:center; background:var(--bg); border-radius:var(--radius-sm); padding:9px 4px; }
+        .sub-unlock-v { font-size:19px; font-weight:800; color:var(--text); line-height:1.2; }
+        .sub-unlock-v.on { color:var(--primary); }
+        .sub-unlock-l { font-size:10.5px; color:var(--text-secondary); margin-top:3px; line-height:1.4; }
+        .sub-unlock-d { font-size:11.5px; color:var(--text-secondary); line-height:1.7; margin-top:9px; }
+        .sub-unlock-btn { margin-top:10px; text-align:center; background:var(--primary); color:#fff; font-size:13px; font-weight:600; border-radius:var(--radius-sm); padding:10px; }
         .rk-grade { background: var(--card); border-radius: var(--radius); padding: 14px 16px; margin: 0 20px 12px; box-shadow: var(--shadow); }
         .rk-grade-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
         .rk-grade-t { font-size: 14px; font-weight: 700; color: var(--text); }
@@ -3037,15 +3047,16 @@
                     </div>
                     <div class="ob-title">有没有注册公司？</div>
                     <div class="ob-subtitle">这一步必须选，管家的政策、金融、风险判定全看它</div>
+                    <!-- 还没注册排在前面：第一人群就是这批人，44 笔补贴里 33 笔的门槛卡在有没有主体上 -->
                     <div class="ob-options">
-                        <div class="ob-option" data-value="已注册" onclick="selectOption(this, 'company')">
-                            <span class="ob-option-icon"><svg class="ic ic-20"><use href="#i-biz"></use></svg></span>
-                            <span class="ob-option-text">已注册</span>
-                            <span class="ob-check"><svg class="ic ic-16"><use href="#i-check"></use></svg></span>
-                        </div>
                         <div class="ob-option" data-value="未注册" onclick="selectOption(this, 'company')">
                             <span class="ob-option-icon"><svg class="ic ic-20"><use href="#i-edit"></use></svg></span>
                             <span class="ob-option-text">还没注册</span>
+                            <span class="ob-check"><svg class="ic ic-16"><use href="#i-check"></use></svg></span>
+                        </div>
+                        <div class="ob-option" data-value="已注册" onclick="selectOption(this, 'company')">
+                            <span class="ob-option-icon"><svg class="ic ic-20"><use href="#i-biz"></use></svg></span>
+                            <span class="ob-option-text">已注册</span>
                             <span class="ob-check"><svg class="ic ic-16"><use href="#i-check"></use></svg></span>
                         </div>
                     </div>
@@ -6082,6 +6093,30 @@
                     <span class="sub-sort ${subSort === 'money' ? 'on' : ''}" onclick="setSubSort('money')">按金额</span>
                     <span class="sub-sort ${subSort === 'deadline' ? 'on' : ''}" onclick="setSubSort('deadline')">按截止日</span>
                 </div>`;
+
+                // 还没注册的人，第一个要算清楚的是注册这件事值多少钱。
+                // 三个数全部现算：能报的、等年度细则的、被主体门槛卡住的。
+                // 被卡住那一档的判据和 judgeSubsidy 里那两条一致（要主体、要独立法人），
+                // 改了打分表这里会跟着变，不写死数字。
+                if (state.company === '未注册') {
+                    const lockedN = ms.all.filter(function (s) {
+                        const g = s.gate || {};
+                        return !g.teamOK && (g.legal || g.reg);
+                    }).length;
+                    const okNow = ms.all.filter(function (s) { return s._fit.st === 'pass' && s._win.st === 'open'; }).length;
+                    const okWait = ms.all.filter(function (s) { return s._fit.st === 'pass' && s._win.st !== 'open'; }).length;
+                    html += `
+                    <div class="sub-unlock">
+                        <div class="sub-unlock-t">还没注册主体，这 ${ms.all.length} 笔现在是这个分布</div>
+                        <div class="sub-unlock-nums">
+                            <div class="sub-unlock-n"><div class="sub-unlock-v on">${okNow}</div><div class="sub-unlock-l">现在就能报</div></div>
+                            <div class="sub-unlock-n"><div class="sub-unlock-v">${okWait}</div><div class="sub-unlock-l">等年度细则</div></div>
+                            <div class="sub-unlock-n"><div class="sub-unlock-v">${lockedN}</div><div class="sub-unlock-l">开完公司解锁</div></div>
+                        </div>
+                        <div class="sub-unlock-d">那 ${lockedN} 笔的条件里写了要有公司主体或独立法人资格。执照下来之后这一栏会重新判一遍，条件与金额还是原文那份。</div>
+                        <div class="sub-unlock-btn" onclick="event.stopPropagation();openTaskPage('开公司')">开公司要办哪几步</div>
+                    </div>`;
+                }
 
                 // 判够不够得着要四个字段。没填全就先别摆判定，摆了也是瞎判，
                 // 直接把入口给出来，别写一句「去我的页填」打发人。
