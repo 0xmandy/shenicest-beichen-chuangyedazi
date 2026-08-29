@@ -61,6 +61,9 @@ for it in items:
         'condQuote': it['条件原文'],
         'gate': it['判定门槛'],
         'gateFrom': it.get('门槛依据') or '',
+        # 年度细则：措施是纲领，年度实施方案才决定当年实际开哪几个方向。
+        # 只有走年度制的朝阳区那 23 条有这个字段，其余的没有，前端要判 undefined。
+        'plan': it.get('年度细则'),
         'url': it['来源']['url'],
     })
 
@@ -70,6 +73,8 @@ body = (
     "        // 由 tools/shenicest-tool-补贴库结构化.py 从真理文件生成，改内容改真理文件不要改这里。\n"
     "        // capWan = 一家企业按这一条最多能拿到手多少钱（万元），手工设定只用于排序，不许用正则覆盖。\n"
     "        // win.st = dated 有明确截止日 / rolling 常年可报 / unknown 原文没写批次。\n"
+    "        // plan = 年度细则里有没有这一条。listed 当年列了 / notlisted 当年没列、报不了。\n"
+    "        // 只有走年度制的朝阳区那 23 条有 plan，其余条目 plan 为 null，判的时候别忘了。\n"
     "        const SUBSIDY_ITEMS = %s;\n"
 ) % json.dumps(out, ensure_ascii=False, separators=(',', ':'))
 

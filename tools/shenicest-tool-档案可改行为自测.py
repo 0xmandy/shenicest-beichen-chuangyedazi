@@ -180,6 +180,30 @@ setTimeout(function () {
 
   setProfileField(null, 'company', '已注册');
 
+  // 年度细则：措施写了这笔钱，不等于当年开了这个方向。
+  // 这四条守住 plan 字段与 subsidyWindow 之间不脱节——脱节的表现是界面上
+  // 一条今年根本没开的补贴，显示成「看年度细则」诱人去报。
+  var pl = matchSubsidy().all;
+  var withPlan = pl.filter(function (x) { return x.plan; });
+  ok('J17 走年度制的条目数与朝阳区条目数一致',
+     withPlan.length === SUBSIDY_ITEMS.filter(function (x) { return x.level === '朝阳区'; }).length,
+     withPlan.length);
+  ok('J18 年度未列的一律不算能报',
+     pl.filter(function (x) { return x.plan && x.plan.st === 'notlisted'; })
+       .every(function (x) { return x._win.st === 'notlisted'; }),
+     '有年度未列的条目窗口没跟上');
+  ok('J19 年度已列的都能算出截止状态',
+     pl.filter(function (x) { return x.plan && x.plan.st === 'listed'; })
+       .every(function (x) { return ['open', 'closed', 'unknown'].indexOf(x._win.st) >= 0; }),
+     '有年度已列的条目窗口算不出来');
+  ok('J20 年度未列的不再显示看年度细则',
+     pl.filter(function (x) { return x._win.st === 'notlisted'; })
+       .every(function (x) { return x._win.label.indexOf('看年度细则') < 0; }),
+     '年度未列的还在显示看年度细则');
+  ok('J21 每条走年度制的都带方案原话',
+     withPlan.every(function (x) { return x.plan['依据'] && x.plan['依据'].length > 10; }),
+     '有条目的年度依据是空的');
+
   // 默认排序主键是够不够得着
   var ms2 = matchSubsidy();
   var firstFit = sortSubsidy(ms2.all.filter(x => x._win.st !== 'closed'), 'fit')[0];
