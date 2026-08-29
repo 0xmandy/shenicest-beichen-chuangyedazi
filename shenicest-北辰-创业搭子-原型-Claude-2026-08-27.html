@@ -2808,6 +2808,92 @@
         .sub-opt.on { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
         .sub-suggest { margin-top:10px; padding:10px 12px; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); font-size:var(--fs-body); color:var(--n900); line-height:1.7; }
         .sub-suggest-btn { display:inline-block; margin-left:6px; padding:5px 11px; border-radius:var(--r-pill); background:var(--brand); color:#fff; font-size:var(--fs-sm); font-weight:600; cursor:pointer; }
+        /* --- 开公司之前：城市政策筛选 + 主体身份选择 --- */
+        .city-note { font-size:var(--fs-cap); color:var(--n500); line-height:1.7; }
+        .city-filter { display:flex; flex-wrap:wrap; gap:7px; }
+        .cf-tag { padding:6px 12px; border-radius:var(--r-pill); background:var(--n0); border:var(--hair); font-size:var(--fs-body); color:var(--n700); cursor:pointer; }
+        .cf-tag.on { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; }
+        .city-policy { display:flex; flex-direction:column; gap:10px; }
+        .city-card { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 14px; }
+        .city-card-head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+        .city-card-name { font-size:var(--fs-lg); font-weight:700; color:var(--n900); }
+        .city-card-hero { font-size:var(--fs-cap); color:var(--brand); font-weight:600; }
+        .city-policy-item { margin-top:10px; padding-top:9px; border-top:1px dashed var(--n200); }
+        .city-policy-item:first-child { margin-top:12px; border-top:none; padding-top:0; }
+        .cpi-t { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:var(--fs-body); font-weight:600; color:var(--n900); }
+        .cpi-tag { flex-shrink:0; padding:2px 7px; border-radius:var(--r-pill); font-size:10px; font-weight:600; }
+        .cpi-tag.t-grad { background:var(--trust-100); color:var(--trust); }
+        .cpi-tag.t-ai, .cpi-tag.t-tech { background:var(--brand-50); color:var(--brand); }
+        .cpi-tag.t-house { background:var(--risk-mid-bg); color:var(--risk-mid); }
+        .cpi-tag.t-tax { background:var(--risk-low-bg); color:var(--risk-low); }
+        .cpi-tag.t-talent { background:#EFE8F7; color:#6C4AA8; }
+        .cpi-tag.t-token { background:#EAF3EF; color:#1F7A63; }
+        .cpi-d { margin-top:3px; font-size:var(--fs-sm); color:var(--n500); line-height:1.7; }
+        .city-empty { padding:18px; text-align:center; font-size:var(--fs-body); color:var(--n500); background:var(--n50); border:1px dashed var(--n300); border-radius:var(--r-sm); }
+        .ident-first { display:flex; gap:10px; align-items:flex-start; background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); padding:12px 13px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-first .ic { flex-shrink:0; margin-top:2px; color:var(--brand); }
+        .ident-first b { color:var(--n900); }
+        .ident-lead { font-size:var(--fs-body); color:var(--n700); line-height:1.8; }
+        .ident-quick { padding:12px 13px; background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); }
+        .ident-quick-title { font-size:var(--fs-cap); font-weight:700; color:var(--n500); }
+        .iq-head { position:relative; padding-right:24px; cursor:pointer; }
+        .iq-head-main { min-width:0; }
+        .iq-sub { margin-top:2px; font-size:var(--fs-cap); color:var(--n400); line-height:1.6; }
+        .iq-chevron { position:absolute; right:0; top:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; transform:translateY(-50%); color:var(--n400); transition: transform .25s; }
+        .ident-quick.open .iq-chevron { transform: translateY(-50%) rotate(90deg); }
+        .ident-questions { margin-top:6px; }
+        .iq-q { margin-top:12px; font-size:var(--fs-cap); font-weight:700; color:var(--n500); }
+        .iq-q:first-child { margin-top:0; }
+        .iq-row { display:flex; align-items:center; gap:8px; padding-top:7px; margin-top:7px; border-top:1px dashed var(--brand-100); }
+        .iq-q + .iq-row { border-top:none; padding-top:0; margin-top:6px; }
+        .iq-a { flex:1; min-width:0; font-size:var(--fs-body); color:var(--n700); line-height:1.5; }
+        .iq-arrow { flex-shrink:0; display:flex; align-items:center; color:var(--n400); }
+        .iq-pick { flex-shrink:0; font-size:var(--fs-body); font-weight:700; color:var(--brand); }
+        .ident-cards { display:flex; flex-direction:column; gap:10px; }
+        .ident-card { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 14px; }
+        .ident-card.limited { border-left:3px solid var(--risk-low); }
+        .ident-card.unlimited { border-left:3px solid var(--risk-mid); }
+        .ident-head { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+        .ident-name { font-size:var(--fs-md); font-weight:700; color:var(--n900); }
+        .ident-badge { flex-shrink:0; padding:2px 8px; border-radius:var(--r-pill); font-size:10px; font-weight:600; }
+        .ident-badge.limited { background:var(--risk-low-bg); color:var(--risk-low); }
+        .ident-badge.unlimited { background:var(--risk-mid-bg); color:var(--risk-mid); }
+        .ident-suit { margin-top:8px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-suit b { color:var(--n900); }
+        .ident-note { margin-top:6px; font-size:var(--fs-sm); color:var(--n500); line-height:1.6; }
+        .ident-ai { display:flex; gap:10px; align-items:flex-start; margin-top:12px; background:var(--trust-50); border:1px solid var(--trust-100); border-radius:var(--r-sm); padding:11px 13px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-ai .ic { flex-shrink:0; margin-top:2px; color:var(--trust); }
+        .ident-ai b { color:var(--n900); }
+        .ident-cost { margin-top:12px; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 13px; }
+        .ident-cost-title { font-size:var(--fs-cap); font-weight:700; color:var(--n500); margin-bottom:4px; }
+        .ident-cost-item { display:flex; gap:7px; align-items:flex-start; padding:7px 0; border-top:1px dashed var(--n200); font-size:var(--fs-sm); color:var(--n700); line-height:1.6; }
+        .ident-cost-item:first-of-type { border-top:none; }
+        .ident-cost-item .ic { flex-shrink:0; margin-top:2px; color:var(--n400); }
+        .ident-cost-note { margin-top:8px; font-size:var(--fs-cap); color:var(--n400); line-height:1.6; }
+        .ident-warn { display:flex; gap:10px; align-items:flex-start; margin-top:10px; background:var(--risk-mid-bg); border:1px solid var(--risk-mid); border-radius:var(--r-sm); padding:11px 13px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-warn .ic { flex-shrink:0; margin-top:2px; color:var(--risk-mid); }
+        .ident-warn b { color:var(--n900); }
+        .city-quiz { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 13px; }
+        .cq-head { position:relative; padding-right:24px; cursor:pointer; }
+        .cq-head-main { min-width:0; }
+        .cq-chevron { position:absolute; right:0; top:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; transform:translateY(-50%); color:var(--n400); transition: transform .25s; }
+        .city-quiz.open .cq-head { margin-bottom:10px; }
+        .city-quiz.open .cq-chevron { transform: translateY(-50%) rotate(90deg); }
+        .cq-title { font-size:var(--fs-md); font-weight:700; color:var(--n900); }
+        .cq-sub { margin-top:2px; font-size:var(--fs-cap); color:var(--n500); line-height:1.6; }
+        .cq-reco { margin-top:12px; padding-top:11px; border-top:1px dashed var(--n200); }
+        .cq-reco-title { font-size:var(--fs-cap); font-weight:700; color:var(--n500); margin-bottom:8px; }
+        .cq-reco-item { background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); padding:10px 12px; margin-bottom:8px; }
+        .cq-reco-item:last-child { margin-bottom:0; }
+        .cq-reco-city { display:flex; align-items:center; gap:7px; }
+        .cq-rank { flex-shrink:0; font-size:10px; font-weight:700; padding:2px 7px; border-radius:var(--r-pill); background:var(--brand); color:#fff; }
+        .cq-rank.top2 { background:var(--n400); }
+        .cq-reco-name { font-size:var(--fs-md); font-weight:700; color:var(--n900); }
+        .cq-reco-count { margin-left:auto; font-size:var(--fs-cap); color:var(--brand); font-weight:600; }
+        .cq-reco-desc { margin-top:5px; font-size:var(--fs-sm); color:var(--n700); line-height:1.6; }
+        .cq-reco-empty { font-size:var(--fs-body); color:var(--n500); line-height:1.6; background:var(--n50); border:1px dashed var(--n300); border-radius:var(--r-sm); padding:10px 12px; }
+        .cq-actions { display:flex; justify-content:flex-end; margin-top:8px; }
+        .cq-reset { border:1px solid var(--n200); background:var(--n0); color:var(--n500); font-size:var(--fs-body); font-weight:600; border-radius:var(--r-pill); padding:6px 14px; cursor:pointer; }
         /* --- 一条龙攻略：首页四个方块一排 --- */
         .guide-list { display:grid; grid-template-columns:repeat(4, 1fr); gap:9px; padding:0 20px 16px; }
         .guide-card { display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 6px; cursor:pointer; }
@@ -2896,6 +2982,7 @@
 <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 20.4V4.4"/><path d="M5 5.2h11.6l-2 3.4 2 3.4H5"/></symbol>
 <symbol id="i-thumb" viewBox="0 0 24 24"><path d="M7.4 20.4V10.6l4-7a2 2 0 0 1 2.8 1.8v3.6h4.4a2 2 0 0 1 2 2.4l-1.4 6.6a2 2 0 0 1-2 1.4Z"/><path d="M7.4 10.6H4.6v9.8h2.8"/></symbol>
 <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="M12 16.2v-4.6M12 8.4h.01"/></symbol>
+<symbol id="i-launch" viewBox="0 0 24 24"><path d="M5 20.4V4.4"/><path d="M5 5.2h11.6l-2 3.4 2 3.4H5"/><path d="M14.6 14.2h6.6"/><path d="M18.2 11.2l3 3-3 3"/></symbol>
 </svg>
 
     <div class="phone-shell" id="app">
@@ -3090,6 +3177,11 @@
                             <span class="sc-icon"><svg class="ic ic-26"><use href="#i-doc"></use></svg></span>
                             <span class="sc-name">政策补贴</span>
                             <span class="sc-desc">拿你的档案逐条比对政策</span>
+                        </div>
+                        <div class="service-card" onclick="openTaskPage('开公司之前')">
+                            <span class="sc-icon"><svg class="ic ic-26"><use href="#i-launch"></use></svg></span>
+                            <span class="sc-name">开公司之前</span>
+                            <span class="sc-desc">怎么开公司更划算</span>
                         </div>
                         <div class="service-card" onclick="openTaskPage('开公司')">
                             <span class="sc-icon"><svg class="ic ic-26"><use href="#i-biz"></use></svg></span>
@@ -4918,6 +5010,17 @@
                 where: '北京市企业服务 e 窗通平台。执照、公章、发票与税控设备打包成「办理结果」服务包，可以邮寄，也可以到企业开办大厅一窗领取。',
                 todos: ['在 e 窗通 提交名称自主申报', '备齐章程与股东身份材料', '预约银行开对公户'],
             },
+            '开公司之前': {
+                title: '开公司之前', icon: 'launch',
+                stepper: true, skipCityPick: true,
+                lead: '正式去注册之前，先把三件事定下来：注册在哪个城市、用哪种主体、做什么行业。城市决定你能吃到哪些补贴和减免，主体决定你怎么担责、能不能收款，行业决定你要不要额外办许可证。',
+                steps: [
+                    { id: 'city', t: '城市选择', short: '选城市', custom: 'city' },
+                    { id: 'identity', t: '如何选身份', short: '选身份', custom: 'identity' },
+                    { id: 'industry', t: '行业区别', short: '行业区别', custom: 'industry' },
+                ],
+                todos: ['对比各城市补贴与减免，锁定注册城市', '按收款、团队、融资需求定主体类型'],
+            },
             '社保': {
                 title: '交社保', icon: 'shield',
                 intro: {
@@ -5466,12 +5569,121 @@
             const d = TASK_PAGES[key];
             if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
         }
+        // ===== 开公司之前：城市政策筛选 + 主体身份选择 =====
+        const CITY_TAGS = [
+            { key: 'all', label: '全部' },
+            { key: 'grad', label: '应届生' },
+            { key: 'ai', label: 'AI补贴' },
+            { key: 'tech', label: '高科技补贴' },
+            { key: 'house', label: '住房补贴' },
+            { key: 'tax', label: '税收减免' },
+            { key: 'talent', label: '人才激励' },
+            { key: 'token', label: 'token激励' },
+        ];
+        const CITY_TAG_META = {
+            grad: { label: '应届生', cls: 't-grad' },
+            ai: { label: 'AI补贴', cls: 't-ai' },
+            tech: { label: '高科技补贴', cls: 't-tech' },
+            house: { label: '住房补贴', cls: 't-house' },
+            tax: { label: '税收减免', cls: 't-tax' },
+            talent: { label: '人才激励', cls: 't-talent' },
+            token: { label: 'token激励', cls: 't-token' },
+        };
+        // 快速测评：勾选你关心的事，映射到各城市政策标签做推荐
+        const CITY_CHECKLIST = [
+            { key: 'grad', t: '我是应届生 / 在校生，看重应届生激励', tags: ['grad'] },
+            { key: 'ai', t: '做 AI / 大模型，要算力或 token 补贴', tags: ['ai', 'token'] },
+            { key: 'tech', t: '做硬科技 / 高科技，想申高新技术企业', tags: ['tech'] },
+            { key: 'house', t: '看重落户 / 住房补贴', tags: ['house'] },
+            { key: 'tax', t: '看重税收减免 / 费用减免', tags: ['tax'] },
+            { key: 'talent', t: '要人才激励 / 创业资助 / 担保贷款', tags: ['talent'] },
+        ];
+        // 各城市对小微型企业的主流扶持方向；具体额度、条件与申报时间以各城市当年官方公告为准。
+        const CITY_POLICY = [
+            { city: '北京', hero: 'AI 与专精特新扶持最密集',
+              items: [
+                  { tags: ['ai', 'tech'], t: '人工智能 / 大模型算力扶持', d: '对 AI 企业研发与算力采购有专项资助和创新券，算力成本可按政策申请减免' },
+                  { tags: ['tech', 'tax'], t: '国家高新技术企业认定', d: '认定后研发费用可加计扣除，企业所得税按优惠税率征收' },
+                  { tags: ['grad', 'house'], t: '应届生落户与租房支持', d: '高校毕业生在京就业创业，可申请落户指标与人才租房补贴' },
+                  { tags: ['talent'], t: '高精尖人才引进', d: '重点产业人才可申人才公寓、子女入学等配套支持' },
+              ] },
+            { city: '上海', hero: '总部经济与创业担保贷',
+              items: [
+                  { tags: ['tax'], t: '小微企业税收减免', d: '小规模纳税人、小型微利企业按国家普惠口径享受增值税与企业所得税减免' },
+                  { tags: ['grad', 'house'], t: '应届生落户与租房补贴', d: '符合条件的高校毕业生可直接落户，配套人才公寓与租房补贴' },
+                  { tags: ['talent'], t: '创业担保贷款贴息', d: '创业者可申请担保贷款并按政策贴息，降低启动资金成本' },
+                  { tags: ['ai', 'tech'], t: '集成电路与 AI 专项', d: '临港等重点片区对芯片、人工智能企业有产业专项扶持' },
+              ] },
+            { city: '深圳', hero: '科创补贴多、申报快',
+              items: [
+                  { tags: ['tech', 'tax'], t: '高新技术企业培育资助', d: '新认定的高新技术企业与专精特新企业有一次性资助和研发资助' },
+                  { tags: ['grad', 'talent'], t: '应届生落户与人才补贴', d: '本科及以上应届生落户门槛低，配套生活补贴与人才安居' },
+                  { tags: ['token', 'ai'], t: '算力券 / Token 补贴', d: '对 AI 企业采购算力、调用大模型 Token 有算力券和额度补贴' },
+                  { tags: ['house'], t: '人才住房保障', d: '人才房、公租房与租金补贴覆盖重点产业人才' },
+              ] },
+            { city: '广州', hero: '创业带动就业补贴',
+              items: [
+                  { tags: ['grad'], t: '高校毕业生创业补贴', d: '高校毕业生创业可申一次性创业资助，带动就业还有社保补贴' },
+                  { tags: ['tax'], t: '小微企业普惠减免', d: '小型微利企业、小规模纳税人按国家口径享受税费减免' },
+                  { tags: ['house', 'talent'], t: '人才引进与住房补贴', d: '重点产业人才可申落户与住房补贴' },
+              ] },
+            { city: '杭州', hero: '数字经济与大学生创业友好',
+              items: [
+                  { tags: ['grad'], t: '大学生创业资助', d: '在杭创业的大学生可申无偿资助、创业担保贷款与场地租金补贴' },
+                  { tags: ['ai', 'tech', 'token'], t: 'AI 与算力扶持', d: '对人工智能、大数据企业有算力券和研发资助' },
+                  { tags: ['tax'], t: '小微企业税收减免', d: '小规模纳税人、小型微利企业享普惠税收减免' },
+              ] },
+            { city: '成都', hero: '新经济与人才安居',
+              items: [
+                  { tags: ['grad', 'house'], t: '青年人才安居', d: '应届生可申人才公寓、租房补贴与落户支持' },
+                  { tags: ['tech'], t: '高新技术企业奖励', d: '新认定高新技术企业有一次性奖励与研发资助' },
+                  { tags: ['talent'], t: '新经济人才激励', d: '重点赛道企业引进人才有配套激励' },
+              ] },
+            { city: '武汉', hero: '光谷科创政策',
+              items: [
+                  { tags: ['grad', 'house'], t: '大学生留汉补贴', d: '应届生留汉就业创业有租房补贴与落户支持' },
+                  { tags: ['tech', 'tax'], t: '高新技术企业培育', d: '认定高企享研发加计扣除与一次性奖励' },
+                  { tags: ['ai', 'token'], t: '光谷算力与 AI 扶持', d: '东湖高新区对 AI、算力企业有专项资助与算力券' },
+              ] },
+        ];
+        const ENTITY_TYPES = [
+            { name: '个人（自然人）', limited: false, suit: '只做咨询、设计、写作这类<b>零散副业</b>，不注册主体直接接活', note: '不开票、不雇人、不融资时最省事；线上收不了款（微信支付只给非个人主体），收入按个人综合所得计税' },
+            { name: '个体工商户', limited: false, suit: '一个人或家庭<b>小本经营</b>，开小店、工作室或接线上订单', note: '能开发票、能办收款，税负简单；对债务承担无限责任，融资较难' },
+            { name: '个人独资企业', limited: false, suit: '一个人想<b>正规经营、按企业记账</b>，但规模不大', note: '比个体户更像企业、能开对公户；出资人对债务承担无限责任' },
+            { name: '合伙企业', limited: false, suit: '律师、会计师等<b>专业团队</b>，或不想并入有限公司的合伙', note: '普通合伙人承担无限（连带）责任，有限合伙人以出资为限担责' },
+            { name: '有限责任公司', limited: true, suit: '两人及以上<b>合伙创业</b>、要融资、要接对公客户', note: '股东以出资额为限担责，个人财产与公司隔离；税负和管理成本比个体户高' },
+            { name: '股份有限公司', limited: true, suit: '要<b>融资、股改、将来上市</b>，股东人数较多', note: '股东以认购股份为限担责，治理要求最严、成本最高' },
+        ];
+        const IDENTITY_QUESTIONS = [
+            { q: '① 要收钱吗？', opts: [
+                { a: '不收钱（纯工具 / 展示 / 内测 Demo）', pick: '个人' },
+                { a: '要收钱（卖货 / 会员 / 报名费）', pick: '至少个体户' },
+            ] },
+            { q: '② 做什么类目？', opts: [
+                { a: '工具 / 信息展示 / 预约，不碰钱', pick: '个人' },
+                { a: '卖货 / 收费服务', pick: '个体户' },
+                { a: '要牌照 / 做平台 / 上 AI', pick: '公司' },
+            ] },
+            { q: '③ 做多久、做多大？', opts: [
+                { a: '先验证想法，做个 Demo 给人看', pick: '个人' },
+                { a: '认真当生意做，一个人小规模', pick: '个体户' },
+                { a: '有合伙人 / 要融资 / 要品牌', pick: '公司' },
+            ] },
+        ];
+        const IDENTITY_COSTS = [
+            { icon: 'receipt', t: '记账报税：没收入也要按期零申报，自己做 0 元，找代账是年费' },
+            { icon: 'pin', t: '注册地址：要真实可联系，否则进经营异常；没办公室要挂靠费' },
+            { icon: 'bank', t: '对公账户：开户后有账户管理费、网银费' },
+            { icon: 'shield', t: '社保：雇了人（含给自己发工资）就要开社保账户按月缴' },
+            { icon: 'calendar', t: '工商年报：每年 6/30 前报送，免费但漏报进异常' },
+            { icon: 'mini', t: '小程序认证费：公司 300 元/年（个体户 30 元/年限时优惠）' },
+        ];
         function renderStepperPage(key, d) {
             const biz = state.biz || {};
             const cur = biz[key + '.step'] || 0;
             let h = `<div class="tp-lead">${d.lead}</div>`;
             if (d.topAsks) h += renderTopAsks(key, d);
-            else h += renderCityPick();
+            else if (!d.skipCityPick) h += renderCityPick();
             const steps = visibleSteps(key, d);
             const pending = d.topAsks && biz[key + '.platform'] === '支付宝小程序';
             if (pending) {
@@ -5489,9 +5701,164 @@
             return h;
         }
 
+        function tagChip(tg) {
+            const m = CITY_TAG_META[tg];
+            return m ? `<span class="cpi-tag ${m.cls}">${m.label}</span>` : '';
+        }
+        function pickCityTag(key, tag) {
+            state.biz = state.biz || {};
+            state.biz[key + '.cityTag'] = tag;
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function cityQuizResult(keys) {
+            const scored = CITY_POLICY.map(c => {
+                let hit = [];
+                keys.forEach(k => {
+                    const def = CITY_CHECKLIST.find(x => x.key === k);
+                    if (!def) return;
+                    const matched = c.items.filter(it => it.tags.some(t => def.tags.indexOf(t) >= 0));
+                    if (matched.length) hit.push({ key: k, titles: matched.map(m => m.t) });
+                });
+                return { city: c.city, hero: c.hero, count: hit.length, hit };
+            }).filter(x => x.count > 0).sort((a, b) => b.count - a.count);
+            return scored;
+        }
+        function toggleCityCheck(key, ck) {
+            state.biz = state.biz || {};
+            const cur = state.biz[key + '.cityCheck'] || {};
+            cur[ck] = !cur[ck];
+            state.biz[key + '.cityCheck'] = cur;
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function clearCityCheck(key) {
+            state.biz = state.biz || {};
+            delete state.biz[key + '.cityCheck'];
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function toggleCityQuiz(key) {
+            state.biz = state.biz || {};
+            state.biz[key + '.cityQuizOpen'] = !state.biz[key + '.cityQuizOpen'];
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        function renderCityStep(key, d) {
+            const biz = state.biz || {};
+            const sel = biz[key + '.cityTag'] || 'all';
+            const checks = (biz[key + '.cityCheck'] || {});
+            const picked = CITY_CHECKLIST.filter(c => checks[c.key]);
+            const reco = cityQuizResult(picked.map(c => c.key));
+            const open = !!biz[key + '.cityQuizOpen'];
+            let h = `<div class="city-quiz${open ? ' open' : ''}">`;
+            h += `<div class="cq-head" onclick="toggleCityQuiz('${key}')"><div class="cq-head-main"><div class="cq-title">快速测评 · 测完推荐城市</div><div class="cq-sub">${open ? '勾选你关心的事，下面直接给 top1 / top2' : (picked.length ? '已勾 ' + picked.length + ' 项 · 展开看推荐' : '勾选你关心的事，测完给 top1 / top2 推荐')}</div></div><span class="cq-chevron">${ic('chevron', 16)}</span></div>`;
+            if (open) {
+                CITY_CHECKLIST.forEach(c => {
+                    const on = !!checks[c.key];
+                    h += `<div class="ck-item${on ? ' on' : ''}" onclick="toggleCityCheck('${key}','${c.key}')"><span class="ck-box">${on ? ic('check', 14) : ''}</span><span class="ck-txt">${c.t}</span></div>`;
+                });
+                if (picked.length) {
+                    h += `<div class="cq-reco">`;
+                    const top = reco.slice(0, 2);
+                    if (!top.length) {
+                        h += `<div class="cq-reco-empty">这几项在罗列的城市里暂没有明显匹配，换个组合试试。</div>`;
+                    } else {
+                        h += `<div class="cq-reco-title">推荐城市</div>`;
+                        top.forEach((r, i) => {
+                            h += `<div class="cq-reco-item"><div class="cq-reco-city"><span class="cq-rank ${i === 0 ? 'top1' : 'top2'}">top${i + 1}</span><span class="cq-reco-name">${r.city}</span><span class="cq-reco-count">命中 ${r.count} 项</span></div><div class="cq-reco-desc">${r.hit.slice(0, 3).map(hh => hh.titles[0]).join(' · ')}</div></div>`;
+                        });
+                    }
+                    h += `<div class="cq-actions"><button class="cq-reset" onclick="clearCityCheck('${key}')">重来</button></div>`;
+                    h += `</div>`;
+                }
+            }
+            h += `</div>`;
+            h += `<div class="city-note">各城市主流扶持方向一览，具体额度、条件与申报时间以各城市当年官方公告为准。</div>`;
+            h += `<div class="city-filter">`;
+            CITY_TAGS.forEach(t => {
+                h += `<span class="cf-tag${sel === t.key ? ' on' : ''}" onclick="pickCityTag('${key}','${t.key}')">${t.label}</span>`;
+            });
+            h += `</div><div class="city-policy">`;
+            let shown = 0;
+            CITY_POLICY.forEach(c => {
+                const items = sel === 'all' ? c.items : c.items.filter(it => it.tags.indexOf(sel) >= 0);
+                if (!items.length) return;
+                shown++;
+                h += `<div class="city-card"><div class="city-card-head"><span class="city-card-name">${c.city}</span><span class="city-card-hero">${c.hero}</span></div>`;
+                items.forEach(it => {
+                    h += `<div class="city-policy-item"><div class="cpi-t">${it.tags.map(tagChip).join('')}<span>${it.t}</span></div><div class="cpi-d">${it.d}</div></div>`;
+                });
+                h += `</div>`;
+            });
+            if (!shown) h += `<div class="city-empty">没有匹配这个标签的城市政策，换个标签看看。</div>`;
+            h += `</div>`;
+            return h;
+        }
+        function renderIdentityStep(key, d) {
+            const biz = state.biz || {};
+            const open = !!biz[key + '.identQuizOpen'];
+            let h = `<div class="ident-first">${ic('bolt', 16)}<div><b>先验证，再注册。</b>不一定要现在注册公司——先把 Demo / 网页版做出来验证，等有真实的人愿意付费，再注册、上线也不迟。</div></div>`;
+            h += `<div class="ident-quick${open ? ' open' : ''}">`;
+            h += `<div class="iq-head" onclick="toggleIdentQuiz('${key}')"><div class="iq-head-main"><div class="ident-quick-title">三问对号入座</div><div class="iq-sub">${open ? '点箭头收起' : '点开看三个问题，对号入座'}</div></div><span class="iq-chevron">${ic('chevron', 16)}</span></div>`;
+            if (open) {
+                h += `<div class="ident-questions">`;
+                IDENTITY_QUESTIONS.forEach(q => {
+                    h += `<div class="iq-q">${q.q}</div>`;
+                    q.opts.forEach(o => {
+                        h += `<div class="iq-row"><span class="iq-a">${o.a}</span><span class="iq-arrow">${ic('chevron', 14)}</span><span class="iq-pick">${o.pick}</span></div>`;
+                    });
+                });
+                h += `</div>`;
+            }
+            h += `</div>`;
+            h += `<div class="ident-ai">${ic('spark', 16)}<div>想做 AI 功能（AI 问答 / 绘画 / 陪伴等「深度合成」类目）？这类只对非个人主体开放，算法备案主体实践上都是企业——<b>想上 AI，直接注册公司最稳</b>。</div></div>`;
+            h += `<div class="ident-cards">`;
+            ENTITY_TYPES.forEach(e => {
+                const kind = e.limited ? 'limited' : 'unlimited';
+                h += `<div class="ident-card ${kind}"><div class="ident-head"><span class="ident-name">${e.name}</span><span class="ident-badge ${kind}">${e.limited ? '有限责任' : '无限责任'}</span></div><div class="ident-suit">${e.suit}</div><div class="ident-note">${e.note}</div></div>`;
+            });
+            h += `</div>`;
+            h += `<div class="ident-cost"><div class="ident-cost-title">注册之后，公司每年还要养这些</div>`;
+            IDENTITY_COSTS.forEach(c => {
+                h += `<div class="ident-cost-item">${ic(c.icon, 14)}<span>${c.t}</span></div>`;
+            });
+            h += `<div class="ident-cost-note">费用与规则为 2026 年 8 月公开口径，微信政策可能调整，以官方最新页面为准。</div></div>`;
+            h += `<div class="ident-warn">${ic('refresh', 16)}<div><b>主体变更的坑：</b>个人能转企业，但要脱层皮——审核费、公证、ICP 重备案，而且只能往企业方向转、不能转回个人。第一步就尽量选对。</div></div>`;
+            return h;
+        }
+        function toggleIdentQuiz(key) {
+            state.biz = state.biz || {};
+            state.biz[key + '.identQuizOpen'] = !state.biz[key + '.identQuizOpen'];
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        const INDUSTRY_LICENSES = [
+            { industry: '食品 / 餐饮', license: '需《食品经营许可证》' },
+            { industry: '医疗器械', license: '需第二类医疗器械经营备案' },
+            { industry: '图书 / 出版', license: '需《出版物经营许可证》' },
+            { industry: '教育培训', license: '需《办学许可证》' },
+        ];
+        function renderIndustryStep(key, d) {
+            let h = `<div class="ident-lead">不同行业对资质的要求不一样：营业执照只是「入场券」，下面这些行业还要对应的「许可证」才是「通行证」——证办不下来的类目，直接别碰。</div>`;
+            h += `<div class="ident-cards">`;
+            INDUSTRY_LICENSES.forEach(x => {
+                h += `<div class="ident-card"><div class="ident-head"><span class="ident-name">${x.industry}</span></div><div class="ident-note">${x.license}</div></div>`;
+            });
+            h += `</div>`;
+            return h;
+        }
         function renderStepDetail(key, d, idx) {
             const s = visibleSteps(key, d)[idx];
             if (!s) return '';
+            if (s.custom === 'city') return renderCityStep(key, d);
+            if (s.custom === 'identity') return renderIdentityStep(key, d);
+            if (s.custom === 'industry') return renderIndustryStep(key, d);
             let h = '';
             if (s.ask) {
                 const stored = (state.biz || {})[key + '.' + s.id];
