@@ -46,11 +46,17 @@ gen company 2000 "state.company='已注册';finishOnboarding();switchTab('compan
 gen risk 1400 "state.company='已注册';finishOnboarding();openRiskPage();"
 gen chat 1100 "state.company='已注册';finishOnboarding();openChat();"
 # 老周的第三个知识源：办事流程回答卡。直接渲染，绕开 respond 里的随机延时
-gen chat-task 1900 "state.company='已注册';finishOnboarding();openChat();addRichMessage(taskAnswerHTML('社保'));addRichMessage(taskAnswerHTML('app'));"
+# 社保与 app 是简单页（步骤自带 d），办证是分步页（步骤只有 t，说明在 guide 里）。
+# 三张一起摆，才盯得住 taskAnswerHTML 两种形状都不印 undefined。
+gen chat-task 2400 "state.company='已注册';finishOnboarding();openChat();addRichMessage(taskAnswerHTML('社保'));addRichMessage(taskAnswerHTML('app'));addRichMessage(taskAnswerHTML('办证'));"
 gen t-shebao 1700 "state.company='已注册';finishOnboarding();openTaskPage('社保');"
 gen t-kaigongsi 1500 "state.company='已注册';finishOnboarding();openTaskPage('开公司');"
 gen t-aigc 2400 "state.company='已注册';finishOnboarding();openTaskPage('aigc');"
 gen t-app 1400 "state.company='已注册';finishOnboarding();openTaskPage('app');"
+# 办证页是分步页，两步都要截：第一步是反选，第二步「前置」是全页最长的一屏
+# （材料清单 + 参考链接 + 那段外省口径的说明），溢出真要出也在这里出
+gen t-banzheng 1900 "state.company='已注册';finishOnboarding();openTaskPage('办证');"
+gen t-banzheng-pre 2100 "state.company='已注册';finishOnboarding();openTaskPage('办证');setTimeout(function(){pickStep('办证',1);},260);"
 gen t-baoshui 1450 "state.company='已注册';finishOnboarding();openTaskPage('报税');"
 gen policy 1700 "state.company='已注册';state.industry='智能机器人';finishOnboarding();openServiceDetail('政策补贴');"
 gen fin 1700 "state.company='已注册';state.finCond=['有知识产权'];finishOnboarding();openServiceDetail('金融服务');"
@@ -65,7 +71,7 @@ gen cal 1400 "state.company='已注册';finishOnboarding();openServiceDetail('�
 # 我的页的企业档案五项可改，收起态与展开态都要看。展开态挑融资条件那一项，它八个选项最长，最容易撑破
 gen profile 1500 "state.company='已注册';finishOnboarding();switchTab('profile');"
 gen profile-open 1700 "state.company='已注册';state.finCond=['有知识产权','有跨境结算需求'];finishOnboarding();switchTab('profile');toggleProfileField('finCond');"
-NAMES=(onboard:900 home:1150 company:2000 risk:1400 chat:1100 chat-task:1900 t-shebao:1700 t-kaigongsi:1500 t-aigc:2400 t-app:1400 t-baoshui:1450 policy:1700 fin:1700 opp:1700 opp-policy:1700 opp-fin:1700 opp-money-detail:2200 opp-money-fit:2200 opp-money-unreg:2300 cal:1400 profile:1500 profile-open:1700)
+NAMES=(onboard:900 home:1150 company:2000 risk:1400 chat:1100 chat-task:2400 t-shebao:1700 t-kaigongsi:1500 t-aigc:2400 t-app:1400 t-banzheng:1900 t-banzheng-pre:2100 t-baoshui:1450 policy:1700 fin:1700 opp:1700 opp-policy:1700 opp-fin:1700 opp-money-detail:2200 opp-money-fit:2200 opp-money-unreg:2300 cal:1400 profile:1500 profile-open:1700)
 for n in $NAMES; do
   nm=${n%%:*}; ht=${n##*:}
   rm -rf /tmp/cyd-$nm /tmp/cydd-$nm 2>/dev/null
