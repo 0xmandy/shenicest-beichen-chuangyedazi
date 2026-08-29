@@ -17,6 +17,12 @@ tools/policy-db.js
 tools/finance-db.js
 tools/subsidy-db.js
 
+# 方案文档的派生产物：mermaid 渲染出的 PNG 与拆出来的六份 docx。
+# 改内容改那份 md，再重跑 出图png / 出docx分册 两个脚本，不入库。
+# 注意 tools/mermaid.min.js 是入库的，它是脚本要读的画图库本体，不是产物。
+tools/figs/
+tools/docx/
+
 .DS_Store
 __pycache__/
 *.pyc
