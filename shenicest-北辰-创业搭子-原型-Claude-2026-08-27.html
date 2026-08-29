@@ -2817,13 +2817,23 @@
         .cpi-tag.t-token { background:#EAF3EF; color:#1F7A63; }
         .cpi-d { margin-top:3px; font-size:var(--fs-sm); color:var(--n500); line-height:1.7; }
         .city-empty { padding:18px; text-align:center; font-size:var(--fs-body); color:var(--n500); background:var(--n50); border:1px dashed var(--n300); border-radius:var(--r-sm); }
+        .ident-first { display:flex; gap:10px; align-items:flex-start; background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); padding:12px 13px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-first .ic { flex-shrink:0; margin-top:2px; color:var(--brand); }
+        .ident-first b { color:var(--n900); }
         .ident-lead { font-size:var(--fs-body); color:var(--n700); line-height:1.8; }
         .ident-quick { padding:12px 13px; background:var(--brand-50); border:1px solid var(--brand-100); border-radius:var(--r-sm); }
         .ident-quick-title { font-size:var(--fs-cap); font-weight:700; color:var(--n500); }
-        .ident-quick-rows { margin-top:6px; }
-        .ident-quick-row { display:flex; align-items:center; gap:8px; padding-top:8px; margin-top:8px; border-top:1px dashed var(--brand-100); }
-        .ident-quick-row:first-child { border-top:none; padding-top:0; margin-top:0; }
-        .iq-cond { flex:1; min-width:0; font-size:var(--fs-body); color:var(--n700); line-height:1.5; }
+        .iq-head { position:relative; padding-right:24px; cursor:pointer; }
+        .iq-head-main { min-width:0; }
+        .iq-sub { margin-top:2px; font-size:var(--fs-cap); color:var(--n400); line-height:1.6; }
+        .iq-chevron { position:absolute; right:0; top:50%; width:16px; height:16px; display:flex; align-items:center; justify-content:center; transform:translateY(-50%); color:var(--n400); transition: transform .25s; }
+        .ident-quick.open .iq-chevron { transform: translateY(-50%) rotate(90deg); }
+        .ident-questions { margin-top:6px; }
+        .iq-q { margin-top:12px; font-size:var(--fs-cap); font-weight:700; color:var(--n500); }
+        .iq-q:first-child { margin-top:0; }
+        .iq-row { display:flex; align-items:center; gap:8px; padding-top:7px; margin-top:7px; border-top:1px dashed var(--brand-100); }
+        .iq-q + .iq-row { border-top:none; padding-top:0; margin-top:6px; }
+        .iq-a { flex:1; min-width:0; font-size:var(--fs-body); color:var(--n700); line-height:1.5; }
         .iq-arrow { flex-shrink:0; display:flex; align-items:center; color:var(--n400); }
         .iq-pick { flex-shrink:0; font-size:var(--fs-body); font-weight:700; color:var(--brand); }
         .ident-cards { display:flex; flex-direction:column; gap:10px; }
@@ -2838,6 +2848,18 @@
         .ident-suit { margin-top:8px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
         .ident-suit b { color:var(--n900); }
         .ident-note { margin-top:6px; font-size:var(--fs-sm); color:var(--n500); line-height:1.6; }
+        .ident-ai { display:flex; gap:10px; align-items:flex-start; margin-top:12px; background:var(--trust-50); border:1px solid var(--trust-100); border-radius:var(--r-sm); padding:11px 13px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-ai .ic { flex-shrink:0; margin-top:2px; color:var(--trust); }
+        .ident-ai b { color:var(--n900); }
+        .ident-cost { margin-top:12px; background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 13px; }
+        .ident-cost-title { font-size:var(--fs-cap); font-weight:700; color:var(--n500); margin-bottom:4px; }
+        .ident-cost-item { display:flex; gap:7px; align-items:flex-start; padding:7px 0; border-top:1px dashed var(--n200); font-size:var(--fs-sm); color:var(--n700); line-height:1.6; }
+        .ident-cost-item:first-of-type { border-top:none; }
+        .ident-cost-item .ic { flex-shrink:0; margin-top:2px; color:var(--n400); }
+        .ident-cost-note { margin-top:8px; font-size:var(--fs-cap); color:var(--n400); line-height:1.6; }
+        .ident-warn { display:flex; gap:10px; align-items:flex-start; margin-top:10px; background:var(--risk-mid-bg); border:1px solid var(--risk-mid); border-radius:var(--r-sm); padding:11px 13px; font-size:var(--fs-body); color:var(--n700); line-height:1.7; }
+        .ident-warn .ic { flex-shrink:0; margin-top:2px; color:var(--risk-mid); }
+        .ident-warn b { color:var(--n900); }
         .city-quiz { background:var(--n0); border:var(--hair); border-radius:var(--r-sm); padding:12px 13px; }
         .cq-head { position:relative; padding-right:24px; cursor:pointer; }
         .cq-head-main { min-width:0; }
@@ -4904,10 +4926,11 @@
             '开公司之前': {
                 title: '开公司之前', icon: 'launch',
                 stepper: true, skipCityPick: true,
-                lead: '',
+                lead: '正式去注册之前，先把三件事定下来：注册在哪个城市、用哪种主体、做什么行业。城市决定你能吃到哪些补贴和减免，主体决定你怎么担责、能不能收款，行业决定你要不要额外办许可证。',
                 steps: [
                     { id: 'city', t: '城市选择', short: '选城市', custom: 'city' },
                     { id: 'identity', t: '如何选身份', short: '选身份', custom: 'identity' },
+                    { id: 'industry', t: '行业区别', short: '行业区别', custom: 'industry' },
                 ],
                 todos: ['对比各城市补贴与减免，锁定注册城市', '按收款、团队、融资需求定主体类型'],
             },
@@ -5537,18 +5560,36 @@
               ] },
         ];
         const ENTITY_TYPES = [
-            { name: '个人（自然人）', limited: false, suit: '只做咨询、设计、写作这类<b>零散副业</b>，不注册主体直接接活', note: '不开票、不雇人、不融资时最省事；收入按个人综合所得计税，开不了公司发票' },
+            { name: '个人（自然人）', limited: false, suit: '只做咨询、设计、写作这类<b>零散副业</b>，不注册主体直接接活', note: '不开票、不雇人、不融资时最省事；线上收不了款（微信支付只给非个人主体），收入按个人综合所得计税' },
             { name: '个体工商户', limited: false, suit: '一个人或家庭<b>小本经营</b>，开小店、工作室或接线上订单', note: '能开发票、能办收款，税负简单；对债务承担无限责任，融资较难' },
             { name: '个人独资企业', limited: false, suit: '一个人想<b>正规经营、按企业记账</b>，但规模不大', note: '比个体户更像企业、能开对公户；出资人对债务承担无限责任' },
             { name: '合伙企业', limited: false, suit: '律师、会计师等<b>专业团队</b>，或不想并入有限公司的合伙', note: '普通合伙人承担无限（连带）责任，有限合伙人以出资为限担责' },
             { name: '有限责任公司', limited: true, suit: '两人及以上<b>合伙创业</b>、要融资、要接对公客户', note: '股东以出资额为限担责，个人财产与公司隔离；税负和管理成本比个体户高' },
             { name: '股份有限公司', limited: true, suit: '要<b>融资、股改、将来上市</b>，股东人数较多', note: '股东以认购股份为限担责，治理要求最严、成本最高' },
         ];
-        const IDENTITY_QUICK = [
-            { cond: '一个人 · 不收款', pick: '个人 / 个体户' },
-            { cond: '一个人 · 要收款', pick: '个体户 / 个人独资' },
-            { cond: '有团队 · 合伙创业', pick: '有限公司' },
-            { cond: '要融资 · 将来上市', pick: '股份有限公司' },
+        const IDENTITY_QUESTIONS = [
+            { q: '① 要收钱吗？', opts: [
+                { a: '不收钱（纯工具 / 展示 / 内测 Demo）', pick: '个人' },
+                { a: '要收钱（卖货 / 会员 / 报名费）', pick: '至少个体户' },
+            ] },
+            { q: '② 做什么类目？', opts: [
+                { a: '工具 / 信息展示 / 预约，不碰钱', pick: '个人' },
+                { a: '卖货 / 收费服务', pick: '个体户' },
+                { a: '要牌照 / 做平台 / 上 AI', pick: '公司' },
+            ] },
+            { q: '③ 做多久、做多大？', opts: [
+                { a: '先验证想法，做个 Demo 给人看', pick: '个人' },
+                { a: '认真当生意做，一个人小规模', pick: '个体户' },
+                { a: '有合伙人 / 要融资 / 要品牌', pick: '公司' },
+            ] },
+        ];
+        const IDENTITY_COSTS = [
+            { icon: 'receipt', t: '记账报税：没收入也要按期零申报，自己做 0 元，找代账是年费' },
+            { icon: 'pin', t: '注册地址：要真实可联系，否则进经营异常；没办公室要挂靠费' },
+            { icon: 'bank', t: '对公账户：开户后有账户管理费、网银费' },
+            { icon: 'shield', t: '社保：雇了人（含给自己发工资）就要开社保账户按月缴' },
+            { icon: 'calendar', t: '工商年报：每年 6/30 前报送，免费但漏报进异常' },
+            { icon: 'mini', t: '小程序认证费：公司 300 元/年（个体户 30 元/年限时优惠）' },
         ];
         function renderStepperPage(key, d) {
             const biz = state.biz || {};
@@ -5672,16 +5713,55 @@
             return h;
         }
         function renderIdentityStep(key, d) {
-            let h = `<div class="ident-lead">选主体就看三件事：<b>谁担责</b>（有限责任还是无限责任）、<b>能不能开发票收款</b>、<b>要不要融资</b>。想清楚这三件，主体自然就定了。</div>`;
-            h += `<div class="ident-quick"><div class="ident-quick-title">一句话速查</div><div class="ident-quick-rows">`;
-            IDENTITY_QUICK.forEach(q => {
-                h += `<div class="ident-quick-row"><span class="iq-cond">${q.cond}</span><span class="iq-arrow">${ic('chevron', 14)}</span><span class="iq-pick">${q.pick}</span></div>`;
-            });
-            h += `</div></div>`;
+            const biz = state.biz || {};
+            const open = !!biz[key + '.identQuizOpen'];
+            let h = `<div class="ident-first">${ic('bolt', 16)}<div><b>先验证，再注册。</b>不一定要现在注册公司——先把 Demo / 网页版做出来验证，等有真实的人愿意付费，再注册、上线也不迟。</div></div>`;
+            h += `<div class="ident-quick${open ? ' open' : ''}">`;
+            h += `<div class="iq-head" onclick="toggleIdentQuiz('${key}')"><div class="iq-head-main"><div class="ident-quick-title">三问对号入座</div><div class="iq-sub">${open ? '点箭头收起' : '点开看三个问题，对号入座'}</div></div><span class="iq-chevron">${ic('chevron', 16)}</span></div>`;
+            if (open) {
+                h += `<div class="ident-questions">`;
+                IDENTITY_QUESTIONS.forEach(q => {
+                    h += `<div class="iq-q">${q.q}</div>`;
+                    q.opts.forEach(o => {
+                        h += `<div class="iq-row"><span class="iq-a">${o.a}</span><span class="iq-arrow">${ic('chevron', 14)}</span><span class="iq-pick">${o.pick}</span></div>`;
+                    });
+                });
+                h += `</div>`;
+            }
+            h += `</div>`;
+            h += `<div class="ident-ai">${ic('spark', 16)}<div>想做 AI 功能（AI 问答 / 绘画 / 陪伴等「深度合成」类目）？这类只对非个人主体开放，算法备案主体实践上都是企业——<b>想上 AI，直接注册公司最稳</b>。</div></div>`;
             h += `<div class="ident-cards">`;
             ENTITY_TYPES.forEach(e => {
                 const kind = e.limited ? 'limited' : 'unlimited';
                 h += `<div class="ident-card ${kind}"><div class="ident-head"><span class="ident-name">${e.name}</span><span class="ident-badge ${kind}">${e.limited ? '有限责任' : '无限责任'}</span></div><div class="ident-suit">${e.suit}</div><div class="ident-note">${e.note}</div></div>`;
+            });
+            h += `</div>`;
+            h += `<div class="ident-cost"><div class="ident-cost-title">注册之后，公司每年还要养这些</div>`;
+            IDENTITY_COSTS.forEach(c => {
+                h += `<div class="ident-cost-item">${ic(c.icon, 14)}<span>${c.t}</span></div>`;
+            });
+            h += `<div class="ident-cost-note">费用与规则为 2026 年 8 月公开口径，微信政策可能调整，以官方最新页面为准。</div></div>`;
+            h += `<div class="ident-warn">${ic('refresh', 16)}<div><b>主体变更的坑：</b>个人能转企业，但要脱层皮——审核费、公证、ICP 重备案，而且只能往企业方向转、不能转回个人。第一步就尽量选对。</div></div>`;
+            return h;
+        }
+        function toggleIdentQuiz(key) {
+            state.biz = state.biz || {};
+            state.biz[key + '.identQuizOpen'] = !state.biz[key + '.identQuizOpen'];
+            saveProfile();
+            const d = TASK_PAGES[key];
+            if (d) document.getElementById('pageScroll').innerHTML = renderStepperPage(key, d);
+        }
+        const INDUSTRY_LICENSES = [
+            { industry: '食品 / 餐饮', license: '需《食品经营许可证》' },
+            { industry: '医疗器械', license: '需第二类医疗器械经营备案' },
+            { industry: '图书 / 出版', license: '需《出版物经营许可证》' },
+            { industry: '教育培训', license: '需《办学许可证》' },
+        ];
+        function renderIndustryStep(key, d) {
+            let h = `<div class="ident-lead">不同行业对资质的要求不一样：营业执照只是「入场券」，下面这些行业还要对应的「许可证」才是「通行证」——证办不下来的类目，直接别碰。</div>`;
+            h += `<div class="ident-cards">`;
+            INDUSTRY_LICENSES.forEach(x => {
+                h += `<div class="ident-card"><div class="ident-head"><span class="ident-name">${x.industry}</span></div><div class="ident-note">${x.license}</div></div>`;
             });
             h += `</div>`;
             return h;
@@ -5691,6 +5771,7 @@
             if (!s) return '';
             if (s.custom === 'city') return renderCityStep(key, d);
             if (s.custom === 'identity') return renderIdentityStep(key, d);
+            if (s.custom === 'industry') return renderIndustryStep(key, d);
             let h = '';
             if (s.ask) {
                 const stored = (state.biz || {})[key + '.' + s.id];
