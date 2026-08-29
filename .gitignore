@@ -1,5 +1,11 @@
-# 命题给的原始材料（xlsx / PPT），不入库
-data/
+# 命题给的原始材料（政策 xlsx / 金融工具 xlsx / 命题 PPT），不入库
+data/*.xlsx
+data/*.pptx
+data/*.pdf
+
+# 从政府网站抓下来的政策原文语料，18MB。不入库，跑三个抓取脚本能重建，
+# 重建命令见 README「补贴条款怎么重建」
+data/policy-raw/
 
 # 部署与自查产物
 dist/
@@ -9,6 +15,7 @@ qa-out/
 # 结构化脚本的输出，内容已经内联进 html，不重复入库
 tools/policy-db.js
 tools/finance-db.js
+tools/subsidy-db.js
 
 .DS_Store
 __pycache__/

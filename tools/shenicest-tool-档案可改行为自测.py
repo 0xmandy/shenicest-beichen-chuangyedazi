@@ -14,7 +14,7 @@ window.onerror = function (m) { out.push('ERROR :: ' + m); };
 setTimeout(function () {
   function ok(name, cond, got) { out.push((cond ? 'PASS' : 'FAIL') + ' :: ' + name + (cond ? '' : ' :: 实际=' + got)); }
   try {
-  function hasKaiGongSi() { return (document.getElementById('taskGroups') || {}).innerHTML.indexOf('开公司') >= 0; }
+  function guideEntries() { return (document.getElementById('taskGroups') || {}).innerHTML; }
 
   // A 默认行业
   ok('A 冷启动默认行业是人工智能', state.industry === '人工智能', state.industry);
@@ -31,7 +31,10 @@ setTimeout(function () {
   // 从未注册起步
   state.company = '未注册'; state.industry = '人工智能'; state.graduation = ''; state.overseas = ''; state.finCond = [];
   finishOnboarding();
-  ok('C1 未注册时首页有开公司入口', hasKaiGongSi(), '没有');
+  // 首页那组入口从「猜您需要」改成「一条龙攻略」后就和档案解耦了，四个方块固定不变。
+  // 这两条断言守的是「解耦没被改回去」，不是「入口跟着档案变」。
+  var guideBefore = guideEntries();
+  ok('C1 首页攻略入口渲染出来了', guideBefore.indexOf('guide-card') >= 0, '空的');
   ok('C2 未注册时问候语是未来创业者', document.getElementById('homeGreeting').textContent.indexOf('未来创业者') >= 0,
      document.getElementById('homeGreeting').textContent);
   var riskBefore = riskProfile().bars.length;
@@ -40,7 +43,7 @@ setTimeout(function () {
   switchTab('profile');
   setProfileField(null, 'company', '已注册');
   ok('C3 阶段改成已注册', state.company === '已注册', state.company);
-  ok('C4 开公司入口收起来了', !hasKaiGongSi(), '还在');
+  ok('C4 首页攻略入口不随档案变', guideEntries() === guideBefore, '跟着档案变了');
   ok('C5 问候语跟着变回创业者', document.getElementById('homeGreeting').textContent.indexOf('未来创业者') < 0,
      document.getElementById('homeGreeting').textContent);
   ok('C6 风险维度换成已注册那一套', riskProfile().bars.length !== riskBefore, riskProfile().bars.length);
@@ -80,10 +83,51 @@ setTimeout(function () {
   setProfileField(null, 'finCond', '有知识产权');
   ok('G1 我的页勾上融资条件', (state.finCond || []).indexOf('有知识产权') >= 0, JSON.stringify(state.finCond));
   switchTab('opportunity');
+  // 找机会页 v7 拆成三栏后，融资条件的 chips 落在金融机会那一栏，先切过去再看
+  setOppTab('fin');
   ok('G2 找机会页同步到选中态',
      document.getElementById('oppScroll').innerHTML.indexOf('pol-chip on" onclick="toggleFinCond(\'有知识产权\')') >= 0, '没同步');
   toggleFinCond('有知识产权');
   ok('G3 找机会页取消，我的页也取消', (state.finCond || []).indexOf('有知识产权') < 0, JSON.stringify(state.finCond));
+
+  // I 能领的钱那一栏（v7 新增）。守的是排序主键、折叠区、金额口径三件事，
+  // 这三样出错截图上全看不出来，只有断言逮得到。
+  setOppTab('money');
+  var moneyHtml = function () { return document.getElementById('oppScroll').innerHTML; };
+  ok('I1 能领的钱栏渲染出补贴卡', moneyHtml().indexOf('openSubsidyDetail(') >= 0, '一张都没有');
+
+  var ms = matchSubsidy();
+  ok('I2 补贴条数是 44 笔', ms.all.length === 44, ms.all.length);
+  ok('I3 申报窗口三态都算得出',
+     ms.all.filter(x => x._win.st === 'open').length > 0 && ms.all.filter(x => x._win.st === 'unknown').length > 0,
+     JSON.stringify(ms.all.map(x => x._win.st).filter((v, i, a) => a.indexOf(v) === i)));
+
+  // 默认排序主键是能不能报，不是金额。第一张不该是那条 1 亿的落地奖励
+  var firstReady = sortSubsidy(ms.all.filter(x => x._win.st !== 'closed'), 'ready')[0];
+  ok('I4 默认排序把能报的排在前面', firstReady._win.st === 'open', firstReady.id + ' ' + firstReady._win.st);
+  var firstMoney = sortSubsidy(ms.all.filter(x => x._win.st !== 'closed'), 'money')[0];
+  ok('I5 切成按金额时第一张确实是金额最大的',
+     firstMoney.capWan === Math.max.apply(null, ms.all.filter(x => x._win.st !== 'closed').map(x => x.capWan)),
+     firstMoney.id + ' ' + firstMoney.capWan);
+
+  // 已截止的默认收在折叠区里，展开才出现
+  var closedId = ms.closed.length ? ms.closed[0].id : '';
+  ok('I6 已截止的默认不在第一屏', !closedId || moneyHtml().indexOf("openSubsidyDetail('" + closedId + "')") < 0, closedId + ' 露出来了');
+  if (closedId) {
+    toggleSubFold();
+    ok('I7 展开折叠区后已截止的出现', moneyHtml().indexOf("openSubsidyDetail('" + closedId + "')") >= 0, '展开了还是没有');
+    toggleSubFold();
+  }
+
+  // 换行业，匹配理由要跟着重算
+  setIndustry('医药健康');
+  var med = matchSubsidy().all.filter(x => x.tag === '医药健康')[0];
+  ok('I8 换行业后医药健康条目认出行业', med && med._reasons.join('').indexOf('行业：医药健康') >= 0,
+     med ? med._reasons.join(' / ') : '库里没有医药健康条目');
+
+  // 金额只能来自数据，界面不许自己算出一个数
+  var capOK = SUBSIDY_ITEMS.every(function (s) { return typeof s.capWan === 'number'; });
+  ok('I9 每条都有金额排序值', capOK, '有条目缺 capWan');
 
   // H 重设档案后行业回到默认而不是空
   resetOnboarding();
