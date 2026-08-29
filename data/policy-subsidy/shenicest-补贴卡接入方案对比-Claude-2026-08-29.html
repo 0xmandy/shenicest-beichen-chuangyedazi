@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>补贴卡接入方案对比 · 创业搭子</title>
+<style>
+:root{
+  --brand:#E5532B; --brand-dark:#C4441F; --brand-50:#FFF3EE; --brand-100:#FFE0D2;
+  --n0:#FFFFFF; --n50:#F6F6F7; --n100:#EFEFF1; --n300:#E3E3E6; --n400:#A0A0A8;
+  --n500:#6E6E76; --n900:#1B1B1F; --border:#E8E8EB;
+  --shadow:0 1px 3px rgba(0,0,0,.06); --shadow-lg:0 6px 22px rgba(0,0,0,.10);
+  --r-md:12px; --r-sm:9px;
+  --font:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#EEEEF1;font-family:var(--font);color:var(--n900);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:34px 22px 60px}
+h1{font-size:23px;margin:0 0 8px;letter-spacing:-.2px}
+.sub{font-size:13px;color:var(--n500);line-height:1.85;margin:0 0 6px;max-width:860px}
+.meta{font-size:11px;color:var(--n400);margin:14px 0 30px}
+
+.cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+.col{flex:1 1 420px;min-width:330px}
+.col-h{display:flex;align-items:baseline;gap:9px;margin-bottom:4px}
+.tagno{font-size:11px;font-weight:700;color:#fff;background:var(--n900);border-radius:5px;padding:2px 7px}
+.col-h h2{font-size:16px;margin:0;letter-spacing:-.1px}
+.col-d{font-size:12px;color:var(--n500);line-height:1.8;margin:0 0 16px;min-height:44px}
+
+/* 手机壳 */
+.phone{width:393px;max-width:100%;background:var(--n50);border-radius:26px;box-shadow:var(--shadow-lg);
+       overflow:hidden;border:1px solid var(--n300)}
+.ph-bar{height:30px;background:var(--n0);display:flex;align-items:center;justify-content:space-between;
+        padding:0 18px;font-size:10px;color:var(--n400);border-bottom:1px solid var(--border)}
+.ph-head{background:var(--n0);padding:12px 20px 11px;border-bottom:1px solid var(--border)}
+.ph-title{font-size:16px;font-weight:700}
+.ph-body{padding:14px 0 16px;min-height:520px}
+.ph-tabbar{display:flex;background:var(--n0);border-top:1px solid var(--border)}
+.ph-tabbar div{flex:1;text-align:center;font-size:10px;color:var(--n400);padding:9px 0 11px}
+.ph-tabbar div.on{color:var(--brand);font-weight:700}
+
+/* 复用原型的政策卡样式 */
+.pol-card{background:var(--n0);border-radius:var(--r-md);padding:13px 14px;margin:0 20px 10px;box-shadow:var(--shadow)}
+.pol-card-top{display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.pol-level{font-size:11px;font-weight:600;color:var(--brand-dark);background:var(--brand-50);padding:2px 8px;border-radius:6px}
+.pol-type{font-size:11px;color:var(--n400)}
+.pol-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px;margin-left:auto}
+.pol-badge-act{background:#E8F5E9;color:#2E7D32}
+.pol-badge-hi{background:#FFF3E0;color:#E65100}
+.pol-name{font-size:14px;font-weight:600;line-height:1.5}
+.pol-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.pol-tag{font-size:10px;color:var(--n500);background:var(--n50);padding:2px 7px;border-radius:5px}
+.pol-count{margin:0 20px 8px;font-size:11px;color:var(--n400)}
+.pol-lvbar{display:flex;gap:6px;padding:0 20px 12px;overflow:hidden}
+.pol-lv{font-size:12px;padding:5px 11px;border-radius:20px;background:var(--n0);color:var(--n500);border:1px solid var(--border);white-space:nowrap}
+.pol-lv.on{background:var(--n900);color:#fff;border-color:var(--n900)}
+
+/* 方案一新增：政策卡底部的补贴展开条 */
+.sub-toggle{margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);
+            display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--brand-dark);font-weight:600}
+.sub-strip{margin-top:8px;background:var(--n50);border-radius:var(--r-sm);padding:9px 10px}
+.sub-strip + .sub-strip{margin-top:6px}
+.ss-top{display:flex;align-items:baseline;gap:7px}
+.ss-name{font-size:12px;font-weight:600}
+.ss-money{margin-left:auto;font-size:12px;font-weight:700;color:var(--brand-dark);white-space:nowrap}
+.ss-cond{font-size:10.5px;color:var(--n500);line-height:1.7;margin-top:4px}
+.sub-none{margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);font-size:11px;color:var(--n400)}
+
+/* 方案二新增：能领的钱一栏 */
+.opp-tabs{display:flex;gap:7px;padding:0 20px 11px}
+.opp-tab{font-size:12px;padding:6px 12px;border-radius:20px;background:var(--n0);color:var(--n500);border:1px solid var(--border)}
+.opp-tab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.sortbar{display:flex;gap:6px;padding:0 20px 11px;overflow:hidden}
+.sort{font-size:11px;padding:5px 10px;border-radius:6px;background:var(--n0);border:1px solid var(--border);color:var(--n500);white-space:nowrap}
+.sort.on{background:var(--brand-50);border-color:var(--brand-100);color:var(--brand-dark);font-weight:600}
+.money-card{background:var(--n0);border-radius:var(--r-md);padding:12px 14px;margin:0 20px 10px;box-shadow:var(--shadow)}
+.mc-top{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.mc-name{font-size:14px;font-weight:600;line-height:1.5}
+.mc-grid{display:flex;gap:8px;margin-top:9px;background:var(--n50);border-radius:var(--r-sm);padding:9px 10px}
+.mc-cell{flex:1;min-width:0}
+.mc-k{display:block;font-size:10px;color:var(--n400);margin-bottom:2px}
+.mc-v{display:block;font-size:11.5px;font-weight:600;line-height:1.5}
+.mc-v.soft{color:var(--n400);font-weight:500}
+.mc-v.hot{color:var(--brand-dark)}
+.mc-why{margin-top:8px;border-left:2px solid var(--brand);padding-left:9px;font-size:10.5px;color:var(--n500);line-height:1.7}
+.mc-src{margin-top:8px;font-size:10px;color:var(--n400)}
+.dead{background:#FDECEA;color:#B3261E}
+.open{background:#E8F5E9;color:#2E7D32}
+
+/* 说明块 */
+.note{margin-top:16px;background:var(--n0);border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px}
+.note h4{margin:0 0 7px;font-size:12.5px}
+.note ul{margin:0;padding-left:17px}
+.note li{font-size:12px;color:var(--n500);line-height:1.9}
+
+/* 对比表 */
+.tbl-wrap{margin-top:42px;overflow-x:auto}
+h3{font-size:16px;margin:0 0 12px}
+table{border-collapse:collapse;width:100%;min-width:760px;background:var(--n0);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow)}
+th,td{text-align:left;padding:12px 15px;font-size:12.5px;line-height:1.75;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:var(--n50);font-size:11.5px;color:var(--n500);font-weight:700}
+td:first-child{font-weight:600;width:210px;color:var(--n900)}
+tr:last-child td{border-bottom:none}
+.good{color:#2E7D32;font-weight:600}
+.bad{color:#B3261E;font-weight:600}
+.rec{margin-top:34px;background:var(--n0);border-left:3px solid var(--brand);border-radius:var(--r-sm);padding:18px 20px;box-shadow:var(--shadow)}
+.rec h3{margin:0 0 9px}
+.rec p{font-size:13px;color:var(--n500);line-height:1.95;margin:0 0 11px;max-width:900px}
+.rec p:last-child{margin-bottom:0}
+.rec b{color:var(--n900)}
+@media (max-width:900px){ .col{flex:1 1 100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>44 条补贴卡怎么接进原型：两个方案的样子</h1>
+<p class="sub">本文件由 Claude 生成，属于 shenicest 黑客松北辰命题参赛项目「创业搭子」。两边用的是同一份数据（<code>shenicest-政策补贴条款-结构化-Claude-2026-08-29.json</code>），差别只在放哪、怎么排。卡片里的金额和条件都是真数据，不是占位文字。</p>
+<p class="meta">2026-08-29 · 数据覆盖 13 份政策 44 笔补贴 · 政策库总量 175 条</p>
+
+<div class="cols">
+
+  <!-- ============ 方案一 ============ -->
+  <div class="col">
+    <div class="col-h"><span class="tagno">方案一</span><h2>挂在政策卡下面做展开</h2></div>
+    <p class="col-d">政策匹配页不动。有补贴数据的政策卡底部多一行「几笔补贴 · 最高多少」，点开就地展开。编号仍然是 P###／R###，一一对应。</p>
+
+    <div class="phone">
+      <div class="ph-bar"><span>9:41</span><span>创业搭子</span></div>
+      <div class="ph-head"><div class="ph-title">政策匹配</div></div>
+      <div class="ph-body">
+        <div class="pol-lvbar">
+          <span class="pol-lv on">全部</span><span class="pol-lv">朝阳区</span><span class="pol-lv">北京市</span><span class="pol-lv">中关村</span>
+        </div>
+        <div class="pol-count">按你的档案匹配到 38 条 · 当前展示 3 条</div>
+
+        <div class="pol-card">
+          <div class="pol-card-top">
+            <span class="pol-level">朝阳区</span><span class="pol-type">支持措施</span>
+            <span class="pol-badge pol-badge-hi">高匹配</span>
+          </div>
+          <div class="pol-name">朝阳区促进通用人工智能创新应用发展的若干措施</div>
+          <div class="pol-tags"><span class="pol-tag">人工智能</span><span class="pol-tag">场景开放</span></div>
+          <div class="sub-toggle"><span>8 笔补贴 · 单笔最高 5000 万</span><span>收起</span></div>
+
+          <div class="sub-strip">
+            <div class="ss-top"><span class="ss-name">买算力的钱补一半</span><span class="ss-money">500 万／年</span></div>
+            <div class="ss-cond">区内算力补 50%、区外 30%；要在朝阳区注册纳税纳统，有独立法人资格</div>
+          </div>
+          <div class="sub-strip">
+            <div class="ss-top"><span class="ss-name">大模型落地场景项目</span><span class="ss-money">500 万／项</span></div>
+            <div class="ss-cond">按研发与建设投入的 80% 补；项目要属于引领性、创新性的大模型应用场景</div>
+          </div>
+          <div class="sub-strip">
+            <div class="ss-top"><span class="ss-name">落地奖励或房租补贴</span><span class="ss-money">三年 3000 万</span></div>
+            <div class="ss-cond">大模型和生成式人工智能企业落地朝阳；链主或重大功能平台可到五年 1 亿</div>
+          </div>
+        </div>
+
+        <div class="pol-card">
+          <div class="pol-card-top">
+            <span class="pol-level">北京市</span><span class="pol-type">实施细则</span>
+            <span class="pol-badge pol-badge-act">可申报</span>
+          </div>
+          <div class="pol-name">北京市中小微企业首次贷款贴息实施细则（2025年修订版）</div>
+          <div class="pol-tags"><span class="pol-tag">融资金融</span><span class="pol-tag">中小企业</span></div>
+          <div class="sub-toggle"><span>1 笔补贴 · 利息贴 20% 到 40%</span><span>展开</span></div>
+        </div>
+
+        <div class="pol-card">
+          <div class="pol-card-top">
+            <span class="pol-level">北京市</span><span class="pol-type">行动计划</span>
+          </div>
+          <div class="pol-name">北京具身智能科技创新与产业培育行动计划（2025-2027年）</div>
+          <div class="pol-tags"><span class="pol-tag">智能机器人</span></div>
+          <div class="sub-none">这份是行动计划，原文没写补贴金额，需查原文</div>
+        </div>
+      </div>
+      <div class="ph-tabbar"><div>首页</div><div>管公司</div><div class="on">找机会</div><div>小事广场</div></div>
+    </div>
+
+    <div class="note">
+      <h4>这个方案实际会发生什么</h4>
+      <ul>
+        <li>175 条政策里只有 13 份有补贴数据，剩下 162 条卡片底下都是那句「需查原文」，翻起来落差很明显</li>
+        <li>想比较「哪笔钱最大、哪笔快到期」，得一张张点开数，44 笔散在 13 个折叠区里</li>
+        <li>改动最小，只加一个折叠区和一个数据 join，政策页的检索、筛选、打分全都不动</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ 方案二 ============ -->
+  <div class="col">
+    <div class="col-h"><span class="tagno">方案二</span><h2>找机会页单开一栏「能领的钱」</h2></div>
+    <p class="col-d">在找机会页现有的政策机会、金融机会旁边加第三栏，44 笔平铺，金额、门槛、截止三格一眼看完，可按金额或截止日重排。</p>
+
+    <div class="phone">
+      <div class="ph-bar"><span>9:41</span><span>创业搭子</span></div>
+      <div class="ph-head"><div class="ph-title">找机会</div></div>
+      <div class="ph-body">
+        <div class="opp-tabs">
+          <span class="opp-tab">政策机会</span><span class="opp-tab on">能领的钱</span><span class="opp-tab">金融机会</span>
+        </div>
+        <div class="sortbar">
+          <span class="sort on">还能报的 9 笔</span><span class="sort">按金额</span><span class="sort">按截止日</span><span class="sort">全部 44</span>
+        </div>
+
+        <div class="money-card">
+          <div class="mc-top">
+            <span class="pol-level">北京市</span><span class="pol-type">高精尖资金</span>
+            <span class="pol-badge open">还能报</span>
+          </div>
+          <div class="mc-name">中小企业服务券补贴</div>
+          <div class="mc-grid">
+            <div class="mc-cell"><span class="mc-k">最多能拿</span><span class="mc-v hot">20 万／年</span></div>
+            <div class="mc-cell"><span class="mc-k">怎么算</span><span class="mc-v">合同额 30%</span></div>
+            <div class="mc-cell"><span class="mc-k">截止</span><span class="mc-v">8月31日</span></div>
+          </div>
+          <div class="mc-why">你符合中小企业划型，买大模型应用、数智转型这类服务就能报；钱由服务机构去兑付，你不用跑</div>
+          <div class="mc-src">出自 2026年高精尖实施指南 方向24 · 打开官方原文</div>
+        </div>
+
+        <div class="money-card">
+          <div class="mc-top">
+            <span class="pol-level">北京市</span><span class="pol-type">科技创新券</span>
+            <span class="pol-badge open">发完即止</span>
+          </div>
+          <div class="mc-name">算力创新券</div>
+          <div class="mc-grid">
+            <div class="mc-cell"><span class="mc-k">最多能拿</span><span class="mc-v hot">20 万／年</span></div>
+            <div class="mc-cell"><span class="mc-k">怎么算</span><span class="mc-v">合同额 25%</span></div>
+            <div class="mc-cell"><span class="mc-k">截止</span><span class="mc-v soft">发完为止</span></div>
+          </div>
+          <div class="mc-why">你是科技型小微、主营在人工智能，够得着；在标杆孵化器里能到 50 万</div>
+          <div class="mc-src">出自 首都科技条件平台与科技创新券实施办法 第十九条 · 打开官方原文</div>
+        </div>
+
+        <div class="money-card">
+          <div class="mc-top">
+            <span class="pol-level">朝阳区</span><span class="pol-type">支持措施</span>
+            <span class="pol-badge pol-badge-hi">金额最大</span>
+          </div>
+          <div class="mc-name">买算力的钱补一半</div>
+          <div class="mc-grid">
+            <div class="mc-cell"><span class="mc-k">最多能拿</span><span class="mc-v hot">500 万／年</span></div>
+            <div class="mc-cell"><span class="mc-k">怎么算</span><span class="mc-v">区内 50%</span></div>
+            <div class="mc-cell"><span class="mc-k">截止</span><span class="mc-v soft">原文未写</span></div>
+          </div>
+          <div class="mc-why">你在朝阳区注册纳税、做人工智能，条件对上了；截止日要等区里发年度实施细则</div>
+          <div class="mc-src">出自 朝阳区促进通用人工智能创新应用发展的若干措施 第一条 · 打开官方原文</div>
+        </div>
+
+        <div class="money-card">
+          <div class="mc-top">
+            <span class="pol-level">北京市</span><span class="pol-type">高精尖资金</span>
+            <span class="pol-badge dead">4月15日已截止</span>
+          </div>
+          <div class="mc-name">算力券补贴</div>
+          <div class="mc-grid">
+            <div class="mc-cell"><span class="mc-k">最多能拿</span><span class="mc-v soft">3000 万</span></div>
+            <div class="mc-cell"><span class="mc-k">怎么算</span><span class="mc-v soft">合同额 50%</span></div>
+            <div class="mc-cell"><span class="mc-k">截止</span><span class="mc-v soft">2026-04-15</span></div>
+          </div>
+          <div class="mc-why">今年这批过了，明年第一批通常 2 月发指南，先把算力合同和发票留好</div>
+          <div class="mc-src">出自 2026年高精尖实施指南 方向14 · 打开官方原文</div>
+        </div>
+      </div>
+      <div class="ph-tabbar"><div>首页</div><div>管公司</div><div class="on">找机会</div><div>小事广场</div></div>
+    </div>
+
+    <div class="note">
+      <h4>这个方案实际会发生什么</h4>
+      <ul>
+        <li>44 笔一屏能扫十几笔，金额大小和还能不能报一眼看出来，这正是「匹配时展示金额和条件」的用法</li>
+        <li>三格卡和金融页的额度／期限／利率是同一个形状，视觉上不用新学</li>
+        <li>同一条政策会在政策页和这一栏各出现一次，要靠详情页做收口，否则像两套数据</li>
+        <li>光按金额排会把 5000 万开源平台顶到最上面，那是初创公司够不着的，得先按能不能报过滤</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 对比表 ============ -->
+<div class="tbl-wrap">
+  <h3>逐条对比</h3>
+  <table>
+    <tr><th>比什么</th><th>方案一　挂在政策卡下面</th><th>方案二　单开一栏</th></tr>
+    <tr>
+      <td>用户带着什么问题来</td>
+      <td>「这条政策具体给多少钱」<br><span class="bad">回答得好</span></td>
+      <td>「我现在能领哪几笔钱」<br><span class="good">回答得好</span></td>
+    </tr>
+    <tr>
+      <td>44 笔怎么排</td>
+      <td>跟着政策文件走，被拆进 13 个折叠区，比较不了</td>
+      <td>平铺，可按金额、按截止日、按够不够得着重排</td>
+    </tr>
+    <tr>
+      <td>另外 162 条没补贴数据的政策</td>
+      <td><span class="bad">每张卡都要挂一句「需查原文」</span>，落差写在脸上</td>
+      <td>不进这一栏，眼不见为净；政策页保持原样</td>
+    </tr>
+    <tr>
+      <td>同一条政策会不会出现两次</td>
+      <td><span class="good">不会</span>，和 P###／R### 一一对应</td>
+      <td>会，政策页一次、这一栏一次，靠详情页收口</td>
+    </tr>
+    <tr>
+      <td>截止日这件事</td>
+      <td>折叠着，过没过期要点开才知道</td>
+      <td>能做成第一排序键。<span class="bad">44 笔里 9 笔现在还能报、6 笔已截止、29 笔原文没写批次</span>，这个信息不摆出来等于没用</td>
+    </tr>
+    <tr>
+      <td>改动量</td>
+      <td><span class="good">小</span>。加一个折叠区、一次数据 join，政策页的检索筛选打分全不动</td>
+      <td>中。新增一栏、一套排序、一个新卡片形状，还要复用现有打分给「够不够得着」判定</td>
+    </tr>
+    <tr>
+      <td>老周问答能不能用上</td>
+      <td>能，但要先定位到政策再翻补贴</td>
+      <td>能，「我能领哪些钱」直接命中这一栏，比现在的兜底强很多</td>
+    </tr>
+    <tr>
+      <td>评委看演示的观感</td>
+      <td>像给原有页面补了个字段</td>
+      <td>像一个新能力：管家把 44 笔钱按你的画像筛完摆在面前</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ============ 推荐 ============ -->
+<div class="rec">
+  <h3>我的建议</h3>
+  <p><b>做方案二，但主排序换成能不能报，不是金额。</b>你提方案二时说的是按金额排，数据出来之后有个情况要先讲：按今天 8 月 29 日算，44 笔里 9 笔现在还能报、6 笔今年批次已经过了、29 笔原文根本没写批次时间。还能报的这 9 笔是中小企业服务券（8月31日）、创赢未来路演（10月15日）、门头沟两笔（年底前），加上首贷贴息、科技创新券、算力创新券、OPC 全栈资源包、朝阳数据要素揭榜挂帅这几笔常态化的。光按金额排，第一屏会是 5000 万、3000 万这种初创公司够不着、而且今年已经截止的，看着热闹但没用。</p>
+  <p>所以顺序建议是：还能报的排最前，有明确截止日的按近的在上，常态化的跟在后面；原文没写批次的 29 笔排中间，标「看年度细则」；今年已截止的 6 笔收进「明年再看」折叠区，保留但不占第一屏。金额做第二排序键和一个可切换的排序按钮。</p>
+  <p><b>方案一的展开区也保留，但不做主入口。</b>点进政策详情页的时候，把这份政策底下的几笔补贴列出来，这是详情页本来就该有的东西，成本很低。这样两边共用同一份 JSON，一个回答「我能领哪几笔钱」，一个回答「这条政策具体给多少」，各自答各自的问题，不冲突。</p>
+  <p>要注意的一件事：这一栏只有 13 份政策有数据，覆盖不到的部分不要在界面上解释为什么，按现有那四条纪律，界面上不写元描述，没数据就不出现。</p>
+</div>
+
+</div>
+</body>
+</html>
