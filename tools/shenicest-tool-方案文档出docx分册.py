@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 本文件由 Claude 生成，属于 shenicest 黑客松「创业搭子」。
+# 本文件属于 shenicest 黑客松「创业搭子」。
 # 把产品方案文档那份 Markdown 按六个交付项拆成六份 docx，图用先渲染好的 PNG。
 #
 # 前置：先跑 chuangyedazi-tool-出mermaid图png.py 出 figs/fig*.png
@@ -17,7 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 MD = os.environ.get(
     "CYD_MD",
     os.path.join(
-        HERE, "..", "docs", "shenicest-北辰-创业搭子-产品方案文档-Claude-2026-08-29.md"
+        HERE, "..", "docs", "shenicest-北辰-创业搭子-产品方案文档-2026-08-29.md"
     ),
 )
 FIGS = os.path.join(HERE, "figs")
@@ -182,7 +182,7 @@ title: "创业搭子 · 产品方案文档（%s）%s"
 subtitle: "She Nicest Hackathon 2026 · 北辰产业云社区命题"
 ---
 
-本文件由 Claude 生成，属于 She Nicest Hackathon 2026 北辰产业云社区命题的参赛项目「创业搭子」。这是产品方案文档六份分册中的第%s份。
+本文件属于 She Nicest Hackathon 2026 北辰产业云社区命题的参赛项目「创业搭子」。这是产品方案文档六份分册中的第%s份。
 
 | 项 | 内容 |
 |---|---|

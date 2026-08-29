@@ -1,13 +1,13 @@
 #!/bin/zsh
 # 排版自查：每个状态各生成一张测试页，并行跑截图与 dump-dom 溢出探针。
-# 属于 shenicest 黑客松北辰命题「创业搭子」，本脚本由 Claude 生成。
+# 属于 shenicest 黑客松北辰命题「创业搭子」。
 #
 # 用法：在 repo 里直接 zsh tools/shenicest-tool-v3改版-qa截图与溢出探针.sh
 # 路径全部从 repo 推出来，不写死任何人的机器路径：
 #   CYD_HTML    要测的原型 html，默认 repo 根目录那份
 #   CYD_QA_DIR  截图与 dump 的落地目录，默认 repo 下的 qa-out/（已进 .gitignore）
 ROOT="${0:A:h:h}"
-CYD_HTML="${CYD_HTML:-$ROOT/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html}"
+CYD_HTML="${CYD_HTML:-$ROOT/shenicest-北辰-创业搭子-原型-2026-08-27.html}"
 SP="${CYD_QA_DIR:-$ROOT/qa-out}"
 CHROME="${CYD_CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
 [[ -f "$CYD_HTML" ]] || { echo "找不到原型 html：$CYD_HTML"; exit 1; }

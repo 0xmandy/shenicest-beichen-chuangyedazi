@@ -1,5 +1,5 @@
 #!/bin/zsh
-# 四条用户旅程的走查截图。属于 shenicest 黑客松北辰命题「创业搭子」，本脚本由 Claude 生成。
+# 四条用户旅程的走查截图。属于 shenicest 黑客松北辰命题「创业搭子」。
 #
 # 与 shenicest-tool-v3改版-qa截图与溢出探针.sh 的分工：那个是排版自查（每个页面各一张 + 溢出探针），
 # 这个是按旅程顺序取图，给交付物「用户旅程图与走查」用，落在 qa-out/journey/。
@@ -8,7 +8,7 @@
 #   CYD_HTML       要测的原型 html，默认 repo 根目录那份
 #   CYD_JOURNEY_DIR 截图落地目录，默认 repo 下 qa-out/journey/
 ROOT="${0:A:h:h}"
-CYD_HTML="${CYD_HTML:-$ROOT/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html}"
+CYD_HTML="${CYD_HTML:-$ROOT/shenicest-北辰-创业搭子-原型-2026-08-27.html}"
 SP="${CYD_JOURNEY_DIR:-$ROOT/qa-out/journey}"
 CHROME="${CYD_CHROME:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
 [[ -f "$CYD_HTML" ]] || { echo "找不到原型 html：$CYD_HTML"; exit 1; }

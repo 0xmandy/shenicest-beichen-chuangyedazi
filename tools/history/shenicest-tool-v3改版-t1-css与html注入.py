@@ -3,7 +3,7 @@
 每一处都用唯一锚点定位，锚点匹配不到或匹配多次就报错退出，不做静默跳过。"""
 import io, sys, os
 
-PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html"
+PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-2026-08-27.html"
 src = io.open(PATH, encoding="utf-8").read()
 
 def rep(old, new, label):

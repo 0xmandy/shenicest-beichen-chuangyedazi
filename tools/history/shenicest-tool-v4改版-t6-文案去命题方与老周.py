@@ -5,7 +5,7 @@
 6 办事流程换成检索到的北京官方口径"""
 import io, re, sys
 
-PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html"
+PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-2026-08-27.html"
 src = io.open(PATH, encoding="utf-8").read()
 
 def rep(old, new, label):
@@ -185,9 +185,9 @@ rep("html += '<div class=\"page-section-title\">政策机会 · 来自命题方�
     "html += '<div class=\"page-section-title\">政策机会</div>';", "找机会政策标题")
 rep("html += '<div class=\"page-section-title\">金融机会 · 来自命题方金融库</div>';",
     "html += '<div class=\"page-section-title\">金融机会</div>';", "找机会金融标题")
-rep("""    <!-- 本文件由 Claude 基于团队 demo 修改，属于 shenicest 黑客松北辰商管命题。
+rep("""    <!-- 本文件属于 shenicest 黑客松北辰商管命题。
          政策数据来源：命题方《政策智能体数据库.xlsx》，原文库 86 份 + 解读库 89 条，标题与链接原样保留。 -->""",
-    """    <!-- 本文件由 Claude 生成，属于「创业搭子」原型。
+    """    <!-- 本文件属于「创业搭子」原型。
          政策数据 175 条（原文库 86 份 + 解读库 89 条）与金融数据 76 条由脚本结构化导入，标题与链接原样保留。
          办事流程取自北京市官方口径：e 窗通企业开办、电子税务局票种核定、社保网上服务平台、工信部 App 与小程序备案、网信办生成式 AI 备案。 -->""",
     "文件头注释")

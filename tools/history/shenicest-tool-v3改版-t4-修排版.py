@@ -3,7 +3,7 @@
 改成 helper 函数生成，杜绝再漏。顺带修首页政策提醒卡的图标。"""
 import io, sys
 
-PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html"
+PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-2026-08-27.html"
 src = io.open(PATH, encoding="utf-8").read()
 
 def rep(old, new, label):

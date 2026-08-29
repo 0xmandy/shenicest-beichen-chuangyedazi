@@ -1,5 +1,5 @@
 #!/bin/zsh
-# 把原型部署到 Cloudflare Pages。属于 shenicest 黑客松北辰命题「创业搭子」，本脚本由 Claude 生成。
+# 把原型部署到 Cloudflare Pages。属于 shenicest 黑客松北辰命题「创业搭子」。
 #
 # 用法：zsh tools/shenicest-tool-部署到cloudflare-pages.sh
 # 线上地址 https://chuangyedazi.pages.dev
@@ -10,7 +10,7 @@
 # wrangler 的 OAuth 令牌会过期。过期了在交互终端跑：npx --yes wrangler@latest login
 set -e
 ROOT="${0:A:h:h}"
-HTML="${CYD_HTML:-$ROOT/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html}"
+HTML="${CYD_HTML:-$ROOT/shenicest-北辰-创业搭子-原型-2026-08-27.html}"
 DIST="$ROOT/dist"
 PROJECT="${CYD_PAGES_PROJECT:-chuangyedazi}"
 

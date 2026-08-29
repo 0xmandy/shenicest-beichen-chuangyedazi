@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# 创业搭子档案可改功能的行为自测。属于 shenicest 黑客松北辰命题，本脚本由 Claude 生成。
+# 创业搭子档案可改功能的行为自测。属于 shenicest 黑客松北辰命题。
 # 不看排版，只验状态机：默认行业、老档案兜底、阶段切换的连带重算、三处改行业互通、容器不被盖。
 import io, os, subprocess, sys, tempfile, pathlib
 
 ROOT = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
-HTML = ROOT / "shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html"
+HTML = ROOT / "shenicest-北辰-创业搭子-原型-2026-08-27.html"
 CHROME = os.environ.get("CYD_CHROME", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 src = io.open(HTML, encoding="utf-8").read()
 

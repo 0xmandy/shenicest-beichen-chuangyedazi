@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""由 Claude 生成，属于 shenicest 黑客松北辰命题原型「创业搭子」。
+"""属于 shenicest 黑客松北辰命题原型「创业搭子」。
 
 把 44 笔补贴的申请条件里「用四个档案字段就能判」的那部分抽成结构化门槛，写回真理文件。
 
@@ -20,7 +20,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, '..', 'data')
-SRC = os.path.join(DATA, 'policy-subsidy', 'shenicest-政策补贴条款-结构化-Claude-2026-08-29.json')
+SRC = os.path.join(DATA, 'policy-subsidy', 'shenicest-政策补贴条款-结构化-2026-08-29.json')
 
 # reg 取值：朝阳区 / 经开区 / 门头沟区 / 北京市（全市通用，各区都算）
 # legal：需要有公司主体，还没注册的直接不符合

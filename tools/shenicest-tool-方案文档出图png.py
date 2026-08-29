@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 本文件由 Claude 生成，属于 shenicest 黑客松「创业搭子」。
+# 本文件属于 shenicest 黑客松「创业搭子」。
 # 把方案文档里的 mermaid 图逐张渲染成 PNG，供 docx 嵌入。
 # 做法：无头 Chrome 渲染 mermaid 到定宽白底页面，截图后用 Pillow 按白色裁掉留白。
 # 两倍缩放截图保证在 Word 里放大不糊。
@@ -17,7 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 MD = os.environ.get(
     "CYD_MD",
     os.path.join(
-        HERE, "..", "docs", "shenicest-北辰-创业搭子-产品方案文档-Claude-2026-08-29.md"
+        HERE, "..", "docs", "shenicest-北辰-创业搭子-产品方案文档-2026-08-29.md"
     ),
 )
 OUT = os.path.join(HERE, "figs")

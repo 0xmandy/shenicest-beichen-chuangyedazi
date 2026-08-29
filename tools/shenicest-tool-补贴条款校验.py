@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""由 Claude 生成，属于 shenicest 黑客松北辰命题原型「创业搭子」。
+"""属于 shenicest 黑客松北辰命题原型「创业搭子」。
 
 补贴条款结构化结果的数字防火墙。三道校验，任何一道不过就打 MISMATCH：
 
@@ -17,7 +17,7 @@ import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-结构化-Claude-2026-08-29.json')
+SRC = os.path.join(HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-结构化-2026-08-29.json')
 
 # 政府网页里同一个字符可能是全角也可能是半角，归一化后再比，
 # 但数字本身不做任何变换 —— 数字是这套校验要守的东西。

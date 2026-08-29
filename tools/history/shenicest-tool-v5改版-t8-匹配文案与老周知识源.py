@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """第八趟（v5）：命中改匹配、首页悬浮入口改老周对话、办事流程补成第三个知识源、老周不用「盯」。
 
-属于 shenicest 黑客松北辰商管命题的「创业搭子」原型，本脚本由 Claude 生成。
-改的是同目录 shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html。
+属于 shenicest 黑客松北辰商管命题的「创业搭子」原型。
+改的是同目录 shenicest-北辰-创业搭子-原型-2026-08-27.html。
 
 三件事：
   1 「命中」统一改成匹配的说法，一条理由里不再出现两次。逐条前缀去掉，整块加一行「匹配理由」小标题。
@@ -22,7 +22,7 @@
 """
 import io, sys
 
-PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html"
+PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-2026-08-27.html"
 src = io.open(PATH, encoding="utf-8").read()
 
 

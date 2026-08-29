@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""由 Claude 生成，属于 shenicest 黑客松北辰命题原型「创业搭子」。
+"""属于 shenicest 黑客松北辰命题原型「创业搭子」。
 
 把结构化的补贴条款 JSON 渲染成给人读的简洁版 Markdown。
 读者读完这一份就知道自己能不能申请、能拿多少、什么时候截止，不用再去翻原文。
@@ -11,8 +11,8 @@ import json
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-结构化-Claude-2026-08-29.json')
-OUT = os.path.join(HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-简洁版-Claude-2026-08-29.md')
+SRC = os.path.join(HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-结构化-2026-08-29.json')
+OUT = os.path.join(HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-简洁版-2026-08-29.md')
 
 LEVEL_ORDER = ['朝阳区', '北京市', '中关村', '经开区', '门头沟区']
 
@@ -38,7 +38,7 @@ def main():
 
     a('# 北京与朝阳补贴政策简洁版（%d 条可申请的钱）' % len(items))
     a('')
-    a('本文件由 Claude 生成，属于 shenicest 黑客松北辰命题参赛项目「创业搭子」。')
+    a('本文件属于 shenicest 黑客松北辰命题参赛项目「创业搭子」。')
     a('')
     a('一条 = 一笔能单独申请的钱。金额和条件逐字来自政府网站上的政策原文，'
       '本地留了原文副本，每条都能点回官方页面核对。原文没写的（比如没写申报时间的），'

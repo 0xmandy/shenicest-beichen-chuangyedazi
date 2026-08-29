@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""由 Claude 生成，属于 shenicest 黑客松北辰命题原型「创业搭子」。
+"""属于 shenicest 黑客松北辰命题原型「创业搭子」。
 把补贴条款真理文件压成前端可用的 JS 数据块，和政策库、金融库两个脚本同一个做法。
 
-真理文件是 data/policy-subsidy/shenicest-政策补贴条款-结构化-Claude-2026-08-29.json，
+真理文件是 data/policy-subsidy/shenicest-政策补贴条款-结构化-2026-08-29.json，
 里面每个金额和条件都能回链到 data/policy-raw/ 下留存的政府原文。
 改内容改那份 JSON，跑一遍 data/shenicest-tool-补贴条款校验.py 过了，再跑这个脚本。
 
@@ -17,7 +17,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.environ.get('SUBSIDY_JSON') or os.path.join(
-    HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-结构化-Claude-2026-08-29.json')
+    HERE, '..', 'data', 'policy-subsidy', 'shenicest-政策补贴条款-结构化-2026-08-29.json')
 CHECK = os.path.join(HERE, 'shenicest-tool-补贴条款校验.py')
 OUT = os.environ.get('SUBSIDY_OUT') or os.path.join(HERE, 'subsidy-db.js')
 

@@ -2,7 +2,7 @@
 """第二趟：JS 层。tab 路由、办事入口、办事详情页、证据组件落地、emoji 全清。"""
 import io, sys, re
 
-PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-Claude-2026-08-27.html"
+PATH = "/Users/qianhuizhao/work/research-system/9-references/shenicest黑客松-2026-08/shenicest-北辰-创业搭子-原型-2026-08-27.html"
 src = io.open(PATH, encoding="utf-8").read()
 
 def rep(old, new, label):

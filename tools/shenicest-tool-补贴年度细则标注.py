@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""由 Claude 生成，属于 shenicest 黑客松北辰命题原型「创业搭子」。
+"""属于 shenicest 黑客松北辰命题原型「创业搭子」。
 
 干什么：给朝阳区那 23 条补贴标上「2026 年度细则里有没有这一条」。
 
@@ -38,7 +38,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.join(HERE, '..')
 RULES = os.path.join(ROOT, 'data', 'policy-raw', 'rules')
 TRUTH = os.path.join(ROOT, 'data', 'policy-subsidy',
-                     'shenicest-政策补贴条款-结构化-Claude-2026-08-29.json')
+                     'shenicest-政策补贴条款-结构化-2026-08-29.json')
 YEAR = '2026'
 
 # 四份政策各自的年度征集通知与实施方案附件。id 是抓取脚本按页面 hash 派生的。

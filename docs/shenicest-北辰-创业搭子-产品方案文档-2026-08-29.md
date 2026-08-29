@@ -1,12 +1,12 @@
 # 创业搭子 · 产品方案文档
 
-本文件由 Claude 生成，属于 shenicest 黑客松「北辰产业云社区」命题的参赛项目「创业搭子」，对应交付物清单里的必交项「产品方案文档」。
+本文件属于 shenicest 黑客松「北辰产业云社区」命题的参赛项目「创业搭子」，对应交付物清单里的必交项「产品方案文档」。
 
 - 版本：v1.0，2026-08-29
 - 线上原型：https://chuangyedazi.pages.dev
 - 原型仓库：`0xmandy/shenicest-beichen-chuangyedazi`（单文件静态 HTML，零外部依赖）
 - 开放层仓库：`0xmandy/chuangyedazi-mcp-api`（MCP server 与检索 API）
-- 实现细节与复现步骤：`docs/shenicest-北辰命题-创业搭子-需求文档-Claude-2026-08-27.md`（当前 v7，本文档对应它的 4.13 节）
+- 实现细节与复现步骤：`docs/shenicest-北辰命题-创业搭子-需求文档-2026-08-27.md`（当前 v7，本文档对应它的 4.13 节）
 
 本文档里出现的所有数字，来源分三类，全文统一标注：
 
