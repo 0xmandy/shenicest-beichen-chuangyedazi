@@ -14,7 +14,7 @@ window.onerror = function (m) { out.push('ERROR :: ' + m); };
 setTimeout(function () {
   function ok(name, cond, got) { out.push((cond ? 'PASS' : 'FAIL') + ' :: ' + name + (cond ? '' : ' :: 实际=' + got)); }
   try {
-  function hasKaiGongSi() { return (document.getElementById('taskGroups') || {}).innerHTML.indexOf('开公司') >= 0; }
+  function guideEntries() { return (document.getElementById('taskGroups') || {}).innerHTML; }
 
   // A 默认行业
   ok('A 冷启动默认行业是人工智能', state.industry === '人工智能', state.industry);
@@ -31,7 +31,10 @@ setTimeout(function () {
   // 从未注册起步
   state.company = '未注册'; state.industry = '人工智能'; state.graduation = ''; state.overseas = ''; state.finCond = [];
   finishOnboarding();
-  ok('C1 未注册时首页有开公司入口', hasKaiGongSi(), '没有');
+  // 首页那组入口从「猜您需要」改成「一条龙攻略」后就和档案解耦了，四个方块固定不变。
+  // 这两条断言守的是「解耦没被改回去」，不是「入口跟着档案变」。
+  var guideBefore = guideEntries();
+  ok('C1 首页攻略入口渲染出来了', guideBefore.indexOf('guide-card') >= 0, '空的');
   ok('C2 未注册时问候语是未来创业者', document.getElementById('homeGreeting').textContent.indexOf('未来创业者') >= 0,
      document.getElementById('homeGreeting').textContent);
   var riskBefore = riskProfile().bars.length;
@@ -40,7 +43,7 @@ setTimeout(function () {
   switchTab('profile');
   setProfileField(null, 'company', '已注册');
   ok('C3 阶段改成已注册', state.company === '已注册', state.company);
-  ok('C4 开公司入口收起来了', !hasKaiGongSi(), '还在');
+  ok('C4 首页攻略入口不随档案变', guideEntries() === guideBefore, '跟着档案变了');
   ok('C5 问候语跟着变回创业者', document.getElementById('homeGreeting').textContent.indexOf('未来创业者') < 0,
      document.getElementById('homeGreeting').textContent);
   ok('C6 风险维度换成已注册那一套', riskProfile().bars.length !== riskBefore, riskProfile().bars.length);
